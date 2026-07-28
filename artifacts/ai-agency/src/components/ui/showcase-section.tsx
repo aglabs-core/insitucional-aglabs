@@ -13,9 +13,16 @@ export default function ShowcaseSection() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 mt-10 gap-10 items-start">
         <div className="md:col-span-2">
+          {/* Ver a nota em feature-sections.tsx: as imagens saíram do hotlink
+              para raw.githubusercontent.com e passaram a ser servidas daqui,
+              em WebP (750 KB -> 59 KB). */}
           <img
             alt="AG LABS - plataforma de IA"
-            src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/features/image-4.png"
+            src="/img/image-4.webp"
+            width={1017}
+            height={678}
+            loading="lazy"
+            decoding="async"
             className="rounded-2xl w-full"
           />
         </div>
@@ -23,7 +30,11 @@ export default function ShowcaseSection() {
         <div className="md:col-span-1 flex flex-col">
           <img
             alt="AG LABS - resultados"
-            src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/features/image-3.png"
+            src="/img/image-3.webp"
+            width={969}
+            height={669}
+            loading="lazy"
+            decoding="async"
             className="rounded-2xl hover:-translate-y-0.5 transition duration-300"
           />
           <h3 className="text-2xl text-white font-medium mt-6 leading-snug">

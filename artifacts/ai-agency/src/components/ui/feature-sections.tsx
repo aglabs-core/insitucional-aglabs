@@ -10,10 +10,20 @@ export default function FeatureSections() {
 
       <div className="mx-auto max-w-6xl w-full px-6 py-10">
         <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12">
+          {/* Servida do próprio site. Antes vinha por hotlink de
+              raw.githubusercontent.com — o repositório de um template de
+              terceiro: se aquele projeto renomeasse o arquivo, a imagem sumia
+              do institucional sem aviso, e o `raw` do GitHub responde sem CDN
+              de cache. Convertida para WebP no caminho (1,6 MB -> 573 KB).
+              O alt estava vazio, e esta imagem não é decoração. */}
           <img
             className="w-full md:max-w-xl lg:max-w-2xl"
-            src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/features/group-image-1.png"
-            alt=""
+            src="/img/group-image-1.webp"
+            width={1338}
+            height={1350}
+            loading="lazy"
+            decoding="async"
+            alt="Painel da AG LABS com indicadores de automação e agentes de IA em operação"
           />
           <div className="space-y-10 w-full md:max-w-sm">
             <div className="flex items-start gap-6">
