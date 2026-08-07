@@ -48,7 +48,7 @@ export function ProductLogoCloud() {
   return (
     <section
       id="marcas-proprias"
-      className="w-full bg-background py-16 md:py-24 border-t border-border/30"
+      className="w-full bg-background py-16 md:py-24"
     >
       <div className="mx-auto max-w-4xl px-6 text-center mb-10 md:mb-14">
         <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight">

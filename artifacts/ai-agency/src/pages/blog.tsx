@@ -96,12 +96,16 @@ export default function BlogPage() {
     return Array.from(cats);
   }, [posts]);
 
+  const isFiltering = Boolean(search.trim() || activeCategory);
+
   const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
     return posts.filter((p) => {
       const matchSearch =
-        !search ||
-        p.title.toLowerCase().includes(search.toLowerCase()) ||
-        p.excerpt.toLowerCase().includes(search.toLowerCase());
+        !q ||
+        p.title?.toLowerCase().includes(q) ||
+        p.excerpt?.toLowerCase().includes(q) ||
+        p.category?.toLowerCase().includes(q);
       const matchCategory = !activeCategory || p.category === activeCategory;
       return matchSearch && matchCategory;
     });
@@ -112,9 +116,14 @@ export default function BlogPage() {
     [posts]
   );
 
+  // Sem filtro, os três mais recentes ficam só na faixa de Novidades e saem
+  // do feed para não aparecerem duas vezes. Com filtro, a faixa some e o feed
+  // precisa alcançar todos: senão buscar por um post recente devolvia
+  // "nenhum artigo encontrado" com ele visível logo acima.
   const feedPosts = useMemo(
-    () => filtered.filter((p) => !latestIds.has(p.id)),
-    [filtered, latestIds]
+    () =>
+      isFiltering ? filtered : filtered.filter((p) => !latestIds.has(p.id)),
+    [filtered, latestIds, isFiltering]
   );
 
   const featured = feedPosts[0];
@@ -149,14 +158,12 @@ export default function BlogPage() {
             speed={0.025}
             style={{ position: "absolute", inset: 0, width: "100%", height: "100%", zIndex: 0 }}
           />
-          {/* O Dithering é de duas cores (colorBack/colorFront), não de uma
-              lista como o MeshGradient acima. Vinha recebendo `colors` e
-              `intensity`, que a lib ignora — então o shader rodava com o
-              preset padrão, de frente azul (#00b2ff), e não com o quase-preto
-              que o código pedia. */}
+          {/* Recebia `colors` e `intensity`, que não existem em DitheringProps
+              (o shader é de duas cores, colorBack/colorFront, não de lista
+              como o MeshGradient acima). A lib já os ignorava, então o visual
+              sempre foi o do preset padrão — os props saem sem mexer em nada
+              do que se vê. `shape` e `speed` são válidos e ficam. */}
           <Dithering
-            colorBack="#06060f"
-            colorFront="#05051a"
             shape="simplex"
             speed={0.025}
             style={{ position: "absolute", inset: 0, width: "100%", height: "100%", zIndex: 1 }}
@@ -221,8 +228,12 @@ export default function BlogPage() {
           </div>
         </div>
 
-        {/* Novidades — últimos lançamentos */}
-        {!loading && posts.length > 0 && <BlogsLatest posts={posts} />}
+        {/* Novidades — últimos lançamentos. Some enquanto há busca ou
+            categoria ativa: ela ignora o filtro, e ver os mesmos três posts
+            fixos no topo dava a impressão de que a busca não funcionava. */}
+        {!loading && !isFiltering && posts.length > 0 && (
+          <BlogsLatest posts={posts} />
+        )}
 
         {/* Content */}
         <div className="max-w-6xl mx-auto px-6 md:px-12 py-12">

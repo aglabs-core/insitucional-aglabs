@@ -20,14 +20,17 @@ function fromRow(row: Record<string, unknown>): BlogPost {
     id: row.id as string,
     title: row.title as string,
     slug: row.slug as string,
-    excerpt: row.excerpt as string,
+    // Os campos de texto caem para string vazia quando a coluna vem nula.
+    // O tipo promete string, então sem isto um post sem resumo derrubava a
+    // busca do blog no primeiro `excerpt.toLowerCase()`.
+    excerpt: (row.excerpt as string) ?? "",
     content: (row.content as string) ?? "",
-    category: row.category as string,
+    category: (row.category as string) ?? "",
     coverImage: (row.cover_image as string) ?? "",
     published: row.published as boolean,
     createdAt: row.created_at as string,
     updatedAt: row.updated_at as string,
-    author: row.author as string,
+    author: (row.author as string) ?? "",
     readTime: (row.read_time as number) ?? 5,
   };
 }
