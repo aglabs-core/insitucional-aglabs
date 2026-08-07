@@ -149,9 +149,14 @@ export default function BlogPage() {
             speed={0.025}
             style={{ position: "absolute", inset: 0, width: "100%", height: "100%", zIndex: 0 }}
           />
+          {/* O Dithering é de duas cores (colorBack/colorFront), não de uma
+              lista como o MeshGradient acima. Vinha recebendo `colors` e
+              `intensity`, que a lib ignora — então o shader rodava com o
+              preset padrão, de frente azul (#00b2ff), e não com o quase-preto
+              que o código pedia. */}
           <Dithering
-            colors={["#06060f", "#05051a", "#030310"]}
-            intensity={0.18}
+            colorBack="#06060f"
+            colorFront="#05051a"
             shape="simplex"
             speed={0.025}
             style={{ position: "absolute", inset: 0, width: "100%", height: "100%", zIndex: 1 }}

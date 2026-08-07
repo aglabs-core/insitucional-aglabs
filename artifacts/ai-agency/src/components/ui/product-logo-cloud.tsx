@@ -51,16 +51,9 @@ export function ProductLogoCloud() {
       className="w-full bg-background py-16 md:py-24 border-t border-border/30"
     >
       <div className="mx-auto max-w-4xl px-6 text-center mb-10 md:mb-14">
-        <p className="text-xs font-semibold uppercase tracking-widest text-blue-500 mb-4">
-          Marcas próprias
-        </p>
         <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight">
           Produtos que a AG LABS construiu
         </h2>
-        <p className="mt-5 text-muted-foreground max-w-xl mx-auto">
-          Plataformas com marca e operação próprias, no ar e em uso. São elas
-          que mostram, na prática, o que a agência entrega.
-        </p>
       </div>
 
       {/* As linhas de cima e de baixo atravessam a página inteira; a malha

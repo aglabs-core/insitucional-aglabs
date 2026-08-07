@@ -348,7 +348,9 @@ export default function AdminPage() {
       if (editing === "new") {
         await blogStore.create(form as Parameters<typeof blogStore.create>[0]);
         showToast("Post criado.");
-      } else if (editing && editing !== "new") {
+        // O ramo acima já tratou "new": aqui sobra BlogPost | null, e o
+        // truthy check basta. A comparação com "new" nunca podia ser verdade.
+      } else if (editing) {
         await blogStore.update(editing.id, form);
         showToast("Post atualizado.");
       }

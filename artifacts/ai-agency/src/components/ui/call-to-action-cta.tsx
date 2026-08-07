@@ -1,13 +1,16 @@
 "use client";
 
 import * as React from "react";
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowRight, CheckCircle, Loader2 } from "lucide-react";
 
-interface CtaEmailCardProps extends React.HTMLAttributes<HTMLDivElement> {
+// O onSubmit nativo da div recebe um evento; o daqui recebe o e-mail já
+// extraído. As duas assinaturas não convivem, então a nativa sai fora.
+interface CtaEmailCardProps
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, "onSubmit"> {
   imageSrc: string;
   title: string;
   description: string;
@@ -53,7 +56,9 @@ const CtaEmailCard = React.forwardRef<HTMLDivElement, CtaEmailCardProps>(
       }
     };
 
-    const containerVariants = {
+    // Anotados como Variants para o "spring" não ser inferido como string
+    // solta — o framer-motion espera o literal.
+    const containerVariants: Variants = {
       hidden: { opacity: 0 },
       visible: {
         opacity: 1,
@@ -64,7 +69,7 @@ const CtaEmailCard = React.forwardRef<HTMLDivElement, CtaEmailCardProps>(
       },
     };
 
-    const itemVariants = {
+    const itemVariants: Variants = {
       hidden: { y: 20, opacity: 0 },
       visible: {
         y: 0,

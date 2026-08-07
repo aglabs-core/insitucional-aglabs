@@ -12,7 +12,7 @@ export default function AboutSection() {
         <div className="mx-auto max-w-6xl space-y-2 px-6">
           <img
             className="rounded-xl object-cover w-full h-[240px] md:h-[460px]"
-            src="https://udcsokdtdqqdnoqozbxh.supabase.co/storage/v1/object/public/heros-lp/aglabs/Equipe_corporativa_em_202604122253.jpeg"
+            src="/img/about-equipe.webp"
             alt="AG LABS - Inteligência Artificial"
           />
 
@@ -65,7 +65,7 @@ export default function AboutSection() {
             {/* LEFT BIG IMAGE */}
             <div className="md:flex-1">
               <img
-                src="https://udcsokdtdqqdnoqozbxh.supabase.co/storage/v1/object/public/heros-lp/aglabs/founder.jpeg"
+                src="/img/about-founder.webp"
                 alt="AG LABS"
                 className="rounded-xl object-cover object-top md:object-center w-full h-[300px] sm:h-[360px] md:h-full"
               />
@@ -81,7 +81,7 @@ export default function AboutSection() {
               >
                 <div className="relative h-60 sm:h-64 md:h-48 w-full overflow-hidden">
                   <img
-                    src="https://i.pinimg.com/736x/10/9e/e3/109ee385971d50218b28256a0073873c.jpg"
+                    src="/img/about-card-1.webp"
                     alt="Acelere o crescimento"
                     className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                   />
@@ -110,7 +110,7 @@ export default function AboutSection() {
                 className="relative overflow-hidden rounded-xl bg-muted shadow-lg"
               >
                 <img
-                  src="https://i.pinimg.com/1200x/b9/53/39/b95339d8474fe7ea9dafc817a8a13444.jpg"
+                  src="/img/about-card-2.webp"
                   alt="Design de Alto Desempenho"
                   className="h-full w-full object-cover min-h-[220px] sm:min-h-[240px] md:min-h-[220px]"
                 />

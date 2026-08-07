@@ -14,8 +14,10 @@ import { useEffect } from "react";
  */
 
 export const SITE_URL = "https://aglabs.ia.br";
-const DEFAULT_IMAGE =
-  "https://udcsokdtdqqdnoqozbxh.supabase.co/storage/v1/object/public/heros-lp/aglabs/2.png";
+// Absoluta de propósito: og:image precisa de URL completa, senão as prévias
+// de link não resolvem. O arquivo já existia em public/ sem ninguém usar,
+// enquanto as tags apontavam para um bucket de terceiro.
+const DEFAULT_IMAGE = `${SITE_URL}/opengraph.jpg`;
 
 type JsonLd = Record<string, unknown> | Record<string, unknown>[];
 

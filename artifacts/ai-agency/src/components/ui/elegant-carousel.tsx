@@ -18,7 +18,7 @@ const slides: SlideData[] = [
       "Construímos a base digital do seu negócio — páginas, sistemas e automações conectadas — para transformar operações em máquinas previsíveis de aquisição e crescimento.",
     accent: "#C4956A",
     imageUrl:
-      "https://i.pinimg.com/1200x/56/b7/30/56b730aaf1ad04fdf08ae410dd19aef0.jpg",
+      "/img/case-1.webp",
     link: "https://lp.aglabs.ia.br/",
   },
   {
@@ -28,7 +28,7 @@ const slides: SlideData[] = [
       "Desenvolvemos funcionários digitais de IA que aprendem e otimizam o seu negócio — reduzindo o tempo de análises, processos e treinamentos com 99,2% de precisão.",
     accent: "#8BA7B8",
     imageUrl:
-      "https://i.pinimg.com/1200x/dc/fe/5d/dcfe5d7bfb8856e2be985dcfb0bffe04.jpg",
+      "/img/case-2.webp",
     link: "https://rag.aglabs.api.br/",
   },
   {
@@ -38,7 +38,7 @@ const slides: SlideData[] = [
       "Construímos ou redesenhamos o seu produto digital — otimizado para reduzir churns e aumentar o NPS logo após o lançamento.",
     accent: "#7A9E7E",
     imageUrl:
-      "https://i.pinimg.com/736x/3a/61/d8/3a61d803b23fc77c5df360a8c0a2fe8a.jpg",
+      "/img/case-3.webp",
     link: "https://templates.aglabs.ia.br/",
   },
   {
@@ -48,7 +48,7 @@ const slides: SlideData[] = [
       "Automatize tarefas rotineiras como pesquisas, envios de mensagens, criação de mídias, textos, leads, e insights automáticos — economizando horas mensais de trabalho.",
     accent: "#A78BFA",
     imageUrl:
-      "https://i.pinimg.com/1200x/d7/0a/1b/d70a1b402d35e10aff0bd761fe173027.jpg",
+      "/img/case-4.webp",
     link: "https://wf.aglabs.ia.br/",
   },
 ];

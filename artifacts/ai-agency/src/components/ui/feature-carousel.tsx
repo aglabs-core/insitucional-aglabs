@@ -22,7 +22,7 @@ const FEATURES = [
     label: "Agentes Autônomos",
     icon: Bot,
     image:
-      "https://i.pinimg.com/736x/22/5e/d6/225ed64777b68c6108f4894f3da7c662.jpg",
+      "/img/feature-1.webp",
     description: "IAs que trabalham 24/7 automatizando decisões e operações.",
   },
   {
@@ -30,7 +30,7 @@ const FEATURES = [
     label: "Automação de Processos",
     icon: Wand2,
     image:
-      "https://i.pinimg.com/1200x/c7/b0/8a/c7b08a12b8de7d123d2a7a0fcd3da650.jpg",
+      "/img/feature-2.webp",
     description:
       "Elimine tarefas repetitivas e ganhe escala sem aumentar equipe.",
   },
@@ -39,7 +39,7 @@ const FEATURES = [
     label: "IA Generativa",
     icon: Lightbulb,
     image:
-      "https://i.pinimg.com/736x/4f/4a/11/4f4a1110573077a5ed78066f7dc10b4d.jpg",
+      "/img/feature-3.webp",
     description:
       "Conteúdo, código e insights gerados por modelos de última geração.",
   },
@@ -48,7 +48,7 @@ const FEATURES = [
     label: "Análise Preditiva",
     icon: BarChart2,
     image:
-      "https://i.pinimg.com/1200x/b7/7a/42/b77a4264911d8cd2e5756fb1eed222f0.jpg",
+      "/img/feature-4.webp",
     description: "Antecipe tendências e tome decisões baseadas em dados reais.",
   },
   {
@@ -56,7 +56,7 @@ const FEATURES = [
     label: "Integração de Sistemas",
     icon: Network,
     image:
-      "https://i.pinimg.com/1200x/43/8c/40/438c40ba655ffde56fe17ae18029a766.jpg",
+      "/img/feature-5.webp",
     description:
       "Conectamos ferramentas, APIs e dados em um único fluxo inteligente.",
   },
@@ -65,7 +65,7 @@ const FEATURES = [
     label: "Segurança & Compliance",
     icon: Shield,
     image:
-      "https://i.pinimg.com/736x/e3/cf/07/e3cf07daebe1f8ab5fd3ee4b1ddae08a.jpg",
+      "/img/feature-6.webp",
     description:
       "Proteção de dados e conformidade com LGPD e padrões enterprise.",
   },
@@ -74,7 +74,7 @@ const FEATURES = [
     label: "Cloud & Escalabilidade",
     icon: Cloud,
     image:
-      "https://i.pinimg.com/736x/4e/af/87/4eaf876784b933ad9c17cc03944a8ff3.jpg",
+      "/img/feature-7.webp",
     description: "Infraestrutura sob demanda que cresce com o seu negócio.",
   },
   {
@@ -82,7 +82,7 @@ const FEATURES = [
     label: "Interfaces Inteligentes",
     icon: Layers,
     image:
-      "https://i.pinimg.com/1200x/4c/02/a9/4c02a97b1d03151e93fa1fd6f8c6193c.jpg",
+      "/img/feature-8.webp",
     description: "UX de alto desempenho integrada para máxima conversão.",
   },
   {
@@ -90,7 +90,7 @@ const FEATURES = [
     label: "Alcance Global",
     icon: Globe,
     image:
-      "https://i.pinimg.com/736x/4e/e6/4d/4ee64d10e48c9bb92145ca6715f15e92.jpg",
+      "/img/feature-9.webp",
     description:
       "Soluções prontas para operar em múltiplos mercados e idiomas.",
   },
@@ -99,7 +99,7 @@ const FEATURES = [
     label: "Resultados Mensuráveis",
     icon: CheckCircle2,
     image:
-      "https://i.pinimg.com/736x/d0/e3/45/d0e345fee5e315782ba616f8aca45d2c.jpg",
+      "/img/feature-10.webp",
     description:
       "Cada entrega com relatórios claros e rastreáveis desde o primeiro dia.",
   },
