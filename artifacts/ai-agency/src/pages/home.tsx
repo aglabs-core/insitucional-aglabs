@@ -28,6 +28,7 @@ import { CtaEmailCard } from "@/components/ui/call-to-action-cta";
 import { PerspectiveMarqueePlayer } from "@/components/ui/perspective-marquee";
 import { CtaCustomProject } from "@/components/ui/cta-custom-project";
 import { FaqSection, institutionalFaq } from "@/components/ui/faq-section";
+import { ProductLogoCloud } from "@/components/ui/product-logo-cloud";
 import { supabase } from "@/lib/supabase";
 import { Seo } from "@/components/seo";
 
@@ -109,6 +110,11 @@ const HomePage = () => {
       <div id="cases">
         <ElegantCarousel />
       </div>
+      {/* Logo depois de #cases, que é para onde o menu "PRODUTOS" aponta: o
+          carrossel acima mostra o que a agência sabe fazer, esta faixa mostra
+          os produtos que ela fez e opera. Como última seção da página ficaria
+          depois do bloco de CTAs, disputando atenção com a conversão. */}
+      <ProductLogoCloud />
       {/* CTA Radar Section */}
       <section
         id="radar"
