@@ -52,7 +52,7 @@ export function ProductLogoCloud() {
     >
       <div className="mx-auto max-w-4xl px-6 text-center mb-10 md:mb-14">
         <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight">
-          Produtos que a AG LABS construiu
+          Produtos AG LABS
         </h2>
       </div>
 
