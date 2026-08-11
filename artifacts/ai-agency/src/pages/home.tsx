@@ -25,6 +25,7 @@ import ShowcaseSection from "@/components/ui/showcase-section";
 import { Cta4 } from "@/components/ui/cta-4";
 import { CtaCard } from "@/components/ui/cta-card";
 import { CtaEmailCard } from "@/components/ui/call-to-action-cta";
+import { CommunityLinks } from "@/components/ui/community-links";
 import { PerspectiveMarqueePlayer } from "@/components/ui/perspective-marquee";
 import { CtaCustomProject } from "@/components/ui/cta-custom-project";
 import { FaqSection, institutionalFaq } from "@/components/ui/faq-section";
@@ -216,7 +217,7 @@ const HomePage = () => {
         </div>
         <PerspectiveMarqueePlayer />
         <CtaCustomProject />
-        <div className="w-full bg-[#050505] py-14 md:py-20">
+        <div className="w-full bg-[#050505] pt-14 md:pt-20">
           <div className="mx-auto max-w-5xl px-6">
             <CtaEmailCard
               title="Fique ligado!"
@@ -228,9 +229,16 @@ const HomePage = () => {
             />
           </div>
         </div>
+        {/* Quem acabou de deixar o e-mail é quem mais tende a querer entrar no
+            grupo, então o convite vem na sequência. O bloco herda o preto e
+            fecha o degradê até o FAQ. */}
+        <CommunityLinks />
       </section>
 
       <FaqSection
+        // Sem o border-t padrão: o degradê que sai da comunidade morre exatamente
+        // aqui, e uma linha atravessando a tela desfaria a fusão entre as seções.
+        className="w-full bg-background py-16 md:py-24"
         items={institutionalFaq}
         eyebrow="Perguntas frequentes"
         title="Dúvidas sobre IA para o seu negócio"
