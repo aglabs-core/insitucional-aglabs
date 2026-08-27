@@ -28,13 +28,15 @@ const CANAIS = [
 
 export function CommunityLinks() {
   return (
-    <section className="relative w-full bg-[#050505] pt-4 pb-24 md:pb-28">
+    <section className="relative w-full bg-[#050505] pt-20 pb-24 md:pt-24 md:pb-28">
       <div className="mx-auto max-w-5xl px-6 text-center">
-        <h2 className="text-2xl md:text-3xl font-semibold text-blue-500">
+        {/* Convite, não manchete: um título do tamanho dos das outras seções
+            competiria com o CTA de e-mail logo acima. */}
+        <h2 className="text-sm font-medium uppercase tracking-[0.2em] text-blue-500 md:text-base">
           Entre para nossa comunidade
         </h2>
 
-        <div className="mt-7 flex items-center justify-center gap-10">
+        <div className="mt-6 flex items-center justify-center gap-8">
           {CANAIS.map(({ nome, rotulo, href, Icone }) => (
             <a
               key={nome}
@@ -44,7 +46,7 @@ export function CommunityLinks() {
               aria-label={rotulo}
               className="text-blue-500 transition-colors duration-300 hover:text-blue-400"
             >
-              <Icone className="h-9 w-9" aria-hidden="true" />
+              <Icone className="h-7 w-7 md:h-8 md:w-8" aria-hidden="true" />
             </a>
           ))}
         </div>

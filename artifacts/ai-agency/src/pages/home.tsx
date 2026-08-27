@@ -119,7 +119,7 @@ const HomePage = () => {
       {/* CTA Radar Section */}
       <section
         id="radar"
-        className="relative w-full bg-background py-16 md:py-24 overflow-hidden border-t border-border/30"
+        className="relative w-full bg-background py-16 md:py-24 overflow-hidden"
       >
         <div className="mx-auto max-w-4xl px-6 text-center mb-12">
           <p className="text-xs font-semibold uppercase tracking-widest text-blue-500 mb-4">
