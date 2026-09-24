@@ -54,8 +54,8 @@ export function CtaCustomProject() {
           </span>
         </a>
 
-        {/* Title */}
-        <h1
+        {/* Title — h2: a página já tem o h1 do hero */}
+        <h2
           className="animate-fade-in -translate-y-4 text-balance 
           bg-gradient-to-br from-black from-30% to-black/40 
           bg-clip-text py-6 text-5xl font-semibold leading-none tracking-tighter 
@@ -63,7 +63,7 @@ export function CtaCustomProject() {
           dark:from-white dark:to-white/40"
         >
           Precisa de um projeto personalizado?
-        </h1>
+        </h2>
 
         {/* Subtitle */}
         <p
