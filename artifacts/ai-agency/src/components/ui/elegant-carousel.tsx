@@ -29,7 +29,7 @@ const slides: SlideData[] = [
     accent: "#8BA7B8",
     imageUrl:
       "/img/case-2.webp",
-    link: "https://rag.aglabs.api.br/",
+    link: "https://rag.aglabs.ia.br/",
   },
   {
     title: "Software Performance",

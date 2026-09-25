@@ -13,7 +13,7 @@ export const Cta4 = ({
   title = "Seu funcionário digital, 24h, não falta, não erra...",
   description = "Treinado para operar como parte do seu negócio 24h por dia, sem falhas, sem limites. Um agente que não só atende, opera, decide e executa como parte do seu time",
   buttonText = "Automatizar minha empresa →",
-  buttonUrl = "https://rag.aglabs.api.br/",
+  buttonUrl = "https://rag.aglabs.ia.br/",
   items = [
     "Atendentes de WhatsApp que nunca dormem",
     "Agentes que executam, decidem e reportam",
