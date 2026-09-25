@@ -8,6 +8,9 @@ interface MinimalistHeroProps {
   mainText: string;
   readMoreLink: string;
   imageSrc: string;
+  /** Variantes da imagem para o navegador escolher pelo tamanho da tela. */
+  imageSrcSet?: string;
+  imageSizes?: string;
   imageAlt: string;
   overlayText: {
     part1: string;
@@ -53,6 +56,8 @@ export const MinimalistHero = ({
   mainText,
   readMoreLink,
   imageSrc,
+  imageSrcSet,
+  imageSizes,
   imageAlt,
   overlayText,
   socialLinks,
@@ -248,6 +253,8 @@ export const MinimalistHero = ({
           />
           <motion.img
             src={imageSrc}
+            srcSet={imageSrcSet}
+            sizes={imageSizes}
             alt={imageAlt}
             className="relative z-10 w-56 object-contain md:w-64 lg:w-72 scale-[1.5] md:scale-[1.7] lg:scale-[2.1]"
             initial={{ opacity: 0, y: 40 }}
@@ -255,6 +262,7 @@ export const MinimalistHero = ({
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
             style={{ willChange: 'transform, opacity' }}
             loading="eager"
+            fetchPriority="high"
             decoding="async"
             onError={(e) => {
               const target = e.target as HTMLImageElement;
