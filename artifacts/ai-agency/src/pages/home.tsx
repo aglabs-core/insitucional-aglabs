@@ -83,6 +83,8 @@ const HomePage = () => {
         mainText="Agentes autônomos, sistemas inteligentes e interfaces de alto desempenho para o crescimento do seu negócio."
         readMoreLink="#services"
         imageSrc="/img/hero-home.webp"
+        imageSrcSet="/img/hero-home-640.webp 640w, /img/hero-home.webp 1024w"
+        imageSizes="(min-width: 1024px) 605px, (min-width: 768px) 435px, 336px"
         imageAlt="AG LABS - Agência de Inteligência Artificial"
         overlayText={{
           part1: "Simples e",

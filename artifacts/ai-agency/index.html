@@ -38,10 +38,22 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <!-- Um pedido só para Inter e Poppins, sem bloquear a primeira renderização
+         (display=swap mostra o texto na fonte do sistema até a fonte chegar). -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" /></noscript>
+    <!-- Imagem do hero (LCP) só na home: nas outras rotas ela não aparece. -->
+    <script>
+      if (location.pathname === '/') {
+        var l = document.createElement('link');
+        l.rel = 'preload'; l.as = 'image'; l.href = '/img/hero-home.webp';
+        l.setAttribute('imagesrcset', '/img/hero-home-640.webp 640w, /img/hero-home.webp 1024w');
+        l.setAttribute('imagesizes', '(min-width: 1024px) 605px, (min-width: 768px) 435px, 336px');
+        l.setAttribute('fetchpriority', 'high');
+        document.head.appendChild(l);
+      }
+    </script>
 
     <!-- Structured Data (Schema.org) — lida por buscadores e IA generativa -->
     <script type="application/ld+json">
