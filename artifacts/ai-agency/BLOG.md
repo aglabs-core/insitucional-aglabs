@@ -142,6 +142,9 @@ São duas imagens com papéis diferentes:
 - **Imagem do post** (`cover_image` no `/admin`): a foto que aparece no card do índice, no
   topo do post e no "Leia também". É ela que dá vida ao blog: foto real e ligada ao assunto,
   sem texto por cima (o título já aparece ao lado). Horizontal, pelo menos 1200 px de largura.
+  Só de banco com licença que permite uso comercial (Unsplash, Pexels) ou foto própria.
+  O site não carrega a foto do Unsplash/Pexels: ela é baixada e servida pelo próprio site
+  em WebP (ver "Foto do post" abaixo).
 - **Capa de compartilhamento** (gerada): a arte com o título, no padrão visual dos carrosséis
   (três variações: `news` preto, `bone` osso com laranja, `ambar` preto com âmbar). Só vai no
   `og:image`/`twitter:image` (prévia do link no WhatsApp, LinkedIn etc.) e no JSON-LD; não
@@ -162,19 +165,45 @@ node scripts/blog-cover.mjs                        # todos os que ainda não tê
 node scripts/blog-cover.mjs --force                # regera tudo (mudou o template)
 ```
 
-Saída em `public/img/blog/`: `og/<slug>.jpg` (og:image, ≤ 300 KB) e, para a reserva de post
-sem imagem própria, `<slug>.webp` (1200×630) e `<slug>-600.webp`. Confira o arquivo gerado antes de commitar: título em
+Saída em `public/img/blog/og/`: `<slug>.jpg` (og:image, ≤ 300 KB) e `<slug>.webp` (1200×630,
+reserva na página para post sem foto). Confira o arquivo gerado antes de commitar: título em
 no máximo 3 linhas, sem corte.
 
 Post sem entrada no `blog-meta.json` continua funcionando: usa a `cover_image` do Supabase e o
 pilar deduzido da categoria, e o build avisa no log.
+
+### Foto do post (obrigatório em post novo)
+
+`scripts/blog-images.mjs` baixa a `cover_image` do post e gera, com sharp, os WebP no tamanho
+de exibição, recortados em 1200×630 pelo centro: `public/img/blog/<slug>-1200.webp` (topo do
+post, destaque) e `<slug>-600.webp` (cards, "Leia também"). Ele grava a URL baixada em
+`photo.source` no `blog-meta.json`; é esse campo que liga a imagem local. Sem ele, a página
+usa a URL original do Supabase (funciona, mas mais pesada e de fora do site).
+
+```bash
+node scripts/blog-images.mjs --slug meu-novo-post      # pega a cover_image do Supabase (com as
+                                                       # variáveis VITE_SUPABASE_*) ou da página publicada
+node scripts/blog-images.mjs --slug meu-novo-post --url "https://images.pexels.com/photos/..."   --credit "Autor — Pexels (link da foto), licença Pexels"   # foto escolhida à mão
+node scripts/blog-images.mjs                           # todos os posts do JSON que ainda não têm
+```
+
+Recorte ruim (rosto cortado, assunto fora do quadro)? Grave `"position": "top"` (ou `bottom`,
+`left`, `right`, `attention`) em `photo` e rode de novo com `--slug`. Trocou a `cover_image`
+no `/admin`? Rode com `--slug x --url <nova URL>`.
+
+Fotos de banco escolhidas pela AG LABS (não vieram do Supabase), com fonte e licença:
+
+| Post | Foto | Licença |
+|---|---|---|
+| `como-criar-site-profissional-para-personal-trainers` | "Woman Doing Exercise", Pixabay no Pexels — https://www.pexels.com/photo/woman-doing-exercise-414029/ | Licença Pexels: uso comercial permitido, atribuição não obrigatória |
 
 ## 7. Publicar
 
 1. Escreva o post no `/admin` como rascunho (não publicado), com `slug` definitivo em
    minúsculas e hífens, com a palavra-chave. **Slug não muda depois de publicado.**
 2. Adicione a entrada do post em `src/content/blog-meta.json` (`pillar`, `kicker`, `cover`,
-   `seoTitle`, `description`) e gere a capa.
+   `seoTitle`, `description`), gere a capa (`blog-cover.mjs`) e a foto
+   (`blog-images.mjs --slug <slug>`). Commite as imagens de `public/img/blog/` junto.
 3. Abra o PR com a ficha da pauta. O CI e a prévia do Cloudflare Pages precisam passar.
 4. Depois do merge, publique o post no `/admin`. O webhook do Supabase dispara o rebuild e o
    pré-render gera a página estática, o sitemap e o RSS.
@@ -190,8 +219,10 @@ SEO:
 - [ ] 2 a 3 links internos para posts do mesmo pilar e 1 para a página do produto (URL final,
       sem redirecionamento).
 - [ ] Imagem do post (`cover_image`) horizontal, sem texto, ligada ao assunto.
-- [ ] Capa de compartilhamento gerada (`og/*.jpg` ≤ 300 KB e os `webp` de reserva) e entrada
+- [ ] Capa de compartilhamento gerada (`og/<slug>.jpg` ≤ 300 KB e `og/<slug>.webp`) e entrada
       no `blog-meta.json`.
+- [ ] Foto do post gerada (`<slug>-1200.webp` e `<slug>-600.webp`, `photo.source` gravado) e
+      recorte conferido.
 - [ ] Imagens dentro do texto em WebP, no tamanho em que aparecem, com `alt` descritivo.
 
 Qualidade:

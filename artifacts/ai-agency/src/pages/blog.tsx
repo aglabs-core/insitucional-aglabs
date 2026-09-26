@@ -7,6 +7,7 @@ import BlogsLatest from "@/components/ui/blogs";
 import { FaqSection, blogFaq, faqJsonLd } from "@/components/ui/faq-section";
 import { Seo } from "@/components/seo";
 import { blogInfo, pillarIds, pillarName, postImage, postPillar } from "@/lib/blog-meta";
+import { PostImage } from "@/components/post-image";
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("pt-BR", {
@@ -28,11 +29,10 @@ const PostCard = memo(function PostCard({ post, index }: { post: BlogPost; index
         }`}
       >
         {image ? (
-          <img
-            src={image}
+          <PostImage
+            post={post}
             alt={post.title}
-            loading="lazy"
-            decoding="async"
+            sizes={isWide ? "(min-width: 768px) 700px, 100vw" : "(min-width: 768px) 350px, (min-width: 640px) 50vw, 100vw"}
             className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-55 transition-opacity duration-500"
           />
         ) : (
@@ -296,15 +296,13 @@ export default function BlogPage() {
           {!loading && featured && (
             <Link href={`/blog/${featured.slug}`}>
               <article className="group cursor-pointer relative overflow-hidden mb-3 h-72 sm:h-80 md:h-96 border border-white/8 hover:border-blue-500/40 transition-colors duration-300">
-                {postImage(featured) && (
-                  <img
-                    src={postImage(featured)!}
-                    alt={featured.title}
-                    loading="eager"
-                    decoding="async"
-                    className="absolute inset-0 w-full h-full object-cover opacity-35 group-hover:opacity-50 transition-opacity duration-500"
-                  />
-                )}
+                <PostImage
+                  post={featured}
+                  alt={featured.title}
+                  sizes="(min-width: 1152px) 1056px, 100vw"
+                  eager
+                  className="absolute inset-0 w-full h-full object-cover opacity-35 group-hover:opacity-50 transition-opacity duration-500"
+                />
                 <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent" />
 
                 {/* "Ler artigo" no canto superior direito */}
