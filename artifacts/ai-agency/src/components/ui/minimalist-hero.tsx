@@ -21,6 +21,13 @@ interface MinimalistHeroProps {
   className?: string;
 }
 
+// Quando o topo já veio pronto no HTML (scripts/home-shell.mjs), a entrada
+// animada faria o conteúdo sumir e reaparecer; nesse caso, e na geração do
+// build, os elementos já nascem no estado final.
+const skipIntro =
+  typeof window === 'undefined' || document.getElementById('root')?.dataset.homeShell === '1';
+const intro = <T,>(from: T): T | false => (skipIntro ? false : from);
+
 function smoothScrollTo(href: string) {
   if (!href.startsWith('#') || href === '#') return;
   const target = document.querySelector(href);
@@ -173,7 +180,7 @@ export const MinimalistHero = ({
       {/* Header */}
       <header className="z-30 flex w-full max-w-7xl items-center justify-between">
         <motion.div
-          initial={{ opacity: 0, x: -20 }}
+          initial={intro({ opacity: 0, x: -20 })}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.4 }}
           style={{ willChange: 'transform, opacity' }}
@@ -189,7 +196,7 @@ export const MinimalistHero = ({
           ))}
         </div>
         <motion.button
-          initial={{ opacity: 0, x: 20 }}
+          initial={intro({ opacity: 0, x: 20 })}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.4 }}
           style={{ willChange: 'transform, opacity' }}
@@ -221,7 +228,7 @@ export const MinimalistHero = ({
 
         {/* Left: description text — desktop only */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={intro({ opacity: 0, y: 16 })}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
           style={{ willChange: 'transform, opacity' }}
@@ -245,7 +252,7 @@ export const MinimalistHero = ({
         {/* Center: image + circle */}
         <div className="relative order-1 md:order-2 flex justify-center items-center w-full h-full">
           <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
+            initial={intro({ scale: 0.8, opacity: 0 })}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
             style={{ willChange: 'transform, opacity' }}
@@ -257,7 +264,7 @@ export const MinimalistHero = ({
             sizes={imageSizes}
             alt={imageAlt}
             className="relative z-10 w-56 object-contain md:w-64 lg:w-72 scale-[1.5] md:scale-[1.7] lg:scale-[2.1]"
-            initial={{ opacity: 0, y: 40 }}
+            initial={intro({ opacity: 0, y: 40 })}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
             style={{ willChange: 'transform, opacity' }}
@@ -274,7 +281,7 @@ export const MinimalistHero = ({
 
         {/* Right: headline */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={intro({ opacity: 0, y: 16 })}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
           style={{ willChange: 'transform, opacity' }}
@@ -313,7 +320,7 @@ export const MinimalistHero = ({
       {/* Footer */}
       <footer className="z-30 flex w-full max-w-7xl items-center justify-between pt-4">
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={intro({ opacity: 0, y: 16 })}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
           style={{ willChange: 'transform, opacity' }}
@@ -324,7 +331,7 @@ export const MinimalistHero = ({
           ))}
         </motion.div>
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={intro({ opacity: 0, y: 16 })}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
           style={{ willChange: 'transform, opacity' }}
