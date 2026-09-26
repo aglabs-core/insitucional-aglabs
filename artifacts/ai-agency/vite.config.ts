@@ -45,6 +45,8 @@ export default defineConfig({
             if (id.includes("react-dom") || id.includes("react/")) return "vendor";
             if (id.includes("framer-motion")) return "motion";
             if (id.includes("@supabase")) return "supabase";
+            // Parser de HTML dos posts guardados em HTML: chunk próprio, baixado sob demanda.
+            if (id.includes("rehype-raw") || id.includes("hast-util-raw") || id.includes("parse5") || id.includes("hast-util-from-parse5") || id.includes("hast-util-to-parse5")) return "html-raw";
             if (id.includes("react-markdown") || id.includes("remark") || id.includes("rehype") || id.includes("mdast") || id.includes("micromark") || id.includes("unified")) return "markdown";
             if (id.includes("@paper-design/shaders")) return "shaders";
             if (id.includes("lucide-react")) return "icons";

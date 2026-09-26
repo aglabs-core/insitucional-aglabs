@@ -138,11 +138,11 @@ const norm = (s: string) =>
     .trim();
 
 /**
- * Vários posts começam o markdown com "# <título>", repetindo o título da
- * página num segundo <h1>. Remove esse primeiro heading quando ele é o próprio
- * título. Mesma regra do pré-render.
+ * Vários posts começam com "# <título>" (ou "<h1>título</h1>", nos que estão
+ * em HTML), repetindo o título da página num segundo <h1>. Remove esse
+ * primeiro heading quando ele é o próprio título. Mesma regra do pré-render.
  */
 export function stripLeadingTitle(content: string, title: string): string {
-  const m = content.match(/^\s*#\s+(.+)\n?/);
-  return m && norm(m[1]) === norm(title) ? content.slice(m[0].length) : content;
+  const m = content.match(/^\s*#\s+(.+)\n?/) ?? content.match(/^\s*<h1[^>]*>([\s\S]*?)<\/h1>\s*/i);
+  return m && norm(m[1].replace(/<[^>]+>/g, "")) === norm(title) ? content.slice(m[0].length) : content;
 }

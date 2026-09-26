@@ -1,0 +1,38 @@
+{
+  "//": "Allowlist do HTML dos posts (rehype-sanitize). Vale para o markdown e para o HTML cru que alguns posts guardam no Supabase. Usada pelo app (src/lib/post-render.ts) e pelo pré-render (scripts/prerender-blog.mjs). Tag fora da lista é desembrulhada (fica o texto); script, style, iframe e afins somem com o conteúdo.",
+  "tagNames": [
+    "h1", "h2", "h3", "h4",
+    "p", "br", "hr",
+    "ul", "ol", "li",
+    "strong", "b", "em", "i", "del", "s",
+    "a", "blockquote", "code", "pre", "img",
+    "table", "thead", "tbody", "tr", "th", "td",
+    "input"
+  ],
+  "attributes": {
+    "a": ["href", "title"],
+    "img": ["src", "alt", "title"],
+    "ol": ["start", ["className", "contains-task-list"]],
+    "ul": [["className", "contains-task-list"]],
+    "li": [["className", "task-list-item"]],
+    "code": [["className", "language-javascript", "language-js", "language-ts", "language-typescript", "language-json", "language-bash", "language-sh", "language-html", "language-css", "language-python", "language-sql", "language-text"]],
+    "input": [["type", "checkbox"], ["disabled", true], "checked"],
+    "th": ["align"],
+    "td": ["align"]
+  },
+  "ancestors": {
+    "tbody": ["table"],
+    "thead": ["table"],
+    "tr": ["table"],
+    "th": ["table"],
+    "td": ["table"],
+    "li": ["ul", "ol"]
+  },
+  "protocols": {
+    "href": ["http", "https", "mailto", "tel"],
+    "src": ["http", "https"]
+  },
+  "strip": ["script", "style", "iframe", "object", "embed", "noscript", "template", "form", "textarea", "select", "button", "svg", "math"],
+  "clobberPrefix": "user-content-",
+  "clobber": ["id", "name"]
+}

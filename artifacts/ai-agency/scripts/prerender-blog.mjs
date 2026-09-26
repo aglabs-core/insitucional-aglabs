@@ -29,6 +29,8 @@ import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
+import rehypeSanitize from "rehype-sanitize";
 import { createClient } from "@supabase/supabase-js";
 
 const SITE_URL = "https://aglabs.ia.br";
@@ -39,6 +41,23 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
 const DIST = resolve(ROOT, "dist");
 const META = JSON.parse(readFileSync(resolve(ROOT, "src/content/blog-meta.json"), "utf8"));
+/** Mesmo plugin de src/lib/post-render.ts (rehypeTrimTables). */
+const TABLE_PARTS = new Set(["table", "thead", "tbody", "tfoot", "tr"]);
+function rehypeTrimTables() {
+  const walk = (node) => {
+    if (!node.children) return;
+    if (node.type === "element" && TABLE_PARTS.has(node.tagName)) {
+      node.children = node.children.filter((c) => !(c.type === "text" && !c.value.trim()));
+    }
+    node.children.forEach(walk);
+  };
+  return (tree) => walk(tree);
+}
+/** Mesma regra de src/lib/post-render.ts (hasHtml): o post guarda HTML, não só markdown. */
+const hasHtml = (content) =>
+  /<\/?(h[1-6]|p|ul|ol|li|strong|em|b|i|a|blockquote|table|br|img|div|span|pre|code)\b[^>]*>/i.test(content);
+/** Allowlist do HTML dos posts — a mesma do app (src/lib/post-render.ts). */
+const POST_HTML_SCHEMA = JSON.parse(readFileSync(resolve(ROOT, "src/content/post-html-schema.json"), "utf8"));
 
 const esc = (s = "") =>
   String(s)
@@ -116,8 +135,8 @@ function relatedOf(post, all, n = 3) {
 const norm = (s) =>
   s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, " ").trim();
 function stripLeadingTitle(content, title) {
-  const m = content.match(/^\s*#\s+(.+)\n?/);
-  return m && norm(m[1]) === norm(title) ? content.slice(m[0].length) : content;
+  const m = content.match(/^\s*#\s+(.+)\n?/) ?? content.match(/^\s*<h1[^>]*>([\s\S]*?)<\/h1>\s*/i);
+  return m && norm(m[1].replace(/<[^>]+>/g, "")) === norm(title) ? content.slice(m[0].length) : content;
 }
 
 /* ---- Cabeçalho ---- */
@@ -182,7 +201,12 @@ function renderMarkdown(post) {
     return renderToStaticMarkup(
       React.createElement(
         ReactMarkdown,
-        { remarkPlugins: [remarkGfm], components: { h1: "h2" } },
+        {
+          // Mesma configuração do app (src/lib/post-render.ts): markdown ou HTML sanitizado.
+          remarkPlugins: [remarkGfm],
+          rehypePlugins: [rehypeTrimTables, ...(hasHtml(post.content) ? [rehypeRaw] : []), [rehypeSanitize, POST_HTML_SCHEMA]],
+          components: { h1: "h2" },
+        },
         stripLeadingTitle(post.content, post.title),
       ),
     );

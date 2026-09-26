@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams } from "wouter";
 import { ArrowLeft, Clock, Calendar, User, ArrowUpRight, Share2, Check, MessageSquare, Send } from "lucide-react";
 import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 import { blogStore, type BlogPost } from "@/lib/blog-store";
 import { commentStore, type BlogComment } from "@/lib/comment-store";
 import { Seo, SITE_URL } from "@/components/seo";
+import { hasHtml, loadRehypeRaw, postComponents, postRehypePlugins, postRemarkPlugins } from "@/lib/post-render";
 import { PostImage } from "@/components/post-image";
 import {
   pillarName,
@@ -40,6 +40,18 @@ export default function BlogPostPage() {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [allPosts, setAllPosts] = useState<BlogPost[]>([]);
+  // Plugin que interpreta HTML cru: só é baixado para posts guardados em HTML.
+  const [rehypeRaw, setRehypeRaw] = useState<Awaited<ReturnType<typeof loadRehypeRaw>> | null>(null);
+  const needsRaw = post !== null && post !== "loading" && hasHtml(post.content);
+
+  useEffect(() => {
+    if (!needsRaw || rehypeRaw) return;
+    let cancelled = false;
+    loadRehypeRaw()
+      .then((plugin) => { if (!cancelled) setRehypeRaw(() => plugin); })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, [needsRaw, rehypeRaw]);
 
   // Lista leve (sem conteúdo, em cache) para o bloco "Leia também".
   useEffect(() => {
@@ -254,10 +266,17 @@ export default function BlogPostPage() {
               prose-hr:border-white/10
               prose-img:rounded-sm"
           >
-            {/* h1 do markdown vira h2: a página já tem o título como único h1. */}
-            <ReactMarkdown remarkPlugins={[remarkGfm]} components={{ h1: "h2" }}>
-              {stripLeadingTitle(post.content, post.title)}
-            </ReactMarkdown>
+            {/* Markdown ou HTML sanitizado (ver src/lib/post-render.ts). */}
+            {/* Post em HTML espera o parser chegar em vez de piscar as tags como texto. */}
+            {(!needsRaw || rehypeRaw) && (
+              <ReactMarkdown
+                remarkPlugins={postRemarkPlugins}
+                rehypePlugins={postRehypePlugins(rehypeRaw ?? undefined)}
+                components={postComponents}
+              >
+                {stripLeadingTitle(post.content, post.title)}
+              </ReactMarkdown>
+            )}
           </div>
 
           {/* CTA para o produto do pilar */}
