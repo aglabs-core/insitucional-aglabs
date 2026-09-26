@@ -112,6 +112,11 @@ Um parágrafo que liga o problema ao produto do pilar, com o link da página do 
   automático e não substitui os links no texto.
 - **Tamanho:** o necessário para responder bem. Guia passo a passo: 1.200 a 2.000 palavras.
   "Vale a pena para X": 900 a 1.400.
+- **Formato do texto:** escreva em markdown. HTML cru também é aceito (alguns posts antigos
+  estão assim), mas passa por uma allowlist (`src/content/post-html-schema.json`): títulos,
+  parágrafos, listas, negrito/itálico, links http(s)/mailto/tel, citação, código, imagem e
+  tabela. Qualquer outra tag vira só texto; `script`, `style`, `iframe`, formulários e
+  atributos como `onclick`/`style` são removidos. O pré-render e o app usam a mesma regra.
 
 ## 5. Tom de voz
 
