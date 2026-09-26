@@ -6,6 +6,16 @@ import remarkGfm from "remark-gfm";
 import { blogStore, type BlogPost } from "@/lib/blog-store";
 import { commentStore, type BlogComment } from "@/lib/comment-store";
 import { Seo, SITE_URL } from "@/components/seo";
+import {
+  pillarName,
+  postCover,
+  postPillar,
+  postProduct,
+  relatedPosts,
+  seoDescription,
+  seoTitle,
+  stripLeadingTitle,
+} from "@/lib/blog-meta";
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("pt-BR", {
@@ -27,6 +37,12 @@ export default function BlogPostPage() {
   const [submitting, setSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState("");
+  const [allPosts, setAllPosts] = useState<BlogPost[]>([]);
+
+  // Lista leve (sem conteúdo, em cache) para o bloco "Leia também".
+  useEffect(() => {
+    blogStore.getPublished().then(setAllPosts).catch(() => setAllPosts([]));
+  }, []);
 
   useEffect(() => {
     if (!slug) { setPost(null); return; }
@@ -111,37 +127,43 @@ export default function BlogPostPage() {
     );
   }
 
+  const cover = postCover(post);
+  const product = postProduct(post);
+  const pillar = pillarName(postPillar(post));
+  const related = relatedPosts(post, allPosts);
+  const url = `${SITE_URL}/blog/${post.slug}`;
+
   return (
     <div className="min-h-screen bg-[#050505] text-white">
       <Seo
-        title={`${post.title} | AG LABS Intelligence`}
-        description={post.excerpt}
+        title={seoTitle(post)}
+        description={seoDescription(post)}
         path={`/blog/${post.slug}`}
-        image={post.coverImage || undefined}
+        image={cover?.og}
         type="article"
         jsonLd={[
           {
             "@context": "https://schema.org",
             "@type": "BlogPosting",
             headline: post.title,
-            description: post.excerpt,
-            image: post.coverImage || undefined,
+            description: seoDescription(post),
+            image: cover ? { "@type": "ImageObject", url: cover.og, width: cover.width, height: cover.height } : undefined,
             datePublished: post.createdAt,
-            dateModified: post.updatedAt,
-            author: { "@type": "Person", name: post.author },
+            dateModified: post.updatedAt || post.createdAt,
+            author: { "@type": "Person", name: post.author || "AG LABS" },
             publisher: {
               "@type": "Organization",
+              "@id": `${SITE_URL}/#organization`,
               name: "AG LABS Intelligence",
               logo: {
                 "@type": "ImageObject",
                 url: `${SITE_URL}/android-chrome-512x512.png`,
+                width: 512,
+                height: 512,
               },
             },
-            mainEntityOfPage: {
-              "@type": "WebPage",
-              "@id": `${SITE_URL}/blog/${post.slug}`,
-            },
-            articleSection: post.category,
+            mainEntityOfPage: { "@type": "WebPage", "@id": url },
+            articleSection: pillar,
             inLanguage: "pt-BR",
           },
           {
@@ -150,12 +172,7 @@ export default function BlogPostPage() {
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
               { "@type": "ListItem", position: 2, name: "Blog", item: `${SITE_URL}/blog` },
-              {
-                "@type": "ListItem",
-                position: 3,
-                name: post.title,
-                item: `${SITE_URL}/blog/${post.slug}`,
-              },
+              { "@type": "ListItem", position: 3, name: post.title, item: url },
             ],
           },
         ]}
@@ -180,25 +197,10 @@ export default function BlogPostPage() {
       </div>
 
       <main className="pt-14">
-        {/* Cover */}
-        {post.coverImage && (
-          <div className="relative h-[50vh] md:h-[60vh] overflow-hidden">
-            <img
-              src={post.coverImage}
-              alt={post.title}
-              loading="eager"
-              decoding="async"
-              fetchPriority="high"
-              className="w-full h-full object-cover opacity-40"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/50 to-transparent" />
-          </div>
-        )}
-
         {/* Article */}
-        <div className={`max-w-3xl mx-auto px-6 md:px-0 ${post.coverImage ? "-mt-32 relative z-10" : "pt-24"}`}>
+        <div className="max-w-3xl mx-auto px-6 md:px-0 pt-12 md:pt-16">
           <span className="inline-block text-blue-400 text-xs font-semibold uppercase tracking-[0.2em] mb-6">
-            {post.category}
+            {pillar}
           </span>
           <h1 className="text-3xl md:text-5xl font-black leading-tight text-white mb-8">
             {post.title}
@@ -216,9 +218,25 @@ export default function BlogPostPage() {
             </span>
           </div>
 
-          <p className="text-white/60 text-lg leading-relaxed mb-12 border-l-2 border-blue-500 pl-5">
+          <p className="text-white/60 text-lg leading-relaxed mb-10 border-l-2 border-blue-500 pl-5">
             {post.excerpt}
           </p>
+
+          {/* Capa no tamanho de exibição (WebP gerado por scripts/blog-cover.mjs). */}
+          {cover && (
+            <img
+              src={cover.src}
+              srcSet={cover.srcSet}
+              sizes="(min-width: 768px) 768px, 100vw"
+              width={cover.width}
+              height={cover.height}
+              alt=""
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
+              className="w-full h-auto mb-12 border border-white/8"
+            />
+          )}
 
           <div
             className="prose prose-invert max-w-none
@@ -237,32 +255,73 @@ export default function BlogPostPage() {
               prose-hr:border-white/10
               prose-img:rounded-sm"
           >
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {post.content}
+            {/* h1 do markdown vira h2: a página já tem o título como único h1. */}
+            <ReactMarkdown remarkPlugins={[remarkGfm]} components={{ h1: "h2" }}>
+              {stripLeadingTitle(post.content, post.title)}
             </ReactMarkdown>
           </div>
 
-          {/* CTA */}
+          {/* CTA para o produto do pilar */}
           <div className="mt-20 mb-16 border border-white/8 hover:border-blue-500/30 transition-colors duration-300 p-8 md:p-12 relative overflow-hidden group">
             <div className="absolute -z-0 size-72 -top-20 -right-20 rounded-full bg-blue-600/10 blur-3xl pointer-events-none group-hover:bg-blue-600/20 transition-all duration-700" />
             <p className="text-blue-400 text-xs font-semibold uppercase tracking-[0.2em] mb-3">
-              Pronto para transformar seu negócio?
+              {pillar}
             </p>
-            <h3 className="text-2xl md:text-3xl font-black text-white mb-4 leading-tight">
-              Fale com um especialista<br className="hidden md:block" /> da AG LABS
-            </h3>
-            <p className="text-white/40 text-sm mb-8 max-w-sm leading-relaxed">
-              Automatize processos, crie agentes de IA e construa soluções sob medida para o seu negócio.
-            </p>
-            <a
-              href="https://wa.me/5564993259857?text=Olá!%20Tenho%20interesse%20em%20um%20projeto%20personalizado%20com%20a%20AG%20LABS."
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition-colors"
-            >
-              Falar com especialista <ArrowUpRight className="w-4 h-4" />
-            </a>
+            <h2 className="text-2xl md:text-3xl font-black text-white mb-4 leading-tight">
+              {product.name}
+            </h2>
+            <p className="text-white/50 text-sm mb-8 max-w-md leading-relaxed">{product.pitch}</p>
+            <div className="flex flex-wrap items-center gap-4">
+              <a
+                href={product.url}
+                target="_blank"
+                rel="noopener"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition-colors"
+              >
+                {product.cta} <ArrowUpRight className="w-4 h-4" />
+              </a>
+              <a
+                href="https://wa.me/5564993259857?text=Ol%C3%A1!%20Vim%20pelo%20blog%20da%20AG%20LABS."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-white/40 hover:text-white/80 transition-colors"
+              >
+                Falar com um especialista
+              </a>
+            </div>
           </div>
+
+          {/* Leia também: posts do mesmo pilar */}
+          {related.length > 0 && (
+            <section className="mb-16">
+              <h2 className="text-lg font-bold text-white mb-6">Leia também</h2>
+              <ul className="grid gap-4 sm:grid-cols-3">
+                {related.map((r) => {
+                  const rc = postCover(r);
+                  return (
+                    <li key={r.slug}>
+                      <Link href={`/blog/${r.slug}`} className="group block border border-white/8 hover:border-blue-500/40 transition-colors">
+                        {rc && (
+                          <img
+                            src={rc.srcSet ? `/img/blog/${r.slug}-600.webp` : rc.src}
+                            width={600}
+                            height={315}
+                            alt=""
+                            loading="lazy"
+                            decoding="async"
+                            className="w-full h-auto"
+                          />
+                        )}
+                        <span className="block p-3 text-sm font-semibold text-white/80 group-hover:text-white leading-snug">
+                          {r.title}
+                        </span>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+          )}
 
           {/* Comments */}
           <div className="mb-16">
