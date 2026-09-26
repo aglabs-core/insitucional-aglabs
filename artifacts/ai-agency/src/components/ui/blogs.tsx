@@ -2,6 +2,7 @@ import { ArrowRight } from "lucide-react";
 import { Link } from "wouter";
 import type { BlogPost } from "@/lib/blog-store";
 import { pillarName, postImage, postPillar } from "@/lib/blog-meta";
+import { PostImage } from "@/components/post-image";
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("pt-BR", {
@@ -39,12 +40,11 @@ export default function BlogsLatest({ posts }: BlogsLatestProps) {
             >
               <div className="relative mb-4 sm:mb-6">
                 {postImage(post) ? (
-                  <img
+                  <PostImage
+                    post={post}
                     alt={post.title}
+                    sizes="(min-width: 1024px) 350px, (min-width: 768px) 50vw, 100vw"
                     className="h-64 w-full object-cover sm:h-72 md:h-64 aspect-video"
-                    src={postImage(post)!}
-                    loading="lazy"
-                    decoding="async"
                   />
                 ) : (
                   <div className="h-64 w-full bg-white/5 sm:h-72 md:h-64 flex items-center justify-center">

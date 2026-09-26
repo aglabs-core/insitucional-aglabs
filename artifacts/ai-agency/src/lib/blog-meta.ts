@@ -27,6 +27,8 @@ interface PostMeta {
   seoTitle?: string;
   description?: string;
   variant?: string;
+  /** Foto do post baixada por scripts/blog-images.mjs (servida pelo site). */
+  photo?: { source: string; position?: string; credit?: string };
 }
 
 const PILLARS = meta.pillars as Record<string, Pillar>;
@@ -70,14 +72,27 @@ export function seoDescription(post: Pick<BlogPost, "slug" | "excerpt">): string
   return POSTS[post.slug]?.description ?? post.excerpt;
 }
 
+export interface PostImage {
+  src: string;
+  /** Presente nas imagens servidas pelo site (600 e 1200 de largura). */
+  srcSet?: string;
+  width?: number;
+  height?: number;
+}
+
 /**
- * Imagem mostrada na página (cards, topo do post, "Leia também"): a imagem
- * original do post, vinda do Supabase. Sem ela, a capa gerada
- * (scripts/blog-cover.mjs) entra como reserva.
+ * Imagem mostrada na página (cards, topo do post, "Leia também"): a foto do
+ * post em WebP servida pelo site (scripts/blog-images.mjs); se ela ainda não
+ * foi gerada, a URL original do Supabase; sem nenhuma das duas, a capa gerada
+ * (scripts/blog-cover.mjs) como reserva.
  */
-export function postImage(post: Pick<BlogPost, "slug" | "coverImage">): string | null {
-  if (post.coverImage) return post.coverImage;
-  if (POSTS[post.slug]) return `/img/blog/${post.slug}.webp`;
+export function postImage(post: Pick<BlogPost, "slug" | "coverImage">): PostImage | null {
+  if (POSTS[post.slug]?.photo) {
+    const base = `/img/blog/${post.slug}`;
+    return { src: `${base}-1200.webp`, srcSet: `${base}-600.webp 600w, ${base}-1200.webp 1200w`, width: 1200, height: 630 };
+  }
+  if (post.coverImage) return { src: post.coverImage };
+  if (POSTS[post.slug]) return { src: `/img/blog/og/${post.slug}.webp`, width: 1200, height: 630 };
   return null;
 }
 

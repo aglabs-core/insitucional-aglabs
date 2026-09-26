@@ -86,13 +86,21 @@ function ogCoverOf(p) {
   }
   return null;
 }
+/** Foto do post em WebP servida pelo site (scripts/blog-images.mjs), se já gerada. */
+function localPhotoOf(p) {
+  const base = `/img/blog/${p.slug}`;
+  return META.posts[p.slug]?.photo && existsSync(resolve(ROOT, "public", `${base.slice(1)}-1200.webp`)) ? base : null;
+}
 /**
- * Imagem mostrada na página: a original do post (Supabase). Sem ela, a capa
- * gerada entra como reserva. Espelho de postImage em src/lib/blog-meta.ts.
+ * Imagem mostrada na página: a foto local; senão a URL original do post
+ * (Supabase); sem nenhuma, a capa gerada como reserva. Espelho de postImage
+ * em src/lib/blog-meta.ts.
  */
 function imageOf(p) {
+  const local = localPhotoOf(p);
+  if (local) return `${local}-1200.webp`;
   if (p.cover) return p.cover;
-  if (ogCoverOf(p)) return `/img/blog/${p.slug}.webp`;
+  if (ogCoverOf(p)) return `/img/blog/og/${p.slug}.webp`;
   return null;
 }
 const absolute = (u) => (u.startsWith("/") ? `${SITE_URL}${u}` : u);
@@ -200,9 +208,9 @@ function buildPostPage(shell, post, all) {
     description,
     // Imagem do post e capa de compartilhamento 1200×630.
     image: [
-      ...(post.cover ? [post.cover] : []),
+      ...(image ? [absolute(image)] : []),
       ...(og ? [{ "@type": "ImageObject", url: og.url, width: og.width, height: og.height }] : []),
-    ].concat(post.cover || og ? [] : [DEFAULT_IMAGE]),
+    ].concat(image || og ? [] : [DEFAULT_IMAGE]),
     datePublished: post.created,
     dateModified: post.updated,
     author: { "@type": "Person", name: post.author },
@@ -240,7 +248,12 @@ function buildPostPage(shell, post, all) {
   });
 
   // Conteúdo legível por crawlers (substituído pelo React quando o JS carrega).
-  const coverImg = image ? `<img src="${esc(image)}" alt="${esc(post.title)}" />` : "";
+  const local = localPhotoOf(post);
+  const coverImg = local
+    ? `<img src="${local}-1200.webp" srcset="${local}-600.webp 600w, ${local}-1200.webp 1200w" sizes="100vw" width="1200" height="630" fetchpriority="high" alt="${esc(post.title)}" />`
+    : image
+      ? `<img src="${esc(image)}" alt="${esc(post.title)}" />`
+      : "";
   const relatedHtml = related.length
     ? `<section><h2>Leia também</h2><ul>` +
       related

@@ -4,9 +4,9 @@
  * Lê src/content/blog-meta.json (pilar, kicker e título de capa de cada post) e
  * renderiza cada capa em HTML no Chrome instalado na máquina (puppeteer-core,
  * sem baixar navegador). Saídas, em public/img/blog/:
- *   <slug>.webp       1200×630 — reserva na página para post sem imagem própria
- *   <slug>-600.webp   600×315  — idem, em tamanho de card
  *   og/<slug>.jpg     1200×630, ≤ 300 KB — og:image / twitter:image / JSON-LD
+ *   og/<slug>.webp    1200×630 — reserva na página para post sem foto
+ * A foto que aparece na página é outra: ver scripts/blog-images.mjs.
  *
  * Uso (dentro de artifacts/ai-agency):
  *   node scripts/blog-cover.mjs                 # gera só as capas que faltam
@@ -131,7 +131,7 @@ async function main() {
   const htmlDir = arg("--html");
   const slugs = only ?? Object.keys(META.posts);
   const todo = slugs.filter(
-    (s) => only || force || !existsSync(join(OUT, `${s}.webp`)) || !existsSync(join(OUT, "og", `${s}.jpg`)) || !existsSync(join(OUT, `${s}-600.webp`)),
+    (s) => only || force || !existsSync(join(OUT, "og", `${s}.webp`)) || !existsSync(join(OUT, "og", `${s}.jpg`)),
   );
   if (todo.length === 0) {
     console.log("[blog-cover] nada a gerar (use --force para regerar).");
@@ -151,7 +151,7 @@ async function main() {
       await page.setContent(html, { waitUntil: "load", timeout: 60000 });
       await page.evaluate(() => document.fonts.ready);
       const size = await page.evaluate(() => window.fit());
-      await page.screenshot({ path: join(OUT, `${slug}.webp`), type: "webp", quality: 82 });
+      await page.screenshot({ path: join(OUT, "og", `${slug}.webp`), type: "webp", quality: 82 });
 
       // og:image em JPEG, reduzindo a qualidade até caber em 300 KB.
       const ogPath = join(OUT, "og", `${slug}.jpg`);
@@ -160,12 +160,8 @@ async function main() {
         if (statSync(ogPath).size <= OG_MAX_BYTES) break;
       }
 
-      // Versão de card: mesmo layout renderizado a meia escala.
-      await page.setViewport({ width: 1200, height: 630, deviceScaleFactor: 0.5 });
-      await page.screenshot({ path: join(OUT, `${slug}-600.webp`), type: "webp", quality: 80 });
-
       const kb = (p) => Math.round(statSync(p).size / 1024);
-      console.log(`[blog-cover] ${slug} (título ${size}px) webp ${kb(join(OUT, `${slug}.webp`))} KB · og ${kb(ogPath)} KB`);
+      console.log(`[blog-cover] ${slug} (título ${size}px) webp ${kb(join(OUT, "og", `${slug}.webp`))} KB · og ${kb(ogPath)} KB`);
     }
   } finally {
     await browser.close();

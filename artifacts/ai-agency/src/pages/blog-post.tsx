@@ -6,6 +6,7 @@ import remarkGfm from "remark-gfm";
 import { blogStore, type BlogPost } from "@/lib/blog-store";
 import { commentStore, type BlogComment } from "@/lib/comment-store";
 import { Seo, SITE_URL } from "@/components/seo";
+import { PostImage } from "@/components/post-image";
 import {
   pillarName,
   postImage,
@@ -151,7 +152,7 @@ export default function BlogPostPage() {
             description: seoDescription(post),
             // Imagem do post e capa de compartilhamento (1200×630).
             image: [
-              ...(post.coverImage ? [post.coverImage] : []),
+              ...(image ? [image.src.startsWith("/") ? `${SITE_URL}${image.src}` : image.src] : []),
               ...(og?.width ? [{ "@type": "ImageObject", url: og.url, width: og.width, height: og.height }] : []),
             ],
             datePublished: post.createdAt,
@@ -206,14 +207,7 @@ export default function BlogPostPage() {
         {/* Imagem original do post no topo */}
         {image && (
           <div className="relative h-[50vh] md:h-[60vh] overflow-hidden">
-            <img
-              src={image}
-              alt={post.title}
-              loading="eager"
-              decoding="async"
-              fetchPriority="high"
-              className="w-full h-full object-cover opacity-40"
-            />
+            <PostImage post={post} alt={post.title} sizes="100vw" priority className="w-full h-full object-cover opacity-40" />
             <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/50 to-transparent" />
           </div>
         )}
@@ -302,21 +296,15 @@ export default function BlogPostPage() {
               <h2 className="text-lg font-bold text-white mb-6">Leia também</h2>
               <ul className="grid gap-4 sm:grid-cols-3">
                 {related.map((r) => {
-                  const thumb = postImage(r);
+
                   return (
                     <li key={r.slug}>
                       <Link href={`/blog/${r.slug}`} className="group block border border-white/8 hover:border-blue-500/40 transition-colors">
-                        {thumb && (
-                          <img
-                            src={thumb}
-                            width={600}
-                            height={315}
-                            alt=""
-                            loading="lazy"
-                            decoding="async"
-                            className="w-full h-auto aspect-[1200/630] object-cover"
-                          />
-                        )}
+                        <PostImage
+                          post={r}
+                          sizes="(min-width: 640px) 240px, 100vw"
+                          className="w-full h-auto aspect-[1200/630] object-cover"
+                        />
                         <span className="block p-3 text-sm font-semibold text-white/80 group-hover:text-white leading-snug">
                           {r.title}
                         </span>
