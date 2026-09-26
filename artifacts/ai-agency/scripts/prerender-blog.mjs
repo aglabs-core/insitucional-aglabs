@@ -4,7 +4,7 @@
  * Por que existe: o site é um SPA (Vite) cujo conteúdo dos posts vem do Supabase
  * no cliente. Crawlers de IA que NÃO executam JS (GPTBot/ClaudeBot/PerplexityBot)
  * veriam o blog vazio. Este script busca os posts publicados no Supabase e gera:
- *   dist/blog/<slug>.html  — cada post com texto, capa, CTA do produto, "Leia
+ *   dist/blog/<slug>.html  — cada post com texto, imagem, CTA do produto, "Leia
  *                            também" e JSON-LD BlogPosting + BreadcrumbList;
  *   dist/blog.html         — índice /blog com a lista completa de posts por pilar;
  *   dist/blog/rss.xml      — feed RSS;
@@ -76,21 +76,26 @@ const seoTitleOf = (p) => {
   return branded.length <= 60 ? branded : base;
 };
 const descriptionOf = (p) => META.posts[p.slug]?.description ?? p.excerpt;
-function coverOf(p) {
+/**
+ * Capa gerada (com o título) — só para compartilhamento: og:image,
+ * twitter:image, JSON-LD e RSS. Não aparece na página.
+ */
+function ogCoverOf(p) {
   if (META.posts[p.slug] && existsSync(resolve(ROOT, "public/img/blog/og", `${p.slug}.jpg`))) {
-    return {
-      src: `/img/blog/${p.slug}.webp`,
-      card: `/img/blog/${p.slug}-600.webp`,
-      srcset: `/img/blog/${p.slug}-600.webp 600w, /img/blog/${p.slug}.webp 1200w`,
-      og: `${SITE_URL}/img/blog/og/${p.slug}.jpg`,
-      ogType: "image/jpeg",
-      width: 1200,
-      height: 630,
-    };
+    return { url: `${SITE_URL}/img/blog/og/${p.slug}.jpg`, type: "image/jpeg", width: 1200, height: 630 };
   }
-  if (p.cover) return { src: p.cover, card: p.cover, og: p.cover };
   return null;
 }
+/**
+ * Imagem mostrada na página: a original do post (Supabase). Sem ela, a capa
+ * gerada entra como reserva. Espelho de postImage em src/lib/blog-meta.ts.
+ */
+function imageOf(p) {
+  if (p.cover) return p.cover;
+  if (ogCoverOf(p)) return `/img/blog/${p.slug}.webp`;
+  return null;
+}
+const absolute = (u) => (u.startsWith("/") ? `${SITE_URL}${u}` : u);
 /** Mesma regra de src/lib/blog-meta.ts (relatedPosts): em roda dentro do pilar. */
 function relatedOf(post, all, n = 3) {
   const pillar = pillarOf(post);
@@ -181,7 +186,8 @@ function renderMarkdown(post) {
 
 function buildPostPage(shell, post, all) {
   const url = `${SITE_URL}/blog/${post.slug}`;
-  const cover = coverOf(post);
+  const og = ogCoverOf(post);
+  const image = imageOf(post);
   const pillar = META.pillars[pillarOf(post)];
   const product = productOf(post);
   const description = descriptionOf(post);
@@ -192,9 +198,11 @@ function buildPostPage(shell, post, all) {
     "@type": "BlogPosting",
     headline: post.title,
     description,
-    image: cover?.width
-      ? { "@type": "ImageObject", url: cover.og, width: cover.width, height: cover.height }
-      : cover?.og ?? DEFAULT_IMAGE,
+    // Imagem do post e capa de compartilhamento 1200×630.
+    image: [
+      ...(post.cover ? [post.cover] : []),
+      ...(og ? [{ "@type": "ImageObject", url: og.url, width: og.width, height: og.height }] : []),
+    ].concat(post.cover || og ? [] : [DEFAULT_IMAGE]),
     datePublished: post.created,
     dateModified: post.updated,
     author: { "@type": "Person", name: post.author },
@@ -223,18 +231,16 @@ function buildPostPage(shell, post, all) {
     title: seoTitleOf(post),
     description,
     url,
-    image: cover?.og ?? DEFAULT_IMAGE,
-    imageType: cover?.ogType,
-    imageWidth: cover?.width,
-    imageHeight: cover?.height,
+    image: og?.url ?? (image ? absolute(image) : DEFAULT_IMAGE),
+    imageType: og?.type,
+    imageWidth: og?.width,
+    imageHeight: og?.height,
     type: "article",
     extra,
   });
 
   // Conteúdo legível por crawlers (substituído pelo React quando o JS carrega).
-  const coverImg = cover
-    ? `<img src="${esc(cover.src)}"${cover.srcset ? ` srcset="${cover.srcset}" sizes="(min-width: 768px) 768px, 100vw"` : ""} width="1200" height="630" alt="" />`
-    : "";
+  const coverImg = image ? `<img src="${esc(image)}" alt="${esc(post.title)}" />` : "";
   const relatedHtml = related.length
     ? `<section><h2>Leia também</h2><ul>` +
       related
@@ -248,8 +254,8 @@ function buildPostPage(shell, post, all) {
     `<p>${esc(pillar.name)}</p>` +
     `<h1>${esc(post.title)}</h1>` +
     `<p>${esc(post.author)} · <time datetime="${isoDate(post.created)}">${brDate(post.created)}</time> · ${post.readTime} min de leitura</p>` +
-    `<p>${esc(post.excerpt)}</p>` +
     coverImg +
+    `<p>${esc(post.excerpt)}</p>` +
     renderMarkdown(post) +
     `<aside><h2>${esc(product.name)}</h2><p>${esc(product.pitch)}</p><p><a href="${product.url}">${esc(product.cta)}</a></p></aside>` +
     `</article>` +
@@ -328,7 +334,7 @@ function buildSitemap(posts) {
       lastmod: isoDate(p.updated),
       changefreq: "monthly",
       priority: "0.7",
-      image: coverOf(p)?.og,
+      image: imageOf(p) ? absolute(imageOf(p)) : undefined,
     })),
   ];
   return (
@@ -349,14 +355,14 @@ function buildSitemap(posts) {
 function buildRss(posts) {
   const items = posts
     .map((p) => {
-      const cover = coverOf(p);
+      const og = ogCoverOf(p);
       return (
         `    <item>\n      <title>${esc(p.title)}</title>\n      <link>${SITE_URL}/blog/${p.slug}</link>\n` +
         `      <guid isPermaLink="true">${SITE_URL}/blog/${p.slug}</guid>\n` +
         `      <pubDate>${new Date(p.created).toUTCString()}</pubDate>\n` +
         `      <category>${esc(META.pillars[pillarOf(p)].name)}</category>\n` +
         `      <description>${esc(descriptionOf(p))}</description>\n` +
-        (cover?.width ? `      <enclosure url="${esc(cover.og)}" type="image/jpeg" length="0" />\n` : "") +
+        (og ? `      <enclosure url="${esc(og.url)}" type="image/jpeg" length="0" />\n` : "") +
         `    </item>`
       );
     })

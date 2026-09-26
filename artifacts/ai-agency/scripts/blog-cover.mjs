@@ -4,8 +4,8 @@
  * Lê src/content/blog-meta.json (pilar, kicker e título de capa de cada post) e
  * renderiza cada capa em HTML no Chrome instalado na máquina (puppeteer-core,
  * sem baixar navegador). Saídas, em public/img/blog/:
- *   <slug>.webp       1200×630 — exibição no post e no destaque do índice
- *   <slug>-600.webp   600×315  — cards do índice e "Leia também"
+ *   <slug>.webp       1200×630 — reserva na página para post sem imagem própria
+ *   <slug>-600.webp   600×315  — idem, em tamanho de card
  *   og/<slug>.jpg     1200×630, ≤ 300 KB — og:image / twitter:image / JSON-LD
  *
  * Uso (dentro de artifacts/ai-agency):

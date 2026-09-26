@@ -6,7 +6,7 @@ import { blogStore, type BlogPost } from "@/lib/blog-store";
 import BlogsLatest from "@/components/ui/blogs";
 import { FaqSection, blogFaq, faqJsonLd } from "@/components/ui/faq-section";
 import { Seo } from "@/components/seo";
-import { blogInfo, pillarIds, pillarName, postCover, postPillar } from "@/lib/blog-meta";
+import { blogInfo, pillarIds, pillarName, postImage, postPillar } from "@/lib/blog-meta";
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("pt-BR", {
@@ -18,34 +18,33 @@ function formatDate(iso: string) {
 
 const PostCard = memo(function PostCard({ post, index }: { post: BlogPost; index: number }) {
   const isWide = index % 5 === 0;
-  const cover = postCover(post);
+  const image = postImage(post);
 
-  // Capa inteira (ela já traz o título diagramado) e o texto embaixo, em vez
-  // de texto por cima de uma foto escurecida.
   return (
     <Link href={`/blog/${post.slug}`}>
       <article
-        className={`group cursor-pointer h-full flex flex-col bg-[#0a0a0a] border border-white/8 hover:border-blue-500/40 transition-colors duration-300 ${
+        className={`group cursor-pointer relative overflow-hidden bg-[#0a0a0a] border border-white/8 hover:border-blue-500/40 transition-colors duration-300 h-56 sm:h-64 ${
           isWide ? "sm:col-span-2 md:col-span-2" : ""
         }`}
       >
-        {cover ? (
+        {image ? (
           <img
-            src={cover.src}
-            srcSet={cover.srcSet}
-            sizes={isWide ? "(min-width: 768px) 740px, 100vw" : "(min-width: 768px) 370px, (min-width: 640px) 50vw, 100vw"}
-            width={cover.width}
-            height={cover.height}
-            alt=""
+            src={image}
+            alt={post.title}
             loading="lazy"
             decoding="async"
-            className="w-full h-auto aspect-[1200/630] object-cover"
+            className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-55 transition-opacity duration-500"
           />
         ) : (
-          <div className="w-full aspect-[1200/630] bg-gradient-to-br from-blue-950/30 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-950/30 to-transparent" />
         )}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/65 to-transparent" />
 
-        <div className="p-5 md:p-6 flex-1 flex flex-col">
+        <div className="absolute top-4 right-4">
+          <ArrowUpRight className="w-4 h-4 text-white/0 group-hover:text-blue-400 transition-colors duration-300" />
+        </div>
+
+        <div className="absolute inset-x-0 bottom-0 p-5 md:p-6">
           <span className="block text-blue-400 text-[10px] font-semibold uppercase tracking-widest mb-2">
             {pillarName(postPillar(post))}
           </span>
@@ -56,7 +55,7 @@ const PostCard = memo(function PostCard({ post, index }: { post: BlogPost; index
           >
             {post.title}
           </h2>
-          <div className="mt-auto flex items-center gap-3 text-xs text-white/30">
+          <div className="flex items-center gap-3 text-xs text-white/30">
             <span className="flex items-center gap-1">
               <Clock className="w-3 h-3" />
               {post.readTime} min
@@ -294,50 +293,45 @@ export default function BlogPage() {
             </div>
           )}
 
-          {!loading && featured && (() => {
-            const cover = postCover(featured);
-            return (
-              <Link href={`/blog/${featured.slug}`}>
-                <article className="group cursor-pointer mb-3 grid md:grid-cols-2 border border-white/8 hover:border-blue-500/40 transition-colors duration-300 bg-[#0a0a0a]">
-                  {cover ? (
-                    <img
-                      src={cover.src}
-                      srcSet={cover.srcSet}
-                      sizes="(min-width: 768px) 560px, 100vw"
-                      width={cover.width}
-                      height={cover.height}
-                      alt=""
-                      loading="eager"
-                      decoding="async"
-                      className="w-full h-auto aspect-[1200/630] object-cover"
-                    />
-                  ) : (
-                    <div className="w-full aspect-[1200/630] bg-gradient-to-br from-blue-950/30 to-transparent" />
-                  )}
-                  <div className="p-6 sm:p-8 flex flex-col justify-center">
-                    <span className="inline-block text-blue-400 text-xs font-semibold uppercase tracking-[0.2em] mb-4">
-                      {pillarName(postPillar(featured))} — Destaque
+          {!loading && featured && (
+            <Link href={`/blog/${featured.slug}`}>
+              <article className="group cursor-pointer relative overflow-hidden mb-3 h-72 sm:h-80 md:h-96 border border-white/8 hover:border-blue-500/40 transition-colors duration-300">
+                {postImage(featured) && (
+                  <img
+                    src={postImage(featured)!}
+                    alt={featured.title}
+                    loading="eager"
+                    decoding="async"
+                    className="absolute inset-0 w-full h-full object-cover opacity-35 group-hover:opacity-50 transition-opacity duration-500"
+                  />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent" />
+
+                {/* "Ler artigo" no canto superior direito */}
+                <div className="absolute top-6 right-6 flex items-center gap-1.5 text-xs font-semibold text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  Ler artigo <ArrowUpRight className="w-3.5 h-3.5" />
+                </div>
+
+                <div className="absolute inset-0 p-6 sm:p-8 md:p-14 flex flex-col justify-end max-w-3xl">
+                  <span className="inline-block text-blue-400 text-xs font-semibold uppercase tracking-[0.2em] mb-4">
+                    {pillarName(postPillar(featured))} — Destaque
+                  </span>
+                  <h2 className="text-2xl md:text-4xl font-black text-white leading-tight mb-4 group-hover:text-blue-50 transition-colors line-clamp-2">
+                    {featured.title}
+                  </h2>
+                  <p className="text-white/50 text-sm leading-relaxed mb-6 max-w-xl hidden md:block line-clamp-2">
+                    {featured.excerpt}
+                  </p>
+                  <div className="flex items-center gap-4 text-xs text-white/30">
+                    <span className="flex items-center gap-1.5">
+                      <Clock className="w-3 h-3" /> {featured.readTime} min de leitura
                     </span>
-                    <h2 className="text-2xl md:text-3xl font-black text-white leading-tight mb-4 group-hover:text-blue-50 transition-colors line-clamp-3">
-                      {featured.title}
-                    </h2>
-                    <p className="text-white/50 text-sm leading-relaxed mb-6 line-clamp-2">
-                      {featured.excerpt}
-                    </p>
-                    <div className="flex items-center gap-4 text-xs text-white/30">
-                      <span className="flex items-center gap-1.5">
-                        <Clock className="w-3 h-3" /> {featured.readTime} min de leitura
-                      </span>
-                      <span>{formatDate(featured.createdAt)}</span>
-                      <span className="ml-auto flex items-center gap-1 text-blue-400 font-semibold">
-                        Ler artigo <ArrowUpRight className="w-3.5 h-3.5" />
-                      </span>
-                    </div>
+                    <span>{formatDate(featured.createdAt)}</span>
                   </div>
-                </article>
-              </Link>
-            );
-          })()}
+                </div>
+              </article>
+            </Link>
+          )}
 
           {!loading && rest.length > 0 && (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mt-3">

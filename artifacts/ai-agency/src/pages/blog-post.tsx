@@ -8,7 +8,8 @@ import { commentStore, type BlogComment } from "@/lib/comment-store";
 import { Seo, SITE_URL } from "@/components/seo";
 import {
   pillarName,
-  postCover,
+  postImage,
+  postOgImage,
   postPillar,
   postProduct,
   relatedPosts,
@@ -127,7 +128,8 @@ export default function BlogPostPage() {
     );
   }
 
-  const cover = postCover(post);
+  const image = postImage(post);
+  const og = postOgImage(post);
   const product = postProduct(post);
   const pillar = pillarName(postPillar(post));
   const related = relatedPosts(post, allPosts);
@@ -139,7 +141,7 @@ export default function BlogPostPage() {
         title={seoTitle(post)}
         description={seoDescription(post)}
         path={`/blog/${post.slug}`}
-        image={cover?.og}
+        image={og?.url}
         type="article"
         jsonLd={[
           {
@@ -147,7 +149,11 @@ export default function BlogPostPage() {
             "@type": "BlogPosting",
             headline: post.title,
             description: seoDescription(post),
-            image: cover ? { "@type": "ImageObject", url: cover.og, width: cover.width, height: cover.height } : undefined,
+            // Imagem do post e capa de compartilhamento (1200×630).
+            image: [
+              ...(post.coverImage ? [post.coverImage] : []),
+              ...(og?.width ? [{ "@type": "ImageObject", url: og.url, width: og.width, height: og.height }] : []),
+            ],
             datePublished: post.createdAt,
             dateModified: post.updatedAt || post.createdAt,
             author: { "@type": "Person", name: post.author || "AG LABS" },
@@ -197,8 +203,23 @@ export default function BlogPostPage() {
       </div>
 
       <main className="pt-14">
+        {/* Imagem original do post no topo */}
+        {image && (
+          <div className="relative h-[50vh] md:h-[60vh] overflow-hidden">
+            <img
+              src={image}
+              alt={post.title}
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
+              className="w-full h-full object-cover opacity-40"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/50 to-transparent" />
+          </div>
+        )}
+
         {/* Article */}
-        <div className="max-w-3xl mx-auto px-6 md:px-0 pt-12 md:pt-16">
+        <div className={`max-w-3xl mx-auto px-6 md:px-0 ${image ? "-mt-32 relative z-10" : "pt-24"}`}>
           <span className="inline-block text-blue-400 text-xs font-semibold uppercase tracking-[0.2em] mb-6">
             {pillar}
           </span>
@@ -218,25 +239,9 @@ export default function BlogPostPage() {
             </span>
           </div>
 
-          <p className="text-white/60 text-lg leading-relaxed mb-10 border-l-2 border-blue-500 pl-5">
+          <p className="text-white/60 text-lg leading-relaxed mb-12 border-l-2 border-blue-500 pl-5">
             {post.excerpt}
           </p>
-
-          {/* Capa no tamanho de exibição (WebP gerado por scripts/blog-cover.mjs). */}
-          {cover && (
-            <img
-              src={cover.src}
-              srcSet={cover.srcSet}
-              sizes="(min-width: 768px) 768px, 100vw"
-              width={cover.width}
-              height={cover.height}
-              alt=""
-              loading="eager"
-              decoding="async"
-              fetchPriority="high"
-              className="w-full h-auto mb-12 border border-white/8"
-            />
-          )}
 
           <div
             className="prose prose-invert max-w-none
@@ -297,19 +302,19 @@ export default function BlogPostPage() {
               <h2 className="text-lg font-bold text-white mb-6">Leia também</h2>
               <ul className="grid gap-4 sm:grid-cols-3">
                 {related.map((r) => {
-                  const rc = postCover(r);
+                  const thumb = postImage(r);
                   return (
                     <li key={r.slug}>
                       <Link href={`/blog/${r.slug}`} className="group block border border-white/8 hover:border-blue-500/40 transition-colors">
-                        {rc && (
+                        {thumb && (
                           <img
-                            src={rc.srcSet ? `/img/blog/${r.slug}-600.webp` : rc.src}
+                            src={thumb}
                             width={600}
                             height={315}
                             alt=""
                             loading="lazy"
                             decoding="async"
-                            className="w-full h-auto"
+                            className="w-full h-auto aspect-[1200/630] object-cover"
                           />
                         )}
                         <span className="block p-3 text-sm font-semibold text-white/80 group-hover:text-white leading-snug">

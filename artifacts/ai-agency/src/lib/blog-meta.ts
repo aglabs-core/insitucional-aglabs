@@ -70,29 +70,33 @@ export function seoDescription(post: Pick<BlogPost, "slug" | "excerpt">): string
   return POSTS[post.slug]?.description ?? post.excerpt;
 }
 
-export interface Cover {
-  src: string;
-  srcSet?: string;
-  og: string;
-  width: number;
-  height: number;
+/**
+ * Imagem mostrada na página (cards, topo do post, "Leia também"): a imagem
+ * original do post, vinda do Supabase. Sem ela, a capa gerada
+ * (scripts/blog-cover.mjs) entra como reserva.
+ */
+export function postImage(post: Pick<BlogPost, "slug" | "coverImage">): string | null {
+  if (post.coverImage) return post.coverImage;
+  if (POSTS[post.slug]) return `/img/blog/${post.slug}.webp`;
+  return null;
 }
 
-/** Capa gerada (quando o post tem entrada no JSON) ou a imagem do Supabase. */
-export function postCover(post: Pick<BlogPost, "slug" | "coverImage">): Cover | null {
+export interface OgImage {
+  url: string;
+  width?: number;
+  height?: number;
+}
+
+/**
+ * Imagem de compartilhamento (og:image, twitter:image): a capa gerada com o
+ * título, 1200×630, que só aparece na prévia do link — nunca na página.
+ * Sem capa gerada, cai para a imagem original.
+ */
+export function postOgImage(post: Pick<BlogPost, "slug" | "coverImage">): OgImage | null {
   if (POSTS[post.slug]) {
-    return {
-      src: `/img/blog/${post.slug}.webp`,
-      srcSet: `/img/blog/${post.slug}-600.webp 600w, /img/blog/${post.slug}.webp 1200w`,
-      og: `https://aglabs.ia.br/img/blog/og/${post.slug}.jpg`,
-      width: 1200,
-      height: 630,
-    };
+    return { url: `https://aglabs.ia.br/img/blog/og/${post.slug}.jpg`, width: 1200, height: 630 };
   }
-  if (post.coverImage) {
-    return { src: post.coverImage, og: post.coverImage, width: 1200, height: 630 };
-  }
-  return null;
+  return post.coverImage ? { url: post.coverImage } : null;
 }
 
 /**
