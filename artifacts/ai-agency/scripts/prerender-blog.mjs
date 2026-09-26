@@ -5,7 +5,7 @@
  * no cliente. Crawlers de IA que NÃO executam JS (GPTBot/ClaudeBot/PerplexityBot)
  * veriam o blog vazio. Este script busca os posts publicados no Supabase e gera
  * um HTML estático por post (com o texto do artigo + JSON-LD BlogPosting embutidos)
- * em dist/blog/<slug>/index.html. O Cloudflare Pages serve esse arquivo direto
+ * em dist/blog/<slug>.html. O Cloudflare Pages serve esse arquivo direto
  * (antes do fallback SPA); quando o usuário (com JS) carrega, o React assume.
  *
  * É NÃO-FATAL: qualquer erro aqui só emite warning e sai com código 0, para nunca
@@ -187,9 +187,12 @@ async function main() {
       articleHtml = `<p>${esc(post.excerpt)}</p>`;
     }
     const page = buildPage(shell, post, articleHtml);
-    const dir = resolve(DIST, "blog", post.slug);
+    // <slug>.html (e não <slug>/index.html): o Cloudflare Pages serve
+    // /blog/<slug> direto, sem redirecionar para a versão com barra final,
+    // que divergia da canônica e do sitemap.
+    const dir = resolve(DIST, "blog");
     mkdirSync(dir, { recursive: true });
-    writeFileSync(resolve(dir, "index.html"), page, "utf8");
+    writeFileSync(resolve(dir, `${post.slug}.html`), page, "utf8");
     count++;
   }
 
