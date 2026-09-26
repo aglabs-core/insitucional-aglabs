@@ -1,0 +1,409 @@
+{
+  "blog": {
+    "title": "Blog da AG LABS: IA e automação para negócios",
+    "description": "Guias práticos de IA e automação para pequenos negócios: atendente de IA no WhatsApp, automações com n8n, sites profissionais e vibecoding."
+  },
+  "pillars": {
+    "atendimento": {
+      "name": "Atendimento com IA",
+      "variant": "bone",
+      "product": {
+        "name": "Atendente de IA",
+        "url": "https://rag.aglabs.ia.br/",
+        "cta": "Conhecer o Atendente de IA",
+        "pitch": "Um atendente de IA treinado com as informações do seu negócio, que responde no WhatsApp e passa para a equipe quando precisa."
+      }
+    },
+    "automacao": {
+      "name": "Automação de processos",
+      "variant": "news",
+      "product": {
+        "name": "Serviços de Automação",
+        "url": "https://wf.aglabs.ia.br/",
+        "cta": "Ver automações da AG LABS",
+        "pitch": "Mapeamos a tarefa repetitiva e montamos o fluxo com n8n e IA, ligado às ferramentas que você já usa."
+      }
+    },
+    "sites": {
+      "name": "Sites e presença digital",
+      "variant": "bone",
+      "product": {
+        "name": "Criação de sites",
+        "url": "https://lp.aglabs.ia.br/",
+        "cta": "Ver sites para negócios locais",
+        "pitch": "Site profissional para negócio local, feito pela AG LABS, com o contato direto no WhatsApp."
+      }
+    },
+    "criar-com-ia": {
+      "name": "Criar com IA",
+      "variant": "ambar",
+      "product": {
+        "name": "VibeKit",
+        "url": "https://templates.aglabs.ia.br/",
+        "cta": "Conhecer o VibeKit",
+        "pitch": "Starter kit em React e TypeScript preparado para quem cria software com IA."
+      }
+    },
+    "estrategia": {
+      "name": "IA na estratégia",
+      "variant": "ambar",
+      "product": {
+        "name": "Serviços de Automação",
+        "url": "https://wf.aglabs.ia.br/",
+        "cta": "Pedir um diagnóstico",
+        "pitch": "Descubra por onde começar: a AG LABS avalia o seu processo e indica o que vale automatizar primeiro."
+      }
+    }
+  },
+  "products": {
+    "app": {
+      "name": "AG LABS App",
+      "url": "https://lp.aglabs.app.br/",
+      "cta": "Conhecer o AG LABS App",
+      "pitch": "Gere imagens, vídeos e áudios com IA em um só lugar."
+    },
+    "barberias": {
+      "name": "Barberias",
+      "url": "https://barberias.com.br/",
+      "cta": "Conhecer o Barberias",
+      "pitch": "Sistema de gestão para barbearias com agendamento online, equipe e relatórios."
+    },
+    "members": {
+      "name": "Members",
+      "url": "https://members.ia.br/",
+      "cta": "Conhecer o Members",
+      "pitch": "Plataforma para vender cursos e conteúdos digitais com área de membros."
+    },
+    "viajeki": {
+      "name": "Viajeki",
+      "url": "https://viajeki.com.br/",
+      "cta": "Conhecer o Viajeki",
+      "pitch": "Planejamento colaborativo de viagens com roteiro por dia, mapa e geração por IA."
+    }
+  },
+  "posts": {
+    "5-erros-empresas-implementar-ia-internamente": {
+      "pillar": "estrategia",
+      "kicker": "IA na empresa",
+      "cover": "5 erros ao implementar *IA* dentro da empresa",
+      "seoTitle": "5 erros ao implementar IA na empresa e como evitar",
+      "description": "Antes de montar um time de IA dentro de casa, conheça os 5 erros mais comuns e como evitá-los para não desperdiçar tempo nem orçamento no projeto."
+    },
+    "agentes-ia-para-vendas-automacao-prospeccao-fechamento-2026": {
+      "pillar": "automacao",
+      "kicker": "Vendas com IA",
+      "cover": "Agentes de IA para *vendas*: prospecção, follow-up e fechamento",
+      "seoTitle": "Agentes de IA para vendas: prospecção e follow-up",
+      "description": "Como estruturar agentes de IA para prospectar, fazer follow-up e ajudar no fechamento, mesmo sem uma equipe comercial grande. Guia para PMEs."
+    },
+    "agentic-ai-ia-que-age-sozinha": {
+      "pillar": "estrategia",
+      "kicker": "Tendência",
+      "cover": "Agentic AI: a IA que *age sozinha*",
+      "seoTitle": "Agentic AI: o que é a IA que age sozinha",
+      "description": "Agentes de IA autônomos já rodam em produção em grandes empresas. Entenda o que é Agentic AI, o que muda na prática e o que isso significa para o seu negócio."
+    },
+    "atendente-ia-whatsapp-academias": {
+      "pillar": "atendimento",
+      "kicker": "Academias",
+      "cover": "Atendente de IA no *WhatsApp* vale a pena para academias?",
+      "seoTitle": "Atendente de IA no WhatsApp para academias",
+      "description": "Mensagens fora do horário viram leads perdidos. Veja como um atendente de IA no WhatsApp funciona em academias e quando o investimento compensa."
+    },
+    "atendente-ia-whatsapp-clinicas-estetica": {
+      "pillar": "atendimento",
+      "kicker": "Clínicas de estética",
+      "cover": "Atendente de IA no *WhatsApp* para clínicas de estética",
+      "seoTitle": "Atendente de IA no WhatsApp para clínicas de estética",
+      "description": "Demora para responder no WhatsApp custa agendamentos. Veja como um atendente de IA atende, agenda e qualifica clientes de clínicas de estética."
+    },
+    "atendente-ia-whatsapp-clinicas-medicas": {
+      "pillar": "atendimento",
+      "kicker": "Clínicas médicas",
+      "cover": "Atendente de IA no *WhatsApp* para clínicas médicas",
+      "seoTitle": "Atendente de IA no WhatsApp para clínicas médicas",
+      "description": "Pacientes sem resposta no WhatsApp procuram outra clínica. Veja como um atendente de IA agenda, tira dúvidas e encaminha casos sem aumentar a equipe."
+    },
+    "atendente-ia-whatsapp-escritorios-de-contabilidade": {
+      "pillar": "atendimento",
+      "kicker": "Contabilidade",
+      "cover": "Atendente de IA no *WhatsApp* para escritórios de contabilidade",
+      "seoTitle": "Atendente de IA no WhatsApp para contabilidade",
+      "description": "Perguntas repetidas no WhatsApp tomam o dia do escritório. Veja como um atendente de IA responde clientes de contabilidade 24 horas e libera a equipe."
+    },
+    "atendente-ia-whatsapp-imobiliarias": {
+      "pillar": "atendimento",
+      "kicker": "Imobiliárias",
+      "cover": "Atendente de IA no *WhatsApp* para imobiliárias",
+      "seoTitle": "Atendente de IA no WhatsApp para imobiliárias",
+      "description": "Como imobiliárias usam um atendente de IA no WhatsApp para qualificar leads, responder a qualquer hora e passar o contato certo para o corretor."
+    },
+    "atendente-ia-whatsapp-saloes-de-beleza": {
+      "pillar": "atendimento",
+      "kicker": "Salões de beleza",
+      "cover": "Atendente de IA no *WhatsApp* para salões de beleza",
+      "seoTitle": "Atendente de IA no WhatsApp para salões de beleza",
+      "description": "Veja como um atendente de IA no WhatsApp reduz agendamentos perdidos, responde clientes a qualquer hora e organiza a agenda do salão de beleza."
+    },
+    "claude-fable-5-anthropic-modelo-mythos-publico": {
+      "pillar": "estrategia",
+      "kicker": "Notícia de IA",
+      "cover": "Claude Fable 5: o primeiro modelo *Mythos* aberto ao público",
+      "seoTitle": "Claude Fable 5: o primeiro modelo Mythos público",
+      "description": "A Anthropic lançou o Claude Fable 5, primeiro modelo da classe Mythos para uso geral. Veja o que ele traz, quanto custa e o que muda para empresas."
+    },
+    "claude-sonnet-5-fable-5-voltando-julho-2026": {
+      "pillar": "estrategia",
+      "kicker": "Notícia de IA",
+      "cover": "Claude *Sonnet 5* chega e Fable 5 volta: o que muda",
+      "seoTitle": "Claude Sonnet 5 e a volta do Fable 5: o que muda",
+      "description": "A Anthropic lançou o Claude Sonnet 5 e trouxe o Fable 5 de volta com novas restrições. Entenda as mudanças e o que elas significam para quem usa IA."
+    },
+    "como-automatizar-agendamento-clientes-n8n": {
+      "pillar": "automacao",
+      "kicker": "n8n na prática",
+      "cover": "Como automatizar o *agendamento* de clientes com n8n",
+      "seoTitle": "Como automatizar agendamento de clientes com n8n",
+      "description": "Passo a passo para automatizar o agendamento com n8n: confirmação, lembrete e reagendamento sem troca manual de mensagens. Ferramentas e prazos."
+    },
+    "como-automatizar-cobrancas-lembretes-pagamento-n8n": {
+      "pillar": "automacao",
+      "kicker": "n8n na prática",
+      "cover": "Como automatizar *cobranças* e lembretes com n8n",
+      "seoTitle": "Como automatizar cobranças e lembretes com n8n",
+      "description": "Monte uma régua de cobrança com n8n: lembrete antes do vencimento, aviso no dia e follow-up de atraso, sem código e sem contratar desenvolvedor."
+    },
+    "como-automatizar-controle-de-estoque-n8n": {
+      "pillar": "automacao",
+      "kicker": "n8n na prática",
+      "cover": "Como automatizar o *controle de estoque* com n8n",
+      "seoTitle": "Como automatizar o controle de estoque com n8n",
+      "description": "Troque a planilha desatualizada por um fluxo no n8n que acompanha o estoque, avisa quando um item está acabando e reduz erros de digitação."
+    },
+    "como-automatizar-emissao-nota-fiscal-n8n": {
+      "pillar": "automacao",
+      "kicker": "n8n na prática",
+      "cover": "Como automatizar a emissão de *nota fiscal* com n8n",
+      "seoTitle": "Como automatizar a emissão de nota fiscal com n8n",
+      "description": "Veja como montar no n8n um fluxo que emite a nota fiscal a partir da venda, envia ao cliente e registra tudo, com menos erro e retrabalho no fiscal."
+    },
+    "como-automatizar-envio-de-propostas-comerciais-n8n": {
+      "pillar": "automacao",
+      "kicker": "n8n na prática",
+      "cover": "Como automatizar o envio de *propostas* com n8n",
+      "seoTitle": "Como automatizar propostas comerciais com n8n",
+      "description": "Crie um fluxo no n8n que monta e envia propostas comerciais personalizadas automaticamente, para responder o cliente mais rápido e sem trabalho manual."
+    },
+    "como-automatizar-follow-up-de-vendas-com-n8n": {
+      "pillar": "automacao",
+      "kicker": "n8n na prática",
+      "cover": "Como automatizar o *follow-up* de vendas com n8n",
+      "seoTitle": "Como automatizar o follow-up de vendas com n8n",
+      "description": "Passo a passo para criar um follow-up de vendas automático no n8n: estágios do funil, ligação com o CRM, envio de mensagens e regras de parada."
+    },
+    "como-automatizar-onboarding-novos-clientes-n8n": {
+      "pillar": "automacao",
+      "kicker": "n8n na prática",
+      "cover": "Como automatizar o *onboarding* de clientes com n8n",
+      "seoTitle": "Como automatizar o onboarding de clientes com n8n",
+      "description": "Automatize as boas-vindas a novos clientes com n8n: e-mail de confirmação, acessos, tarefas internas e acompanhamento, sem escrever código."
+    },
+    "como-criar-site-profissional-para-advogados": {
+      "pillar": "sites",
+      "kicker": "Advogados",
+      "cover": "Como criar um *site profissional* para advogados",
+      "seoTitle": "Site profissional para advogados: guia completo",
+      "description": "O que um site de advogado precisa ter para transmitir credibilidade, aparecer no Google e gerar consultas, respeitando as regras de publicidade da OAB."
+    },
+    "como-criar-site-profissional-para-dentistas": {
+      "pillar": "sites",
+      "kicker": "Dentistas",
+      "cover": "Como criar um *site profissional* para dentistas",
+      "seoTitle": "Site profissional para dentistas: guia completo",
+      "description": "O que o site de um dentista precisa ter para atrair pacientes pelo Google, os erros mais comuns e como montar a presença digital sem complicação."
+    },
+    "como-criar-site-profissional-para-personal-trainers": {
+      "pillar": "sites",
+      "kicker": "Personal trainers",
+      "cover": "Como criar um *site profissional* para personal trainers",
+      "seoTitle": "Site profissional para personal trainer: guia",
+      "description": "Como montar um site de personal trainer que passa credibilidade, aparece no Google e leva o aluno direto para o WhatsApp. Guia com o que incluir."
+    },
+    "como-criar-site-profissional-para-psicologos": {
+      "pillar": "sites",
+      "kicker": "Psicólogos",
+      "cover": "Como criar um *site profissional* para psicólogos",
+      "seoTitle": "Site profissional para psicólogos: guia completo",
+      "description": "O que o site de um psicólogo precisa ter, como aparecer no Google e como atrair novos pacientes sem depender só de indicação de outros pacientes."
+    },
+    "como-criar-site-profissional-para-restaurantes": {
+      "pillar": "sites",
+      "kicker": "Restaurantes",
+      "cover": "Como criar um *site profissional* para restaurantes",
+      "seoTitle": "Site profissional para restaurantes: guia completo",
+      "description": "O que o site de um restaurante precisa ter para aparecer no Google, mostrar o cardápio e transformar visitas em reservas e pedidos, sem complicação."
+    },
+    "como-criar-site-profissional-para-veterinarios": {
+      "pillar": "sites",
+      "kicker": "Veterinários",
+      "cover": "Como criar um *site profissional* para veterinários",
+      "seoTitle": "Site profissional para veterinários: guia completo",
+      "description": "Como um site profissional ajuda a clínica veterinária a receber agendamentos online, passar credibilidade e manter os tutores por perto. Guia prático."
+    },
+    "como-usar-vibecoding-criar-ferramentas-internas-empresa": {
+      "pillar": "criar-com-ia",
+      "kicker": "Vibecoding",
+      "cover": "Vibecoding para criar *ferramentas internas* na empresa",
+      "seoTitle": "Vibecoding para criar ferramentas internas",
+      "description": "Como usar vibecoding para criar ferramentas internas sob medida para a sua empresa, sem contratar desenvolvedor e sem esperar meses pelo sistema."
+    },
+    "cultura-de-dados-empresas-que-crescem-com-ia-2026": {
+      "pillar": "estrategia",
+      "kicker": "Dados",
+      "cover": "Cultura de dados: a base para *crescer com IA*",
+      "seoTitle": "Cultura de dados: a base para crescer com IA",
+      "description": "Por que a cultura de dados separa empresas que crescem com IA das que estagnam. Os 4 níveis de maturidade e 5 passos para evoluir a sua empresa."
+    },
+    "delegue-para-ia-equipe-agentes-inteligentes-2026": {
+      "pillar": "automacao",
+      "kicker": "Agentes de IA",
+      "cover": "Delegue para a IA: monte sua *equipe de agentes*",
+      "seoTitle": "Como montar sua primeira equipe de agentes de IA",
+      "description": "Os 4 agentes de IA que fazem mais sentido para uma PME começar, por onde começar e como medir o retorno sem gastar uma fortuna. Guia para empresários."
+    },
+    "era-dos-agentes-gpt55-agentic-commerce-ia-que-executa": {
+      "pillar": "estrategia",
+      "kicker": "Tendência",
+      "cover": "A era dos agentes: a IA que *executa*, não só responde",
+      "seoTitle": "A era dos agentes: GPT-5.5 e agentic commerce",
+      "description": "GPT-5.5 na API, agentic commerce chegando ao Brasil e agentes para o mercado financeiro: o que a virada de maio de 2026 muda para o seu negócio."
+    },
+    "eua-bane-claude-fable-5-anthropic-seguranca-nacional-2026": {
+      "pillar": "estrategia",
+      "kicker": "Notícia de IA",
+      "cover": "EUA mandam desligar o *Claude Fable 5*",
+      "seoTitle": "EUA mandam desligar o Claude Fable 5: o que houve",
+      "description": "Em 12 de junho de 2026 o governo dos EUA ordenou à Anthropic desativar o Claude Fable 5 e o Mythos 5. O que aconteceu e o que muda para o mercado."
+    },
+    "funil-vendas-automatizado-ia-empresarios-2026": {
+      "pillar": "automacao",
+      "kicker": "Vendas com IA",
+      "cover": "Funil de vendas *automatizado* com IA",
+      "seoTitle": "Funil de vendas automatizado com IA: como montar",
+      "description": "Como montar um funil de vendas com IA que qualifica leads, nutre contatos e avisa o vendedor na hora certa, sem precisar de uma equipe grande."
+    },
+    "google-io-2026-anthropic-mythos-nova-fase-ia": {
+      "pillar": "estrategia",
+      "kicker": "Notícia de IA",
+      "cover": "Google I/O 2026 e Anthropic *Mythos*: a nova fase da IA",
+      "seoTitle": "Google I/O 2026 e Anthropic Mythos: o que muda",
+      "description": "Gemini 3.5 Flash, Gemini Spark e o world model Omni no Google I/O, e o Mythos da Anthropic fora do público: o que cada movimento significa para empresas."
+    },
+    "ia-atendimento-cliente-roi-pmes-2026": {
+      "pillar": "atendimento",
+      "kicker": "Atendimento",
+      "cover": "IA no atendimento ao cliente: como calcular o *retorno*",
+      "seoTitle": "IA no atendimento ao cliente: como calcular o ROI",
+      "description": "Como calcular o retorno de um agente de IA no atendimento da sua PME, o que ele resolve sozinho, o que fica com humanos e por onde começar."
+    },
+    "ia-generativa-vantagem-competitiva-pmes-2026": {
+      "pillar": "estrategia",
+      "kicker": "PMEs",
+      "cover": "IA generativa como *vantagem competitiva* para PMEs",
+      "seoTitle": "IA generativa para PMEs: guia prático",
+      "description": "Como pequenas e médias empresas brasileiras podem usar IA generativa no dia a dia para ganhar tempo, vender melhor e competir com empresas maiores."
+    },
+    "ia-transformando-automacao-processos-empresariais": {
+      "pillar": "automacao",
+      "kicker": "Automação",
+      "cover": "Como a IA está mudando a *automação* de processos",
+      "seoTitle": "Como a IA está mudando a automação de processos",
+      "description": "Como agentes de inteligência artificial estão mudando a forma de automatizar tarefas repetitivas nas empresas e de crescer sem aumentar a equipe."
+    },
+    "marketing-com-ia-campanhas-alto-impacto-2026": {
+      "pillar": "criar-com-ia",
+      "product": "app",
+      "kicker": "Marketing com IA",
+      "cover": "Marketing com IA: campanhas *em minutos*",
+      "seoTitle": "Marketing com IA: como criar campanhas mais rápido",
+      "description": "Como usar IA para criar, testar e ajustar campanhas de marketing em muito menos tempo, sem depender de agência cara ou de uma equipe grande."
+    },
+    "operacoes-piloto-automatico-eliminando-gargalos-ia-2026": {
+      "pillar": "automacao",
+      "kicker": "Operação",
+      "cover": "Operação no *piloto automático*: menos gargalos com IA",
+      "seoTitle": "Como eliminar gargalos da operação com IA",
+      "description": "Como PMEs usam IA para automatizar processos operacionais, tirar gargalos do caminho e liberar a equipe para o trabalho que faz a empresa crescer."
+    },
+    "quanto-custa-nao-ter-ia-na-sua-empresa-em-2026": {
+      "pillar": "estrategia",
+      "kicker": "Custo de oportunidade",
+      "cover": "Quanto custa *não ter IA* na sua empresa?",
+      "seoTitle": "Quanto custa não ter IA na sua empresa em 2026?",
+      "description": "Adiar a IA também tem custo: tempo gasto em tarefas repetitivas, respostas lentas e margem menor. Veja como estimar o preço de ficar parado."
+    },
+    "reduzindo-custos-operacionais-com-ia-resultados-90-dias-2026": {
+      "pillar": "automacao",
+      "kicker": "Custos",
+      "cover": "Como *reduzir custos* operacionais com IA em 90 dias",
+      "seoTitle": "Como reduzir custos operacionais com IA",
+      "description": "Um plano de 90 dias para usar IA na redução de custos operacionais: onde automatizar primeiro, como cortar retrabalho e como medir o resultado."
+    },
+    "tomada-de-decisao-com-ia-vantagem-competitiva": {
+      "pillar": "estrategia",
+      "kicker": "Gestão",
+      "cover": "Tomada de decisão com IA: *mais rápida* e mais precisa",
+      "seoTitle": "Tomada de decisão com IA: como começar",
+      "description": "Como usar inteligência artificial para tomar decisões mais rápidas e bem informadas no seu negócio, com exemplos práticos e por onde começar."
+    },
+    "tomando-decisoes-com-ia-dados-tempo-real-vantagem-2026": {
+      "pillar": "estrategia",
+      "kicker": "Dados",
+      "cover": "Decisões com IA e *dados em tempo real*",
+      "seoTitle": "Decisões com IA e dados em tempo real",
+      "description": "Como usar IA para transformar dados em tempo real em decisões do dia a dia: que dados acompanhar, que ferramentas usar e como implementar."
+    },
+    "vibecoding-como-criar-app-com-ia-sem-saber-programar": {
+      "pillar": "criar-com-ia",
+      "kicker": "Vibecoding",
+      "cover": "Vibecoding: crie seu primeiro *app com IA*",
+      "seoTitle": "Vibecoding: como criar um app com IA sem programar",
+      "description": "Vibecoding é criar software descrevendo o que você quer para a IA. Entenda o conceito, as ferramentas e como começar mesmo sem saber programar."
+    },
+    "vibecoding-como-criar-dashboards-dados-empresa-sem-programar": {
+      "pillar": "criar-com-ia",
+      "kicker": "Vibecoding",
+      "cover": "Vibecoding: crie *dashboards* de dados sem programar",
+      "seoTitle": "Vibecoding: como criar dashboards sem programar",
+      "description": "Como usar vibecoding para criar dashboards personalizados que transformam os dados da empresa em decisões, mesmo sem saber programar."
+    },
+    "vibecoding-lojistas-loja-virtual-simples-ia-fim-de-semana": {
+      "pillar": "criar-com-ia",
+      "kicker": "Vibecoding",
+      "cover": "Vibecoding para lojistas: sua *loja virtual* com IA",
+      "seoTitle": "Vibecoding: loja virtual com IA em um fim de semana",
+      "description": "Passo a passo para lojistas criarem uma loja virtual simples com vibecoding, do planejamento à publicação, em um fim de semana de trabalho."
+    },
+    "vibecoding-para-fotografos-site-portfolio-agendamento-ia": {
+      "pillar": "criar-com-ia",
+      "kicker": "Vibecoding",
+      "cover": "Vibecoding para fotógrafos: *portfólio* com agendamento",
+      "seoTitle": "Vibecoding: site de portfólio para fotógrafos",
+      "description": "Como fotógrafos podem usar vibecoding e IA para criar um site de portfólio com agendamento integrado, sem precisar contratar um desenvolvedor."
+    },
+    "vibecoding-para-pequenas-empresas-crm-simples-ia": {
+      "pillar": "criar-com-ia",
+      "kicker": "Vibecoding",
+      "cover": "Vibecoding: um *CRM simples* com IA em 2 horas",
+      "seoTitle": "Vibecoding: como criar um CRM simples com IA",
+      "description": "Como donos de pequenas empresas criam ferramentas próprias, como um CRM simples, dashboards e agendamento, usando IA e sem saber programar."
+    },
+    "whatsapp-business-ia-mudando-varejo": {
+      "pillar": "atendimento",
+      "kicker": "Varejo",
+      "cover": "WhatsApp Business + IA: o que muda no *varejo*",
+      "seoTitle": "WhatsApp Business com IA no varejo: como usar",
+      "description": "Como lojas e e-commerces usam agentes de IA no WhatsApp Business para atender mais rápido, vender mais e manter o cliente por perto de forma automática."
+    }
+  }
+}
