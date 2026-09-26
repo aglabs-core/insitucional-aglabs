@@ -1,7 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import { Link } from "wouter";
 import type { BlogPost } from "@/lib/blog-store";
-import { pillarName, postCover, postPillar } from "@/lib/blog-meta";
+import { pillarName, postImage, postPillar } from "@/lib/blog-meta";
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("pt-BR", {
@@ -38,20 +38,16 @@ export default function BlogsLatest({ posts }: BlogsLatestProps) {
               className="cursor-pointer border border-white/8 bg-[#0a0a0a]/50 backdrop-blur-sm transition-all duration-300 hover:border-blue-500/40 hover:shadow-lg hover:shadow-blue-500/5"
             >
               <div className="relative mb-4 sm:mb-6">
-                {postCover(post) ? (
+                {postImage(post) ? (
                   <img
-                    alt=""
-                    className="w-full h-auto aspect-[1200/630] object-cover"
-                    src={postCover(post)!.src}
-                    srcSet={postCover(post)!.srcSet}
-                    sizes="(min-width: 1024px) 360px, (min-width: 768px) 50vw, 100vw"
-                    width={1200}
-                    height={630}
+                    alt={post.title}
+                    className="h-64 w-full object-cover sm:h-72 md:h-64 aspect-video"
+                    src={postImage(post)!}
                     loading="lazy"
                     decoding="async"
                   />
                 ) : (
-                  <div className="w-full aspect-[1200/630] bg-white/5 flex items-center justify-center">
+                  <div className="h-64 w-full bg-white/5 sm:h-72 md:h-64 flex items-center justify-center">
                     <span className="text-white/20 text-sm">Sem imagem</span>
                   </div>
                 )}

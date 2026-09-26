@@ -135,11 +135,17 @@ se houver divergência, ele prevalece).
   páginas dos produtos. O post leva para a página.
 - Português do Brasil com acentuação completa (há posts antigos sem acento: corrigir ao editar).
 
-## 6. Capa
+## 6. Imagem do post e capa de compartilhamento
 
-Toda capa é gerada pelo `scripts/blog-cover.mjs` a partir do `blog-meta.json`, no padrão
-visual dos carrosséis (três variações: `news` preto, `bone` osso com laranja, `ambar` preto
-com âmbar). Nada de foto de banco de imagens.
+São duas imagens com papéis diferentes:
+
+- **Imagem do post** (`cover_image` no `/admin`): a foto que aparece no card do índice, no
+  topo do post e no "Leia também". É ela que dá vida ao blog: foto real e ligada ao assunto,
+  sem texto por cima (o título já aparece ao lado). Horizontal, pelo menos 1200 px de largura.
+- **Capa de compartilhamento** (gerada): a arte com o título, no padrão visual dos carrosséis
+  (três variações: `news` preto, `bone` osso com laranja, `ambar` preto com âmbar). Só vai no
+  `og:image`/`twitter:image` (prévia do link no WhatsApp, LinkedIn etc.) e no JSON-LD; não
+  aparece na página. Se o post ficar sem imagem própria, ela entra como reserva na página.
 
 Campos de capa no `blog-meta.json`:
 
@@ -156,8 +162,8 @@ node scripts/blog-cover.mjs                        # todos os que ainda não tê
 node scripts/blog-cover.mjs --force                # regera tudo (mudou o template)
 ```
 
-Saída em `public/img/blog/`: `<slug>.webp` (1200×630, exibição), `<slug>-600.webp` (cards) e
-`og/<slug>.jpg` (og:image, ≤ 300 KB). Confira o arquivo gerado antes de commitar: título em
+Saída em `public/img/blog/`: `og/<slug>.jpg` (og:image, ≤ 300 KB) e, para a reserva de post
+sem imagem própria, `<slug>.webp` (1200×630) e `<slug>-600.webp`. Confira o arquivo gerado antes de commitar: título em
 no máximo 3 linhas, sem corte.
 
 Post sem entrada no `blog-meta.json` continua funcionando: usa a `cover_image` do Supabase e o
@@ -183,7 +189,9 @@ SEO:
 - [ ] Nenhum `# ` (H1) no corpo; H2 em forma de pergunta.
 - [ ] 2 a 3 links internos para posts do mesmo pilar e 1 para a página do produto (URL final,
       sem redirecionamento).
-- [ ] Capa gerada (`webp`, `-600.webp` e `og/*.jpg` ≤ 300 KB) e entrada no `blog-meta.json`.
+- [ ] Imagem do post (`cover_image`) horizontal, sem texto, ligada ao assunto.
+- [ ] Capa de compartilhamento gerada (`og/*.jpg` ≤ 300 KB e os `webp` de reserva) e entrada
+      no `blog-meta.json`.
 - [ ] Imagens dentro do texto em WebP, no tamanho em que aparecem, com `alt` descritivo.
 
 Qualidade:
