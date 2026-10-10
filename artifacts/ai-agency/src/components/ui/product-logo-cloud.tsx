@@ -33,15 +33,21 @@ const PRODUCTS: Product[] = [
     logo: "/logos/app-aglabs.png",
     href: "https://aglabs.app.br/",
   },
+  {
+    name: "MeCard",
+    logo: "/logos/mecard.png",
+    href: "https://mecard.com.br/",
+  },
 ];
 
-// Quatro colunas em qualquer largura — no mobile a faixa só funciona
-// visualmente se os quatro ficarem na mesma linha.
+// Cinco colunas em qualquer largura — no mobile a faixa só funciona
+// visualmente se os cinco ficarem na mesma linha.
 const CELL = [
   "border-r bg-white/[0.03]",
   "border-r",
   "border-r bg-white/[0.03]",
-  "",
+  "border-r",
+  "bg-white/[0.03]",
 ];
 
 export function ProductLogoCloud() {
@@ -60,7 +66,7 @@ export function ProductLogoCloud() {
           fica centralizada e fechada dos lados, para os logos respirarem
           juntos em vez de se espalharem pela largura toda. */}
       <div className="relative w-full border-y border-white/10">
-        <div className="mx-auto grid w-full max-w-2xl grid-cols-4 border-x border-white/10">
+        <div className="mx-auto grid w-full max-w-2xl grid-cols-5 border-x border-white/10">
           {PRODUCTS.map((product, i) => (
             <a
               key={product.name}
@@ -83,7 +89,7 @@ export function ProductLogoCloud() {
               </span>
 
               {/* O "+" marca o encontro dos divisores com as linhas da faixa. */}
-              {i < 3 && (
+              {i < 4 && (
                 <Plus
                   strokeWidth={1}
                   aria-hidden="true"
