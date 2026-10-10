@@ -40,14 +40,16 @@ const PRODUCTS: Product[] = [
   },
 ];
 
-// Cinco colunas em qualquer largura — no mobile a faixa só funciona
-// visualmente se os cinco ficarem na mesma linha.
+// No mobile, duas linhas (três em cima, dois centrados embaixo): com os
+// cinco lado a lado as células ficavam estreitas e os logos, espremidos.
+// A malha tem seis colunas e cada célula ocupa duas; a partir de `sm` volta
+// a ser uma linha de cinco.
 const CELL = [
-  "border-r bg-white/[0.03]",
-  "border-r",
-  "border-r bg-white/[0.03]",
-  "border-r",
-  "bg-white/[0.03]",
+  "col-span-2 border-b border-r sm:col-span-1 sm:border-b-0 bg-white/[0.03]",
+  "col-span-2 border-b border-r sm:col-span-1 sm:border-b-0",
+  "col-span-2 border-b sm:col-span-1 sm:border-b-0 sm:border-r bg-white/[0.03]",
+  "col-span-2 col-start-2 border-l border-r sm:col-span-1 sm:col-start-auto sm:border-l-0",
+  "col-span-2 border-r sm:col-span-1 sm:border-r-0 bg-white/[0.03]",
 ];
 
 export function ProductLogoCloud() {
@@ -66,7 +68,7 @@ export function ProductLogoCloud() {
           fica centralizada e fechada dos lados, para os logos respirarem
           juntos em vez de se espalharem pela largura toda. */}
       <div className="relative w-full border-y border-white/10">
-        <div className="mx-auto grid w-full max-w-2xl grid-cols-5 border-x border-white/10">
+        <div className="mx-auto grid w-full max-w-2xl grid-cols-6 sm:grid-cols-5 border-x border-white/10">
           {PRODUCTS.map((product, i) => (
             <a
               key={product.name}
@@ -93,7 +95,7 @@ export function ProductLogoCloud() {
                 <Plus
                   strokeWidth={1}
                   aria-hidden="true"
-                  className="pointer-events-none absolute -bottom-[12.5px] -right-[12.5px] z-10 h-6 w-6 text-white/25"
+                  className={`pointer-events-none absolute -bottom-[12.5px] -right-[12.5px] z-10 h-6 w-6 text-white/25 ${i === 2 ? "hidden sm:block" : ""}`}
                 />
               )}
             </a>
