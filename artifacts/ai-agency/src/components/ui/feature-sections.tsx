@@ -84,8 +84,8 @@ export default function FeatureSections() {
                   Segurança & Privacidade
                 </h3>
                 <p className="text-sm text-slate-600">
-                  Infraestrutura com criptografia ponta a ponta e conformidade
-                  com a LGPD.
+                  Consulte a política de privacidade para conhecer o tratamento
+                  de dados e os canais para exercer seus direitos.
                 </p>
               </div>
             </div>

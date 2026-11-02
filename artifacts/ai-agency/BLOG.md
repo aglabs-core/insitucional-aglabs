@@ -8,6 +8,26 @@ editorial e precisa ser revisado em PR fica no repositório, em
 SEO, kicker e título da capa. O app e o pré-render (`scripts/prerender-blog.mjs`) leem esse
 mesmo arquivo.
 
+### Verificação de conteúdo e destinos
+
+`pnpm run test:content` verifica a copy versionada e faz parte do build. Para os
+corpos dos posts (dados do Supabase, não fallback versionado), exporte somente os
+posts públicos e rode `BLOG_FIXTURE=/caminho/posts.json pnpm run test:content`.
+O snapshot deve conter uma lista não vazia de linhas com `slug`, `published` e
+`content`. Esse modo rejeita o domínio inventado `aglabs.com.br` e o número
+incorreto `556493259857`; não converte outros números ou finalidades.
+Sem `BLOG_FIXTURE`, o teste cobre apenas os arquivos versionados: não certifica
+os dados atuais nem intercepta o publicador externo. Corrigir o corpo exige
+edição da linha `blog_posts.content`, comparação contra o conteúdo lido antes e
+readback; um rebuild isolado não corrige os dados. Depois da correção, o HTML
+pré-renderizado precisa seguir o rebuild padrão descrito em `scripts/README.md`.
+
+Destinos de atendimento usam `https://wa.me/5564993259857`, conforme
+`01 - Empresa/Políticas Comerciais e de Suporte.md` no vault (versão
+`de1d0c3bb8be8215dc651ded42f3d6264aa4cb51`); números de lembretes de produtos
+são distintos. Não afirme ausência de erros/falhas ou conformidade jurídica e
+criptografia ponta a ponta sem comprovação específica do escopo.
+
 ## 1. Para quem escrevemos
 
 Donos de pequenos negócios e profissionais liberais (clínicas, salões, barbearias,
