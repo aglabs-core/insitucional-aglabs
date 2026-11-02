@@ -10,12 +10,12 @@ interface Cta4Props {
 }
 
 export const Cta4 = ({
-  title = "Seu funcionário digital, 24h, não falta, não erra...",
-  description = "Treinado para operar como parte do seu negócio 24h por dia, sem falhas, sem limites. Um agente que não só atende, opera, decide e executa como parte do seu time",
+  title = "Agentes de IA para apoiar a rotina do seu negócio",
+  description = "Agentes configurados para atendimento e tarefas do seu negócio, dentro do escopo e das integrações de cada projeto. Respostas e ações podem exigir revisão humana; a operação depende da disponibilidade dos sistemas conectados.",
   buttonText = "Automatizar minha empresa →",
   buttonUrl = "https://rag.aglabs.ia.br/",
   items = [
-    "Atendentes de WhatsApp que nunca dormem",
+    "Atendimento no WhatsApp com IA",
     "Agentes que executam, decidem e reportam",
     "Análise de dados e relatórios no piloto automático",
     "Criação de conteúdo e copy para marketing",

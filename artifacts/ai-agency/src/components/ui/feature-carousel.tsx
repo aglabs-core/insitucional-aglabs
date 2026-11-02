@@ -67,7 +67,7 @@ const FEATURES = [
     image:
       "/img/feature-6.webp",
     description:
-      "Proteção de dados e conformidade com LGPD e padrões enterprise.",
+      "Requisitos de segurança e privacidade avaliados conforme o escopo de cada projeto.",
   },
   {
     id: "cloud",
