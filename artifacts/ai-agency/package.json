@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --config vite.config.ts --host 0.0.0.0",
-    "build": "vite build --config vite.config.ts && (node scripts/prerender-blog.mjs || echo '[prerender] pulado (nao-fatal)') && node scripts/home-shell.mjs",
+    "build": "vite build --config vite.config.ts && node scripts/prerender-blog.mjs && node scripts/home-shell.mjs",
     "prerender": "node scripts/prerender-blog.mjs",
     "covers": "node scripts/blog-cover.mjs",
     "images": "node scripts/blog-images.mjs",

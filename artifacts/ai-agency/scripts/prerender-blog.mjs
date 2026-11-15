@@ -15,8 +15,8 @@
  * Pilar, título/description de SEO e capa vêm de src/content/blog-meta.json
  * (guia em BLOG.md), o mesmo arquivo que o app usa.
  *
- * É NÃO-FATAL: qualquer erro aqui só emite warning e sai com código 0, para nunca
- * quebrar o deploy. Usa as MESMAS libs de markdown do app (render idêntico).
+ * Falhas de configuração, consulta ou renderização interrompem o build para
+ * impedir deploy de HTML incompleto. Usa as mesmas libs de markdown do app.
  *
  * Requer no ambiente de build: VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY.
  * Teste local sem credenciais: BLOG_FIXTURE=<arquivo.json> com as linhas da
@@ -420,8 +420,7 @@ async function loadRows() {
   const supabaseUrl = process.env.VITE_SUPABASE_URL;
   const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY;
   if (!supabaseUrl || !supabaseKey) {
-    console.warn("[prerender] VITE_SUPABASE_URL/ANON_KEY ausentes — prerender pulado (não-fatal).");
-    return null;
+    throw new Error("[prerender] VITE_SUPABASE_URL/ANON_KEY ausentes");
   }
   const supabase = createClient(supabaseUrl, supabaseKey);
   const { data, error } = await supabase
@@ -429,22 +428,22 @@ async function loadRows() {
     .select("title,slug,excerpt,content,category,cover_image,author,created_at,updated_at,read_time")
     .eq("published", true);
   if (error) {
-    console.warn("[prerender] Erro ao buscar posts no Supabase (não-fatal):", error.message);
-    return null;
+    throw new Error(`[prerender] Erro ao buscar posts no Supabase: ${error.message}`);
   }
   return data ?? [];
 }
 
 async function main() {
   const rows = await loadRows();
-  if (!rows) return;
+  if (!Array.isArray(rows) || rows.length === 0) {
+    throw new Error("[prerender] Nenhum post publicado retornado; geração interrompida");
+  }
 
   let shell;
   try {
     shell = readFileSync(resolve(DIST, "index.html"), "utf8");
   } catch (e) {
-    console.warn("[prerender] dist/index.html não encontrado (não-fatal):", e?.message ?? e);
-    return;
+    throw new Error("[prerender] dist/index.html não encontrado", { cause: e });
   }
 
   const posts = rows
@@ -488,6 +487,6 @@ async function main() {
 }
 
 main().catch((e) => {
-  // NUNCA quebrar o build por causa do prerender.
-  console.warn("[prerender] Exceção não-fatal:", e?.message ?? e);
+  console.error("[prerender] Falha:", e?.message ?? e);
+  process.exitCode = 1;
 });
