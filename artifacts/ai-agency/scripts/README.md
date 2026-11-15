@@ -30,9 +30,10 @@ O Cloudflare Pages serve `dist/blog/<slug>.html` em `/blog/<slug>` diretamente (
 (São as mesmas que o app já usa. No Cloudflare Pages, configure-as em
 Settings → Environment variables, escopo **Production** e **Preview**.)
 
-## Segurança / não-fatal
-O passo é **não-fatal**: qualquer erro (Supabase indisponível, env ausente, etc.) só
-emite warning e **não quebra o build/deploy**. Sem env, ele apenas pula.
+## Segurança / fail-closed
+Falha de consulta, ambiente ausente, resposta malformada ou shell inválido **interrompem o build**; o deploy anterior permanece publicado. Vazio intencional exige `BLOG_ALLOW_EMPTY=1` (não ignora erros CMS). Produção não usa `BLOG_FIXTURE` nem `BLOG_ALLOW_EMPTY`.
+
+`public/404.html` desativa o fallback SPA global do Cloudflare Pages: endereços inexistentes retornam HTTP 404. As rotas válidas do app continuam servidas pelos arquivos HTML gerados pelo `home-shell.mjs`; artigos vêm do prerender.
 
 ## Como testar (recomendado, antes de mesclar)
 Esta mudança está na branch **`feat/blog-prerender`**.
