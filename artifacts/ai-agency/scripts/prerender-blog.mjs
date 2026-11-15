@@ -21,6 +21,7 @@
  * Requer no ambiente de build: VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY.
  * Teste local sem credenciais: BLOG_FIXTURE=<arquivo.json> com as linhas da
  * tabela blog_posts (mesmas colunas do select abaixo).
+ * Blog intencionalmente vazio: BLOG_ALLOW_EMPTY=1 (não ignora erro de consulta).
  */
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { resolve, dirname } from "node:path";
@@ -362,7 +363,7 @@ function buildIndexPage(shell, posts) {
 
 function buildSitemap(posts) {
   const today = new Date().toISOString().slice(0, 10);
-  const newest = posts.reduce((max, p) => (isoDate(p.updated) > max ? isoDate(p.updated) : max), "0000-00-00");
+  const newest = posts.length ? posts.reduce((max, p) => (isoDate(p.updated) > max ? isoDate(p.updated) : max), "0000-00-00") : today;
   const urls = [
     { loc: `${SITE_URL}/`, lastmod: today, changefreq: "weekly", priority: "1.0" },
     { loc: `${SITE_URL}/blog`, lastmod: newest, changefreq: "daily", priority: "0.8" },
@@ -430,13 +431,18 @@ async function loadRows() {
   if (error) {
     throw new Error(`[prerender] Erro ao buscar posts no Supabase: ${error.message}`);
   }
-  return data ?? [];
+  return data;
 }
 
 async function main() {
   const rows = await loadRows();
-  if (!Array.isArray(rows) || rows.length === 0) {
-    throw new Error("[prerender] Nenhum post publicado retornado; geração interrompida");
+  if (!Array.isArray(rows)) throw new Error("[prerender] Resposta de posts inválida; esperado um array");
+  // Uma consulta vazia não prova indisponibilidade: pode ser despublicação intencional.
+  if (!rows.length && process.env.BLOG_ALLOW_EMPTY !== "1") {
+    throw new Error("[prerender] Consulta sem posts publicados; confirme BLOG_ALLOW_EMPTY=1 para um blog intencionalmente vazio");
+  }
+  if (rows.some((row) => !row || typeof row.slug !== "string" || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(row.slug))) {
+    throw new Error("[prerender] Post sem slug válido; geração interrompida");
   }
 
   let shell;
@@ -445,9 +451,11 @@ async function main() {
   } catch (e) {
     throw new Error("[prerender] dist/index.html não encontrado", { cause: e });
   }
+  if (!shell.includes('<div id="root"></div>') || !shell.includes("</head>")) {
+    throw new Error("[prerender] Shell sem marcadores de conteúdo/head");
+  }
 
   const posts = rows
-    .filter((row) => row.slug)
     .map((row) => ({
       title: row.title ?? "",
       slug: row.slug,
