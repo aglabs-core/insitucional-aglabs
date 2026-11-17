@@ -145,7 +145,6 @@ export default function BlogPage() {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [visibleCount, setVisibleCount] = useState(6);
   const [headline, setHeadline] = useState(0);
-  const [carouselHovered, setCarouselHovered] = useState(false);
   const [carouselPaused, setCarouselPaused] = useState(false);
   const [attempt, setAttempt] = useState(0);
   const reducedMotion = useReducedMotion();
@@ -197,29 +196,18 @@ export default function BlogPage() {
 
   // Os destaques não se repetem no feed. Os filtros alcançam todos os artigos.
   const highlights = posts.slice(0, 3);
-  const feedPosts = isFiltering ? filtered : posts.slice(3);
+  const secondaryHighlights = posts.slice(3, 5);
+  const feedPosts = isFiltering ? filtered : posts.slice(5);
 
   useEffect(() => {
-    if (
-      reducedMotion ||
-      carouselPaused ||
-      carouselHovered ||
-      isFiltering ||
-      posts.length < 2
-    )
+    if (reducedMotion || carouselPaused || isFiltering || posts.length < 2)
       return;
     const timer = window.setInterval(() => {
       if (!document.hidden)
         setHeadline((n) => (n + 1) % Math.min(3, posts.length));
-    }, 6000);
+    }, 12000);
     return () => window.clearInterval(timer);
-  }, [
-    reducedMotion,
-    carouselPaused,
-    carouselHovered,
-    isFiltering,
-    posts.length,
-  ]);
+  }, [reducedMotion, carouselPaused, isFiltering, posts.length, headline]);
 
   function selectCategory(id: string | null) {
     setActiveCategory(id);
@@ -360,9 +348,12 @@ export default function BlogPage() {
               role="region"
               aria-label="Manchetes mais recentes"
               aria-roledescription="carrossel"
-              onMouseEnter={() => setCarouselHovered(true)}
-              onMouseLeave={() => setCarouselHovered(false)}
-              onFocusCapture={() => setCarouselPaused(true)}
+              onFocusCapture={(e) => {
+                // Keyboard focus pauses rotation; a touch or mouse click must
+                // not leave autoplay permanently paused after navigation.
+                if ((e.target as HTMLElement).matches(":focus-visible"))
+                  setCarouselPaused(true);
+              }}
               onBlurCapture={(e) => {
                 if (!e.currentTarget.contains(e.relatedTarget))
                   setCarouselPaused(false);
@@ -406,9 +397,9 @@ export default function BlogPage() {
                 </button>
               </div>
             </div>
-            {highlights.length > 1 && (
+            {secondaryHighlights.length > 0 && (
               <div className="journal-secondary-features">
-                {highlights.slice(1).map((post) => (
+                {secondaryHighlights.map((post) => (
                   <FeatureCard key={post.id} post={post} />
                 ))}
               </div>
