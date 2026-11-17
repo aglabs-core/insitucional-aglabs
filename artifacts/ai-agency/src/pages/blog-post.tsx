@@ -1,3 +1,4 @@
+import "./blog-article.css";
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "wouter";
 import { ArrowLeft, Clock, Calendar, User, ArrowUpRight, Share2, Check, MessageSquare, Send } from "lucide-react";
@@ -121,7 +122,7 @@ export default function BlogPostPage() {
 
   if (post === "loading") {
     return (
-      <div className="min-h-screen bg-[#050505] flex items-center justify-center">
+      <div className="journal-article min-h-screen bg-[#050505] flex items-center justify-center">
         <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
       </div>
     );
@@ -129,7 +130,7 @@ export default function BlogPostPage() {
 
   if (!post || !post.published) {
     return (
-      <div className="min-h-screen bg-[#050505] text-white flex flex-col items-center justify-center gap-6">
+      <div className="journal-article min-h-screen bg-[#050505] text-white flex flex-col items-center justify-center gap-6">
         <p className="text-8xl font-black text-white/5">404</p>
         <p className="text-white/40">Artigo não encontrado.</p>
         <Link href="/blog">
@@ -149,7 +150,7 @@ export default function BlogPostPage() {
   const url = `${SITE_URL}/blog/${post.slug}`;
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white">
+    <div className="journal-article min-h-screen bg-[#050505] text-white">
       <Seo
         title={seoTitle(post)}
         description={seoDescription(post)}

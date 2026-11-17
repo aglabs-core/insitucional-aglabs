@@ -1,0 +1,74 @@
+/* Reading palette shared with the editorial index. */
+.journal-article {
+  background: #f5f6f8;
+  color: #172234;
+}
+.journal-article [class*="text-white"] {
+  color: #526176;
+}
+.journal-article :is(h1, h2, h3, strong),
+.journal-article .prose :is(h1, h2, h3, h4, strong) {
+  color: #14243b;
+}
+.journal-article [class*="bg-[#050505]/80"] {
+  background: #f5f6f8ed;
+}
+.journal-article [class*="border-white/"] {
+  border-color: #d9e1ec;
+}
+.journal-article [class*="bg-white/"] {
+  background: #eaf0f8;
+}
+.journal-article [class*="text-blue-"] {
+  color: #245fc9;
+}
+.journal-article :is(a, button)[class*="bg-blue-"],
+.journal-article :is(a, button)[class*="bg-blue-"] * {
+  color: white;
+}
+.journal-article .prose {
+  color: #42526a;
+  --tw-prose-invert-body: #42526a;
+  --tw-prose-invert-headings: #14243b;
+  --tw-prose-invert-bold: #14243b;
+  --tw-prose-invert-counters: #526176;
+  --tw-prose-invert-bullets: #6480a6;
+  --tw-prose-invert-quotes: #42526a;
+  --tw-prose-invert-th-borders: #cbd5e1;
+  --tw-prose-invert-td-borders: #dce3ed;
+}
+.journal-article .prose :is(p, ul, ol, li, blockquote) {
+  color: #42526a;
+}
+.journal-article .prose a {
+  color: #245fc9;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.journal-article .prose code {
+  color: #174da8;
+  background: #e6edf8;
+}
+.journal-article .prose pre {
+  background: #e6edf8;
+  border-color: #cbd7e8;
+}
+.journal-article .prose blockquote {
+  background: #edf2fc;
+  border-left-color: #2563eb;
+  padding: 1px 20px;
+}
+.journal-article :is(input, textarea) {
+  color: #172234;
+  background: white;
+}
+.journal-article :is(input, textarea)::placeholder {
+  color: #738198;
+}
+.journal-article [class*="from-[#050505]"] {
+  background-image: linear-gradient(to top, #f5f6f8, #f5f6f880, transparent);
+}
+
+.journal-article :is(h1, h2, h3, h4, strong)[class] {
+  color: #14243b;
+}

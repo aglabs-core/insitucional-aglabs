@@ -1,13 +1,25 @@
-import React, { useState, useMemo, useEffect, memo } from "react";
+import { useState, useMemo, useEffect, memo } from "react";
 import { Link } from "wouter";
-import { ArrowLeft, ArrowUpRight, Clock, Search, X } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  ArrowUpRight,
+  Clock,
+  Search,
+  X,
+  Sparkles,
+  Workflow,
+  MessageSquare,
+  Layers,
+} from "lucide-react";
 import { MeshGradient, Dithering } from "@paper-design/shaders-react";
+import { useReducedMotion } from "framer-motion";
 import { blogStore, type BlogPost } from "@/lib/blog-store";
-import BlogsLatest from "@/components/ui/blogs";
-import { FaqSection, blogFaq, faqJsonLd } from "@/components/ui/faq-section";
+import { blogFaq, faqJsonLd } from "@/components/ui/faq-section";
 import { Seo } from "@/components/seo";
-import { blogInfo, pillarIds, pillarName, postImage, postPillar } from "@/lib/blog-meta";
+import { blogInfo, pillarIds, pillarName, postPillar } from "@/lib/blog-meta";
 import { PostImage } from "@/components/post-image";
+import "./blog.css";
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("pt-BR", {
@@ -17,60 +29,105 @@ function formatDate(iso: string) {
   });
 }
 
-const PostCard = memo(function PostCard({ post, index }: { post: BlogPost; index: number }) {
-  const isWide = index % 5 === 0;
-  const image = postImage(post);
-
+function PostMeta({ post }: { post: BlogPost }) {
   return (
-    <Link href={`/blog/${post.slug}`}>
-      <article
-        className={`group cursor-pointer relative overflow-hidden bg-[#0a0a0a] border border-white/8 hover:border-blue-500/40 transition-colors duration-300 h-56 sm:h-64 ${
-          isWide ? "sm:col-span-2 md:col-span-2" : ""
-        }`}
-      >
-        {image ? (
+    <div className="journal-meta">
+      <time dateTime={post.createdAt}>{formatDate(post.createdAt)}</time>
+      <span aria-hidden="true">·</span>
+      <span>
+        <Clock size={12} aria-hidden="true" /> {post.readTime} min de leitura
+      </span>
+    </div>
+  );
+}
+
+const FeatureCard = memo(function FeatureCard({
+  post,
+  lead = false,
+}: {
+  post: BlogPost;
+  lead?: boolean;
+}) {
+  return (
+    <Link
+      href={`/blog/${post.slug}`}
+      aria-label={post.title}
+      className={`journal-feature ${lead ? "journal-feature-lead" : ""}`}
+    >
+      <article>
+        <PostImage
+          post={post}
+          alt=""
+          priority={lead}
+          eager={!lead}
+          sizes={
+            lead
+              ? "(min-width: 1280px) 830px, (min-width: 768px) 65vw, 100vw"
+              : "(min-width: 768px) 410px, 100vw"
+          }
+          className="journal-feature-image"
+        />
+        <div className="journal-feature-shade" />
+        <div className="journal-feature-copy">
+          <span className="journal-tag">{pillarName(postPillar(post))}</span>
+          <h2>{post.title}</h2>
+          {lead && <p>{post.excerpt}</p>}
+          {lead && <PostMeta post={post} />}
+        </div>
+        <span className="journal-feature-arrow" aria-hidden="true">
+          <ArrowUpRight size={19} />
+        </span>
+      </article>
+    </Link>
+  );
+});
+
+const FeedCard = memo(function FeedCard({ post }: { post: BlogPost }) {
+  return (
+    <Link
+      className="journal-story"
+      href={`/blog/${post.slug}`}
+      aria-label={post.title}
+    >
+      <article>
+        <div className="journal-story-image">
           <PostImage
             post={post}
-            alt={post.title}
-            sizes={isWide ? "(min-width: 768px) 700px, 100vw" : "(min-width: 768px) 350px, (min-width: 640px) 50vw, 100vw"}
-            className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-55 transition-opacity duration-500"
+            alt=""
+            sizes="(min-width: 768px) 260px, (min-width: 480px) 180px, 115px"
           />
-        ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-950/30 to-transparent" />
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/65 to-transparent" />
-
-        <div className="absolute top-4 right-4">
-          <ArrowUpRight className="w-4 h-4 text-white/0 group-hover:text-blue-400 transition-colors duration-300" />
         </div>
-
-        <div className="absolute inset-x-0 bottom-0 p-5 md:p-6">
-          <span className="block text-blue-400 text-[10px] font-semibold uppercase tracking-widest mb-2">
-            {pillarName(postPillar(post))}
-          </span>
-          <h2
-            className={`font-bold text-white leading-snug mb-2.5 group-hover:text-blue-50 transition-colors line-clamp-2 ${
-              isWide ? "text-lg md:text-xl" : "text-base md:text-lg"
-            }`}
-          >
-            {post.title}
-          </h2>
-          <div className="flex items-center gap-3 text-xs text-white/30">
-            <span className="flex items-center gap-1">
-              <Clock className="w-3 h-3" />
-              {post.readTime} min
-            </span>
-            <span>{formatDate(post.createdAt)}</span>
-          </div>
+        <div className="journal-story-copy">
+          <span className="journal-kicker">{pillarName(postPillar(post))}</span>
+          <h3>{post.title}</h3>
+          <p>{post.excerpt}</p>
+          <PostMeta post={post} />
         </div>
       </article>
     </Link>
   );
 });
 
-function Skeleton({ className }: { className?: string }) {
-  return <div className={`animate-pulse bg-white/5 ${className ?? ""}`} />;
-}
+const shortcuts = [
+  {
+    id: "atendimento",
+    label: "Atendimento com IA",
+    description: "Conversas que viram oportunidades.",
+    Icon: MessageSquare,
+  },
+  {
+    id: "automacao",
+    label: "Automação de processos",
+    description: "Menos tarefas. Mais possibilidades.",
+    Icon: Workflow,
+  },
+  {
+    id: "criar-com-ia",
+    label: "Criar com IA",
+    description: "Da ideia ao seu próximo projeto.",
+    Icon: Sparkles,
+  },
+];
 
 export default function BlogPage() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -78,278 +135,516 @@ export default function BlogPage() {
   const [fetchError, setFetchError] = useState(false);
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [visibleCount, setVisibleCount] = useState(6);
+  const [headline, setHeadline] = useState(0);
+  const [carouselHovered, setCarouselHovered] = useState(false);
+  const [carouselPaused, setCarouselPaused] = useState(false);
+  const [attempt, setAttempt] = useState(0);
+  const reducedMotion = useReducedMotion();
 
   useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
     setFetchError(false);
     blogStore
       .getPublished()
       .then((data) => {
-        setPosts(data);
-        setLoading(false);
+        if (!cancelled) {
+          setPosts(data);
+          setLoading(false);
+        }
       })
       .catch(() => {
-        setFetchError(true);
-        setLoading(false);
+        if (!cancelled) {
+          setFetchError(true);
+          setLoading(false);
+        }
       });
-  }, []);
+    return () => {
+      cancelled = true;
+    };
+  }, [attempt]);
 
-  // Filtros pelos pilares editoriais (BLOG.md), não pela categoria livre do
-  // Supabase, que tinha grafias repetidas ("automacao" e "Automação").
   const categories = useMemo(
     () => pillarIds.filter((id) => posts.some((p) => postPillar(p) === id)),
-    [posts]
+    [posts],
   );
-
   const isFiltering = Boolean(search.trim() || activeCategory);
-
   const filtered = useMemo(() => {
-    const q = search.trim().toLowerCase();
-    return posts.filter((p) => {
-      const matchSearch =
-        !q ||
-        p.title?.toLowerCase().includes(q) ||
-        p.excerpt?.toLowerCase().includes(q) ||
-        pillarName(postPillar(p)).toLowerCase().includes(q);
-      const matchCategory = !activeCategory || postPillar(p) === activeCategory;
-      return matchSearch && matchCategory;
-    });
+    const normalize = (value: string) =>
+      value
+        .toLocaleLowerCase("pt-BR")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+    const q = normalize(search.trim());
+    return posts.filter(
+      (p) =>
+        (!q ||
+          normalize(
+            `${p.title} ${p.excerpt} ${pillarName(postPillar(p))}`,
+          ).includes(q)) &&
+        (!activeCategory || postPillar(p) === activeCategory),
+    );
   }, [posts, search, activeCategory]);
 
-  const latestIds = useMemo(
-    () => new Set(posts.slice(0, 3).map((p) => p.id)),
-    [posts]
-  );
+  // Os destaques não se repetem no feed. Os filtros alcançam todos os artigos.
+  const highlights = posts.slice(0, 3);
+  const feedPosts = isFiltering ? filtered : posts.slice(3);
 
-  // Sem filtro, os três mais recentes ficam só na faixa de Novidades e saem
-  // do feed para não aparecerem duas vezes. Com filtro, a faixa some e o feed
-  // precisa alcançar todos: senão buscar por um post recente devolvia
-  // "nenhum artigo encontrado" com ele visível logo acima.
-  const feedPosts = useMemo(
-    () =>
-      isFiltering ? filtered : filtered.filter((p) => !latestIds.has(p.id)),
-    [filtered, latestIds, isFiltering]
-  );
+  useEffect(() => {
+    if (
+      reducedMotion ||
+      carouselPaused ||
+      carouselHovered ||
+      isFiltering ||
+      posts.length < 2
+    )
+      return;
+    const timer = window.setInterval(() => {
+      if (!document.hidden)
+        setHeadline((n) => (n + 1) % Math.min(3, posts.length));
+    }, 6000);
+    return () => window.clearInterval(timer);
+  }, [
+    reducedMotion,
+    carouselPaused,
+    carouselHovered,
+    isFiltering,
+    posts.length,
+  ]);
 
-  const featured = feedPosts[0];
-  const rest = feedPosts.slice(1);
+  function selectCategory(id: string | null) {
+    setActiveCategory(id);
+    setVisibleCount(6);
+  }
+
+  function browseCategory(id: string) {
+    selectCategory(id);
+    document.getElementById("artigos")?.scrollIntoView({
+      behavior: reducedMotion ? "instant" : "smooth",
+      block: "start",
+    });
+  }
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white">
+    <div className="ag-journal" id="top">
       <Seo
         title={blogInfo.title}
         description={blogInfo.description}
         path="/blog"
         jsonLd={faqJsonLd(blogFaq)}
       />
-      {/* Top bar */}
-      <div className="fixed top-0 left-0 right-0 z-50 flex items-center px-6 md:px-12 h-14 border-b border-white/5 bg-[#050505]/80 backdrop-blur-md">
-        <Link href="/">
-          <span className="flex items-center gap-2 text-white/40 hover:text-white text-sm transition-colors cursor-pointer">
-            <ArrowLeft className="w-4 h-4" />
-            AG LABS
-          </span>
-        </Link>
-      </div>
-
-      <main className="pt-14">
-        {/* Hero */}
-        <div className="relative border-b border-white/8 overflow-hidden">
-          {/* Shader — z-0, cores apagadas para não brigar com o texto */}
+      <a href="#artigos" className="journal-skip">
+        Pular para os artigos
+      </a>
+      <header className="journal-header">
+        <div className="journal-shader" aria-hidden="true">
           <MeshGradient
             colors={["#040a18", "#071a5e", "#030820", "#04194a"]}
             swirl={0.3}
             distortion={0.5}
-            speed={0.025}
-            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", zIndex: 0 }}
+            speed={reducedMotion ? 0 : 0.025}
+            style={{
+              position: "absolute",
+              inset: 0,
+              width: "100%",
+              height: "100%",
+              zIndex: 0,
+            }}
           />
-          {/* Recebia `colors` e `intensity`, que não existem em DitheringProps
-              (o shader é de duas cores, colorBack/colorFront, não de lista
-              como o MeshGradient acima). A lib já os ignorava, então o visual
-              sempre foi o do preset padrão — os props saem sem mexer em nada
-              do que se vê. `shape` e `speed` são válidos e ficam. */}
           <Dithering
             shape="simplex"
-            speed={0.025}
-            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", zIndex: 1 }}
+            speed={reducedMotion ? 0 : 0.025}
+            style={{
+              position: "absolute",
+              inset: 0,
+              width: "100%",
+              height: "100%",
+              zIndex: 1,
+            }}
           />
-          {/* Overlay escuro para legibilidade — z-10 */}
-          <div className="absolute inset-0 bg-black/60 z-10" />
-          {/* Fade de saída para baixo — z-10 */}
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-[#050505] z-10" />
-
-          {/* Texto — z-20, sempre acima de tudo */}
-          <div className="relative z-20 max-w-6xl mx-auto px-6 md:px-12 py-20 md:py-28">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-400 mb-6">
-              Blog — AG LABS
+        </div>
+        <div className="journal-container journal-header-content">
+          <div className="journal-utility">
+            <Link href="/">
+              <ArrowLeft size={12} /> Conheça a AG Labs
+            </Link>
+            <span>Inteligência artificial aplicada a negócios</span>
+          </div>
+          <div className="journal-masthead">
+            <Link
+              href="/blog"
+              className="journal-brand"
+              aria-label="AG Labs Blog, início"
+            >
+              <span>
+                AG LABS<span className="journal-brand-dot">.</span>
+              </span>
+              <span className="journal-brand-label">BLOG</span>
+            </Link>
+            <p>
+              O próximo passo do seu negócio
+              <br />
+              <strong>começa com uma boa ideia.</strong>
             </p>
-            <h1 className="text-5xl md:text-7xl font-black tracking-tight leading-none text-white mb-6 max-w-3xl">
-              Inteligência<br />
-              <span className="text-gray-400">que move</span>{" "}
-              <span className="text-blue-400">negócios.</span>
+            <a
+              href="/#projetos-personalizados"
+              className="journal-contact"
+              aria-label="Conversar com a AG Labs"
+            >
+              Vamos conversar <ArrowUpRight size={16} />
+            </a>
+          </div>
+          <div className="journal-header-bottom">
+            <h1>
+              IA, tecnologia e negócios. <span>Na prática.</span>
             </h1>
-            <p className="text-white/50 text-lg max-w-md">
-              Insights sobre IA, automação e tecnologia aplicada para escalar sua operação.
-            </p>
+            <span className="journal-edition">
+              <span /> Uma publicação AG Labs
+            </span>
           </div>
         </div>
-
-        {/* Busca e filtros, em duas linhas. Dividindo uma linha só com os
-            chips, o campo de busca era espremido a 54px assim que as
-            categorias passavam de meia dúzia — o flex-1 perdia a disputa. */}
-        <div className="max-w-6xl mx-auto px-6 md:px-12 py-6 space-y-4 border-b border-white/5">
-          <div className="relative w-full sm:max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/25" />
-            <input
-              type="text"
-              placeholder="Buscar artigos..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              aria-label="Buscar artigos"
-              className="w-full pl-9 pr-9 py-2.5 bg-white/5 border border-white/8 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-blue-500/50 transition"
-            />
-            {search && (
+        <nav className="journal-navigation" aria-label="Temas do blog">
+          <div className="journal-container journal-nav-inner">
+            <div className="journal-nav-topics">
               <button
                 type="button"
-                onClick={() => setSearch("")}
-                aria-label="Limpar busca"
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-white/30 hover:text-white/70 transition"
+                onClick={() => selectCategory(null)}
+                aria-pressed={!activeCategory}
+                className={!activeCategory ? "is-active" : ""}
               >
-                <X className="w-3.5 h-3.5" />
+                Todos os artigos
               </button>
-            )}
-          </div>
-
-          {/* No mobile os chips rolam na horizontal em vez de empilhar em
-              três linhas e empurrar o conteúdo para baixo. */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 -mb-1 sm:flex-wrap sm:overflow-x-visible sm:pb-0 sm:mb-0 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            <button
-              onClick={() => setActiveCategory(null)}
-              className={`shrink-0 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider border transition ${
-                !activeCategory
-                  ? "border-blue-500 text-blue-400 bg-blue-500/10"
-                  : "border-white/10 text-white/30 hover:border-white/20 hover:text-white/50"
-              }`}
-            >
-              Todos
-            </button>
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(activeCategory === cat ? null : cat)}
-                className={`shrink-0 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider border transition ${
-                  activeCategory === cat
-                    ? "border-blue-500 text-blue-400 bg-blue-500/10"
-                    : "border-white/10 text-white/30 hover:border-white/20 hover:text-white/50"
-                }`}
-              >
-                {pillarName(cat)}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Novidades — últimos lançamentos. Some enquanto há busca ou
-            categoria ativa: ela ignora o filtro, e ver os mesmos três posts
-            fixos no topo dava a impressão de que a busca não funcionava. */}
-        {!loading && !isFiltering && posts.length > 0 && (
-          <BlogsLatest posts={posts} />
-        )}
-
-        {/* Content */}
-        <div className="max-w-6xl mx-auto px-6 md:px-12 py-12">
-          {loading && (
-            <div className="space-y-3">
-              <Skeleton className="w-full h-56 sm:h-64" />
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                <Skeleton className="h-56 sm:h-64" />
-                <Skeleton className="h-56 sm:h-64" />
-                <Skeleton className="h-56 sm:h-64" />
-              </div>
-            </div>
-          )}
-
-          {fetchError && (
-            <div className="py-32 text-center flex flex-col items-center gap-4">
-              <p className="text-white/30 text-lg">Não foi possível carregar os artigos.</p>
-              <button
-                onClick={() => {
-                  setLoading(true);
-                  setFetchError(false);
-                  blogStore
-                    .getPublished()
-                    .then((data) => { setPosts(data); setLoading(false); })
-                    .catch(() => { setFetchError(true); setLoading(false); });
-                }}
-                className="px-4 py-2 text-xs font-semibold uppercase tracking-wider border border-white/10 text-white/40 hover:border-blue-500/50 hover:text-blue-400 transition"
-              >
-                Tentar novamente
-              </button>
-            </div>
-          )}
-
-          {!loading && !fetchError && feedPosts.length === 0 && (
-            <div className="py-32 text-center text-white/20">
-              <p className="text-lg">Nenhum artigo encontrado.</p>
-            </div>
-          )}
-
-          {!loading && featured && (
-            <Link href={`/blog/${featured.slug}`}>
-              <article className="group cursor-pointer relative overflow-hidden mb-3 h-72 sm:h-80 md:h-96 border border-white/8 hover:border-blue-500/40 transition-colors duration-300">
-                <PostImage
-                  post={featured}
-                  alt={featured.title}
-                  sizes="(min-width: 1152px) 1056px, 100vw"
-                  eager
-                  className="absolute inset-0 w-full h-full object-cover opacity-35 group-hover:opacity-50 transition-opacity duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent" />
-
-                {/* "Ler artigo" no canto superior direito */}
-                <div className="absolute top-6 right-6 flex items-center gap-1.5 text-xs font-semibold text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  Ler artigo <ArrowUpRight className="w-3.5 h-3.5" />
-                </div>
-
-                <div className="absolute inset-0 p-6 sm:p-8 md:p-14 flex flex-col justify-end max-w-3xl">
-                  <span className="inline-block text-blue-400 text-xs font-semibold uppercase tracking-[0.2em] mb-4">
-                    {pillarName(postPillar(featured))} — Destaque
-                  </span>
-                  <h2 className="text-2xl md:text-4xl font-black text-white leading-tight mb-4 group-hover:text-blue-50 transition-colors line-clamp-2">
-                    {featured.title}
-                  </h2>
-                  <p className="text-white/50 text-sm leading-relaxed mb-6 max-w-xl hidden md:block line-clamp-2">
-                    {featured.excerpt}
-                  </p>
-                  <div className="flex items-center gap-4 text-xs text-white/30">
-                    <span className="flex items-center gap-1.5">
-                      <Clock className="w-3 h-3" /> {featured.readTime} min de leitura
-                    </span>
-                    <span>{formatDate(featured.createdAt)}</span>
-                  </div>
-                </div>
-              </article>
-            </Link>
-          )}
-
-          {!loading && rest.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mt-3">
-              {rest.map((post, i) => (
-                <PostCard key={post.id} post={post} index={i} />
+              {categories.map((id) => (
+                <button
+                  type="button"
+                  key={id}
+                  onClick={() =>
+                    selectCategory(id === activeCategory ? null : id)
+                  }
+                  aria-pressed={activeCategory === id}
+                  className={activeCategory === id ? "is-active" : ""}
+                >
+                  {pillarName(id)}
+                </button>
               ))}
             </div>
-          )}
+            <a
+              href="#busca"
+              className="journal-search-link"
+              aria-label="Ir para a busca de artigos"
+              onClick={() => document.getElementById("busca")?.focus()}
+            >
+              <Search size={18} />
+            </a>
+          </div>
+        </nav>
+      </header>
+
+      <main className="journal-container">
+        {!loading && !fetchError && !isFiltering && highlights.length > 0 && (
+          <section
+            className="journal-highlights"
+            aria-label="Artigos em destaque"
+          >
+            <div
+              className="journal-carousel"
+              role="region"
+              aria-label="Manchetes mais recentes"
+              aria-roledescription="carrossel"
+              onMouseEnter={() => setCarouselHovered(true)}
+              onMouseLeave={() => setCarouselHovered(false)}
+              onFocusCapture={() => setCarouselPaused(true)}
+            >
+              <FeatureCard
+                post={highlights[headline % highlights.length]}
+                lead
+              />
+              <div className="journal-carousel-controls">
+                <button
+                  type="button"
+                  aria-label="Manchete anterior"
+                  onClick={() =>
+                    setHeadline(
+                      (n) => (n - 1 + highlights.length) % highlights.length,
+                    )
+                  }
+                >
+                  ←
+                </button>
+                {highlights.map((post, i) => (
+                  <button
+                    key={post.id}
+                    type="button"
+                    aria-label={`Manchete ${i + 1}: ${post.title}`}
+                    aria-pressed={headline % highlights.length === i}
+                    onClick={() => setHeadline(i)}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+                <button
+                  type="button"
+                  aria-label="Próxima manchete"
+                  onClick={() =>
+                    setHeadline((n) => (n + 1) % highlights.length)
+                  }
+                >
+                  →
+                </button>
+                <button
+                  type="button"
+                  aria-label={
+                    carouselPaused ? "Reproduzir manchetes" : "Pausar manchetes"
+                  }
+                  onClick={() => setCarouselPaused((v) => !v)}
+                >
+                  {carouselPaused ? "▶" : "Ⅱ"}
+                </button>
+              </div>
+            </div>
+            {highlights.length > 1 && (
+              <div className="journal-secondary-features">
+                {highlights.slice(1).map((post) => (
+                  <FeatureCard key={post.id} post={post} />
+                ))}
+              </div>
+            )}
+          </section>
+        )}
+        {!loading && !fetchError && !isFiltering && categories.length > 0 && (
+          <section className="journal-shortcuts" aria-label="Explore os temas">
+            {shortcuts
+              .filter(({ id }) => categories.includes(id))
+              .map(({ id, label, description, Icon }) => (
+                <button
+                  type="button"
+                  key={id}
+                  onClick={() => browseCategory(id)}
+                >
+                  <span className="journal-shortcut-icon">
+                    <Icon size={22} />
+                  </span>
+                  <span>
+                    <strong>{label}</strong>
+                    <small>{description}</small>
+                  </span>
+                  <ArrowRight size={17} className="journal-shortcut-arrow" />
+                </button>
+              ))}
+          </section>
+        )}
+
+        <div className="journal-content-layout" id="artigos">
+          <section
+            className="journal-feed"
+            aria-labelledby="journal-feed-heading"
+            aria-busy={loading}
+          >
+            <div className="journal-section-heading">
+              <div>
+                <span className="journal-kicker">PARA LER E APLICAR</span>
+                <h2 id="journal-feed-heading">
+                  {isFiltering
+                    ? activeCategory
+                      ? pillarName(activeCategory)
+                      : "Resultados da busca"
+                    : "Últimos artigos"}
+                </h2>
+              </div>
+              <Layers size={22} aria-hidden="true" />
+            </div>
+            <div className="journal-search">
+              <Search size={17} aria-hidden="true" />
+              <input
+                id="busca"
+                type="search"
+                placeholder="O que você quer descobrir?"
+                aria-label="Buscar artigos"
+                value={search}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  setVisibleCount(6);
+                }}
+              />
+              {search && (
+                <button
+                  type="button"
+                  aria-label="Limpar busca"
+                  onClick={() => {
+                    setSearch("");
+                    setVisibleCount(6);
+                  }}
+                >
+                  <X size={16} />
+                </button>
+              )}
+            </div>
+            <div className="journal-results-status" role="status">
+              {!loading && !fetchError && isFiltering && (
+                <>
+                  <span>
+                    {filtered.length}{" "}
+                    {filtered.length === 1
+                      ? "artigo encontrado"
+                      : "artigos encontrados"}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSearch("");
+                      selectCategory(null);
+                    }}
+                  >
+                    Limpar filtros <X size={12} />
+                  </button>
+                </>
+              )}
+            </div>
+            {loading && (
+              <div className="journal-loading" role="status">
+                <span className="journal-sr-only">Carregando artigos…</span>
+                {[0, 1, 2].map((n) => (
+                  <div key={n} className="journal-skeleton" />
+                ))}
+              </div>
+            )}
+            {!loading && fetchError && (
+              <div className="journal-empty">
+                <h3>Não foi possível carregar os artigos.</h3>
+                <p>Tente novamente para continuar a leitura.</p>
+                <button
+                  type="button"
+                  className="journal-load-more"
+                  onClick={() => setAttempt((n) => n + 1)}
+                >
+                  Tentar novamente <ArrowRight size={16} />
+                </button>
+              </div>
+            )}
+            {!loading && !fetchError && feedPosts.length === 0 && (
+              <div className="journal-empty">
+                <h3>
+                  {isFiltering
+                    ? "Nenhum artigo encontrado."
+                    : posts.length
+                      ? "Você já está por dentro."
+                      : "Novas ideias estão a caminho."}
+                </h3>
+                <p>
+                  {isFiltering
+                    ? "Experimente outro termo ou escolha um dos temas do blog."
+                    : posts.length
+                      ? "Explore os destaques acima ou escolha um tema para continuar."
+                      : "Volte em breve para conferir os próximos artigos."}
+                </p>
+              </div>
+            )}
+            {!loading &&
+              !fetchError &&
+              feedPosts
+                .slice(0, visibleCount)
+                .map((post) => <FeedCard key={post.id} post={post} />)}
+            {!loading && !fetchError && feedPosts.length > visibleCount && (
+              <button
+                type="button"
+                className="journal-load-more"
+                onClick={() => setVisibleCount((n) => n + 6)}
+              >
+                Explorar mais artigos <ArrowRight size={16} />
+              </button>
+            )}
+          </section>
+
+          <aside className="journal-sidebar">
+            {categories.length > 0 && (
+              <section className="journal-topics">
+                <span className="journal-kicker">
+                  ESCOLHA SEU PRÓXIMO PASSO
+                </span>
+                <h2>Explore por tema</h2>
+                {categories.map((id, i) => (
+                  <button
+                    type="button"
+                    key={id}
+                    aria-pressed={activeCategory === id}
+                    onClick={() => browseCategory(id)}
+                  >
+                    <span className="journal-topic-number">0{i + 1}</span>
+                    <span>{pillarName(id)}</span>
+                    <ArrowUpRight size={15} />
+                  </button>
+                ))}
+              </section>
+            )}
+            <section className="journal-promo">
+              <span className="journal-promo-icon">
+                <Sparkles size={25} />
+              </span>
+              <span className="journal-kicker">DA LEITURA À AÇÃO</span>
+              <h2>Boas ideias merecem sair do papel.</h2>
+              <p>
+                Agentes de IA, automações e sites para o próximo momento do seu
+                negócio.
+              </p>
+              <a href="/#services">
+                Conheça as soluções <ArrowUpRight size={17} />
+              </a>
+              <span className="journal-promo-brand" aria-hidden="true">
+                AG LABS.
+              </span>
+            </section>
+            <div className="journal-editorial-note">
+              <span className="journal-kicker">NOSSO OLHAR</span>
+              <p>
+                Tecnologia faz sentido quando resolve um problema real. É sobre
+                isso que a gente escreve.
+              </p>
+            </div>
+          </aside>
         </div>
-
-        <FaqSection
-          items={blogFaq}
-          eyebrow="FAQ"
-          title="Perguntas frequentes sobre o blog"
-          className="w-full py-16 md:py-24 border-t border-white/8"
-        />
+        <section className="journal-faq" aria-labelledby="journal-faq-heading">
+          <div>
+            <span className="journal-kicker">SOBRE O BLOG</span>
+            <h2 id="journal-faq-heading">
+              Antes de continuar,
+              <br />
+              algumas respostas.
+            </h2>
+          </div>
+          <div>
+            {blogFaq.map((item) => (
+              <details key={item.question}>
+                <summary>
+                  {item.question}
+                  <span aria-hidden="true">+</span>
+                </summary>
+                <p>{item.answer}</p>
+              </details>
+            ))}
+          </div>
+        </section>
       </main>
-
-      <footer className="border-t border-white/5 py-8 text-center text-xs text-white/15 mt-12">
-        © {new Date().getFullYear()} AG LABS — Inteligência Artificial aplicada
+      <footer className="journal-footer">
+        <div className="journal-container">
+          <Link href="/" className="journal-brand">
+            AG LABS<span className="journal-brand-dot">.</span>
+          </Link>
+          <p>Ideias que conectam tecnologia e negócios.</p>
+          <span>© {new Date().getFullYear()} AG Labs</span>
+          <a
+            href="#top"
+            onClick={(e) => {
+              e.preventDefault();
+              window.scrollTo({
+                top: 0,
+                behavior: reducedMotion ? "instant" : "smooth",
+              });
+            }}
+          >
+            Voltar ao topo ↑
+          </a>
+        </div>
       </footer>
     </div>
   );
