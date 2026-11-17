@@ -53,6 +53,16 @@
         "cta": "Pedir um diagnóstico",
         "pitch": "Descubra por onde começar: a AG LABS avalia o seu processo e indica o que vale automatizar primeiro."
       }
+    },
+    "curiosidades": {
+      "name": "Curiosidades",
+      "variant": "news",
+      "product": {
+        "name": "AG LABS App",
+        "url": "https://lp.aglabs.app.br/",
+        "cta": "Conhecer o AG LABS App",
+        "pitch": "Gere imagens, vídeos e áudios com IA em um só lugar."
+      }
     }
   },
   "products": {
@@ -79,6 +89,24 @@
       "url": "https://viajeki.com.br/",
       "cta": "Conhecer o Viajeki",
       "pitch": "Planejamento colaborativo de viagens com roteiro por dia, mapa e geração por IA."
+    },
+    "orquestra": {
+      "name": "Orquestra",
+      "url": "https://github.com/aglabsrv-sys/orquestra",
+      "cta": "Conhecer o Orquestra",
+      "pitch": "Notas Markdown, tarefas, projetos e agenda no seu computador. Open source, com licença MIT."
+    },
+    "mecard": {
+      "name": "MeCard",
+      "url": "https://mecard.com.br/",
+      "cta": "Conhecer o MeCard",
+      "pitch": "Sua apresentação e seus contatos em um cartão digital."
+    },
+    "atendente": {
+      "name": "Atendente de IA",
+      "url": "https://rag.aglabs.ia.br/",
+      "cta": "Conhecer o Atendente de IA",
+      "pitch": "Um atendente de IA treinado com as informações do seu negócio, que responde no WhatsApp e passa para a equipe quando precisa."
     }
   },
   "posts": {
@@ -126,8 +154,8 @@
     "atendente-ia-whatsapp-clinicas-estetica": {
       "pillar": "atendimento",
       "kicker": "Clínicas de estética",
-      "cover": "Atendente de IA no *WhatsApp* para clínicas de estética",
-      "seoTitle": "Atendente de IA no WhatsApp para clínicas de estética",
+      "cover": "Atendimento com IA na estética: agendamentos e limites do assistente",
+      "seoTitle": "Atendimento com IA na estética: agendamentos e limites do assistente",
       "description": "Demora para responder no WhatsApp custa agendamentos. Veja como um atendente de IA atende, agenda e qualifica clientes de clínicas de estética.",
       "photo": {
         "source": "https://images.pexels.com/photos/7089401/pexels-photo-7089401.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750"
@@ -166,8 +194,8 @@
     "atendente-ia-whatsapp-saloes-de-beleza": {
       "pillar": "atendimento",
       "kicker": "Salões de beleza",
-      "cover": "Atendente de IA no *WhatsApp* para salões de beleza",
-      "seoTitle": "Atendente de IA no WhatsApp para salões de beleza",
+      "cover": "WhatsApp do salão: organize agendamentos com um assistente de IA",
+      "seoTitle": "WhatsApp do salão: organize agendamentos com um assistente de IA",
       "description": "Veja como um atendente de IA no WhatsApp reduz agendamentos perdidos, responde clientes a qualquer hora e organiza a agenda do salão de beleza.",
       "photo": {
         "source": "https://images.pexels.com/photos/3735641/pexels-photo-3735641.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750"
@@ -276,8 +304,8 @@
     "como-criar-site-profissional-para-dentistas": {
       "pillar": "sites",
       "kicker": "Dentistas",
-      "cover": "Como criar um *site profissional* para dentistas",
-      "seoTitle": "Site profissional para dentistas: guia completo",
+      "cover": "Site de dentista: estrutura, busca local e erros a evitar",
+      "seoTitle": "Site de dentista: estrutura, busca local e erros a evitar",
       "description": "O que o site de um dentista precisa ter para atrair pacientes pelo Google, os erros mais comuns e como montar a presença digital sem complicação.",
       "photo": {
         "source": "https://images.pexels.com/photos/3845810/pexels-photo-3845810.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
@@ -286,8 +314,8 @@
     "como-criar-site-profissional-para-personal-trainers": {
       "pillar": "sites",
       "kicker": "Personal trainers",
-      "cover": "Como criar um *site profissional* para personal trainers",
-      "seoTitle": "Site profissional para personal trainer: guia",
+      "cover": "Site de personal trainer: mostre seu trabalho e facilite o contato",
+      "seoTitle": "Site de personal trainer: mostre seu trabalho e facilite o contato",
       "description": "Como montar um site de personal trainer que passa credibilidade, aparece no Google e leva o aluno direto para o WhatsApp. Guia com o que incluir.",
       "photo": {
         "source": "https://images.pexels.com/photos/414029/pexels-photo-414029.jpeg?auto=compress&cs=tinysrgb&w=1260",
@@ -307,8 +335,8 @@
     "como-criar-site-profissional-para-restaurantes": {
       "pillar": "sites",
       "kicker": "Restaurantes",
-      "cover": "Como criar um *site profissional* para restaurantes",
-      "seoTitle": "Site profissional para restaurantes: guia completo",
+      "cover": "Site de restaurante: cardápio, reservas e contato sem atrito",
+      "seoTitle": "Site de restaurante: cardápio, reservas e contato sem atrito",
       "description": "O que o site de um restaurante precisa ter para aparecer no Google, mostrar o cardápio e transformar visitas em reservas e pedidos, sem complicação.",
       "photo": {
         "source": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200&q=80"
@@ -317,8 +345,8 @@
     "como-criar-site-profissional-para-veterinarios": {
       "pillar": "sites",
       "kicker": "Veterinários",
-      "cover": "Como criar um *site profissional* para veterinários",
-      "seoTitle": "Site profissional para veterinários: guia completo",
+      "cover": "Site de clínica veterinária: o que os tutores precisam encontrar",
+      "seoTitle": "Site de clínica veterinária: o que os tutores precisam encontrar",
       "description": "Como um site profissional ajuda a clínica veterinária a receber agendamentos online, passar credibilidade e manter os tutores por perto. Guia prático.",
       "photo": {
         "source": "https://images.pexels.com/photos/1350197/pexels-photo-1350197.jpeg"
@@ -544,6 +572,48 @@
       "photo": {
         "source": "https://images.unsplash.com/photo-1611746872915-64382b5c76da?w=800&q=80"
       }
+    },
+    "qr-code-nasceu-fabricas-antes-pix": {
+      "pillar": "curiosidades",
+      "product": "mecard",
+      "kicker": "Curiosidades",
+      "cover": "O QR Code nasceu nas fábricas, muito antes do Pix",
+      "description": "A história de um código pensado para peças de automóveis ajuda a entender por que ele virou uma ponte entre o papel e o digital."
+    },
+    "web-nasceu-organizar-informacao": {
+      "pillar": "curiosidades",
+      "product": "orquestra",
+      "kicker": "Curiosidades",
+      "cover": "A web começou com um problema de organização",
+      "description": "Antes de lojas e redes sociais, uma proposta de 1989 queria tornar informações de pesquisa mais fáceis de conectar."
+    },
+    "ia-responde-confianca-mesmo-quando-erra": {
+      "pillar": "curiosidades",
+      "product": "app",
+      "kicker": "Curiosidades",
+      "cover": "Por que uma IA pode errar com tanta confiança?",
+      "description": "Uma resposta bem escrita pode conter fatos inventados. Entenda a diferença entre fluência e verificação antes de usar um resultado."
+    },
+    "t-de-gpt-transformer-explicado": {
+      "pillar": "curiosidades",
+      "kicker": "Você sabia?",
+      "cover": "Você sabia que o T do GPT vem de Transformer?",
+      "description": "A sigla esconde uma ideia sobre como relacionar palavras e contexto.",
+      "product": "atendente"
+    },
+    "como-fazer-trends-fotos-ia-referencia": {
+      "pillar": "curiosidades",
+      "kicker": "Você sabia?",
+      "cover": "Como as pessoas fazem aquelas trends de fotos com IA?",
+      "description": "Foto, referência e um pedido claro: um ponto de partida para experimentar.",
+      "product": "app"
+    },
+    "conhecimento-cotidiano-primeiro-produto-digital": {
+      "pillar": "curiosidades",
+      "kicker": "Você sabia?",
+      "cover": "A dúvida que você responde toda semana pode virar um produto",
+      "description": "Uma pergunta recorrente pode ser o começo de uma aula, guia ou material digital.",
+      "product": "members"
     }
   }
 }

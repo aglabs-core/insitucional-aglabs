@@ -35,6 +35,32 @@ function fromRow(row: Record<string, unknown>): BlogPost {
   };
 }
 
+// Generated from published CMS rows; JSON data, never executable article HTML.
+function bootData(): {
+  list?: Record<string, unknown>[];
+  post?: Record<string, unknown>;
+} {
+  try {
+    return JSON.parse(
+      document.getElementById("blog-seed")?.textContent || "{}",
+    );
+  } catch {
+    return {};
+  }
+}
+export function initialBlogPosts(): BlogPost[] {
+  return (bootData().list ?? [])
+    .map(fromRow)
+    .sort(
+      (a, b) =>
+        b.createdAt.localeCompare(a.createdAt) || a.slug.localeCompare(b.slug),
+    );
+}
+export function initialBlogPost(slug?: string): BlogPost | undefined {
+  const row = bootData().post;
+  return row && row.slug === slug ? fromRow(row) : undefined;
+}
+
 // Columns needed for listing (excludes heavy `content` field)
 const LIST_COLUMNS =
   "id, title, slug, excerpt, category, cover_image, published, created_at, updated_at, author, read_time";
@@ -44,8 +70,10 @@ const SLUG_CACHE_TTL = 10 * 60_000; // 10 minutes
 
 let listCache: { data: BlogPost[]; at: number } | null = null;
 const slugCache = new Map<string, { data: BlogPost; at: number }>();
+let bootPostUsed = false;
 
 export function invalidateBlogListCache() {
+  bootPostUsed = true;
   listCache = null;
   slugCache.clear();
 }
@@ -69,7 +97,8 @@ export const blogStore = {
       .from("blog_posts")
       .select(LIST_COLUMNS)
       .eq("published", true)
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false })
+      .order("slug", { ascending: true });
     if (error) throw error;
     const posts = (data ?? []).map(fromRow);
     listCache = { data: posts, at: Date.now() };
@@ -78,6 +107,11 @@ export const blogStore = {
 
   /** Fetches full post by slug. Cached per-slug for 10 min. */
   async getBySlug(slug: string): Promise<BlogPost | null> {
+    if (!bootPostUsed) {
+      bootPostUsed = true;
+      const initial = initialBlogPost(slug);
+      if (initial) slugCache.set(slug, { data: initial, at: Date.now() });
+    }
     const cached = slugCache.get(slug);
     if (cached && Date.now() - cached.at < SLUG_CACHE_TTL) {
       return cached.data;
@@ -93,7 +127,9 @@ export const blogStore = {
     return post;
   },
 
-  async create(post: Omit<BlogPost, "id" | "createdAt" | "updatedAt">): Promise<BlogPost> {
+  async create(
+    post: Omit<BlogPost, "id" | "createdAt" | "updatedAt">,
+  ): Promise<BlogPost> {
     const { data, error } = await supabase
       .from("blog_posts")
       .insert({
@@ -115,7 +151,9 @@ export const blogStore = {
   },
 
   async update(id: string, updates: Partial<BlogPost>): Promise<BlogPost> {
-    const db: Record<string, unknown> = { updated_at: new Date().toISOString() };
+    const db: Record<string, unknown> = {
+      updated_at: new Date().toISOString(),
+    };
     if (updates.title !== undefined) db.title = updates.title;
     if (updates.slug !== undefined) db.slug = updates.slug;
     if (updates.excerpt !== undefined) db.excerpt = updates.excerpt;

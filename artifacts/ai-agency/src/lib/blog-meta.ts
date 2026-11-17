@@ -44,6 +44,7 @@ export const pillarName = (id: string) => PILLARS[id]?.name ?? id;
 /** Pilar de posts ainda sem entrada no JSON, deduzido da categoria do Supabase. */
 function pillarFromCategory(category: string): string {
   const c = category.toLowerCase();
+  if (c.includes("curios")) return "curiosidades";
   if (c.includes("site")) return "sites";
   if (c.includes("conversacional") || c.includes("atendimento")) return "atendimento";
   if (c.includes("automa")) return "automacao";

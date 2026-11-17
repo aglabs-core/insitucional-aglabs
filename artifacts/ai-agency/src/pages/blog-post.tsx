@@ -1,12 +1,30 @@
+import { Footer } from "@/components/ui/footer-section";
+import { useTrackRead } from "@/lib/blog-metrics";
 import "./blog-article.css";
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "wouter";
-import { ArrowLeft, Clock, Calendar, User, ArrowUpRight, Share2, Check, MessageSquare, Send } from "lucide-react";
+import {
+  ArrowLeft,
+  Clock,
+  Calendar,
+  User,
+  ArrowUpRight,
+  Share2,
+  Check,
+  MessageSquare,
+  Send,
+} from "lucide-react";
 import ReactMarkdown from "react-markdown";
-import { blogStore, type BlogPost } from "@/lib/blog-store";
+import { blogStore, initialBlogPost, type BlogPost } from "@/lib/blog-store";
 import { commentStore, type BlogComment } from "@/lib/comment-store";
 import { Seo, SITE_URL } from "@/components/seo";
-import { hasHtml, loadRehypeRaw, postComponents, postRehypePlugins, postRemarkPlugins } from "@/lib/post-render";
+import {
+  hasHtml,
+  loadRehypeRaw,
+  postComponents,
+  postRehypePlugins,
+  postRemarkPlugins,
+} from "@/lib/post-render";
 import { PostImage } from "@/components/post-image";
 import {
   pillarName,
@@ -30,7 +48,10 @@ function formatDate(iso: string) {
 
 export default function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>();
-  const [post, setPost] = useState<BlogPost | null | "loading">("loading");
+  const [post, setPost] = useState<BlogPost | null | "loading">(
+    () => initialBlogPost(slug) ?? "loading",
+  );
+  useTrackRead(post && post !== "loading" ? post.id : undefined);
   const [copied, setCopied] = useState(false);
   const [comments, setComments] = useState<BlogComment[]>([]);
   const [commentsLoading, setCommentsLoading] = useState(false);
@@ -42,50 +63,71 @@ export default function BlogPostPage() {
   const [submitError, setSubmitError] = useState("");
   const [allPosts, setAllPosts] = useState<BlogPost[]>([]);
   // Plugin que interpreta HTML cru: só é baixado para posts guardados em HTML.
-  const [rehypeRaw, setRehypeRaw] = useState<Awaited<ReturnType<typeof loadRehypeRaw>> | null>(null);
+  const [rehypeRaw, setRehypeRaw] = useState<Awaited<
+    ReturnType<typeof loadRehypeRaw>
+  > | null>(null);
   const needsRaw = post !== null && post !== "loading" && hasHtml(post.content);
 
   useEffect(() => {
     if (!needsRaw || rehypeRaw) return;
     let cancelled = false;
     loadRehypeRaw()
-      .then((plugin) => { if (!cancelled) setRehypeRaw(() => plugin); })
+      .then((plugin) => {
+        if (!cancelled) setRehypeRaw(() => plugin);
+      })
       .catch(() => {});
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [needsRaw, rehypeRaw]);
 
   // Lista leve (sem conteúdo, em cache) para o bloco "Leia também".
   useEffect(() => {
-    blogStore.getPublished().then(setAllPosts).catch(() => setAllPosts([]));
+    blogStore
+      .getPublished()
+      .then(setAllPosts)
+      .catch(() => setAllPosts([]));
   }, []);
 
   useEffect(() => {
-    if (!slug) { setPost(null); return; }
+    if (!slug) {
+      setPost(null);
+      return;
+    }
     let cancelled = false;
-    blogStore.getBySlug(slug).then((data) => {
-      if (cancelled) return;
-      setPost(data);
-      if (data) {
-        setCommentsLoading(true);
-        setCommentsError("");
-        commentStore.getByPostId(data.id)
-          .then((c) => {
-            if (!cancelled) setComments(c);
-          })
-          .catch((err: unknown) => {
-            if (!cancelled) {
-              const msg = err instanceof Error ? err.message : "Erro ao carregar comentários.";
-              setCommentsError(msg);
-            }
-          })
-          .finally(() => {
-            if (!cancelled) setCommentsLoading(false);
-          });
-      }
-    }).catch(() => {
-      if (!cancelled) setPost(null);
-    });
-    return () => { cancelled = true; };
+    blogStore
+      .getBySlug(slug)
+      .then((data) => {
+        if (cancelled) return;
+        setPost(data);
+        if (data) {
+          setCommentsLoading(true);
+          setCommentsError("");
+          commentStore
+            .getByPostId(data.id)
+            .then((c) => {
+              if (!cancelled) setComments(c);
+            })
+            .catch((err: unknown) => {
+              if (!cancelled) {
+                const msg =
+                  err instanceof Error
+                    ? err.message
+                    : "Erro ao carregar comentários.";
+                setCommentsError(msg);
+              }
+            })
+            .finally(() => {
+              if (!cancelled) setCommentsLoading(false);
+            });
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setPost(null);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [slug]);
 
   async function handleSubmitComment(e: React.FormEvent) {
@@ -94,14 +136,21 @@ export default function BlogPostPage() {
     setSubmitting(true);
     setSubmitError("");
     try {
-      const created = await commentStore.create(post.id, commentName.trim(), commentText.trim());
+      const created = await commentStore.create(
+        post.id,
+        commentName.trim(),
+        commentText.trim(),
+      );
       setComments((prev) => [...prev, created]);
       setCommentName("");
       setCommentText("");
       setSubmitSuccess(true);
       setTimeout(() => setSubmitSuccess(false), 3000);
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Erro ao enviar comentário. Tente novamente.";
+      const msg =
+        err instanceof Error
+          ? err.message
+          : "Erro ao enviar comentário. Tente novamente.";
       setSubmitError(msg);
     } finally {
       setSubmitting(false);
@@ -112,7 +161,9 @@ export default function BlogPostPage() {
     const url = window.location.href;
     const title = post && post !== "loading" ? (post as BlogPost).title : "";
     if (navigator.share) {
-      try { await navigator.share({ title, url }); } catch (_) {}
+      try {
+        await navigator.share({ title, url });
+      } catch (_) {}
     } else {
       await navigator.clipboard.writeText(url);
       setCopied(true);
@@ -150,108 +201,152 @@ export default function BlogPostPage() {
   const url = `${SITE_URL}/blog/${post.slug}`;
 
   return (
-    <div className="journal-article min-h-screen bg-[#050505] text-white">
-      <Seo
-        title={seoTitle(post)}
-        description={seoDescription(post)}
-        path={`/blog/${post.slug}`}
-        image={og?.url}
-        type="article"
-        jsonLd={[
-          {
-            "@context": "https://schema.org",
-            "@type": "BlogPosting",
-            headline: post.title,
-            description: seoDescription(post),
-            // Imagem do post e capa de compartilhamento (1200×630).
-            image: [
-              ...(image ? [image.src.startsWith("/") ? `${SITE_URL}${image.src}` : image.src] : []),
-              ...(og?.width ? [{ "@type": "ImageObject", url: og.url, width: og.width, height: og.height }] : []),
-            ],
-            datePublished: post.createdAt,
-            dateModified: post.updatedAt || post.createdAt,
-            author: { "@type": "Person", name: post.author || "AG LABS" },
-            publisher: {
-              "@type": "Organization",
-              "@id": `${SITE_URL}/#organization`,
-              name: "AG LABS Intelligence",
-              logo: {
-                "@type": "ImageObject",
-                url: `${SITE_URL}/android-chrome-512x512.png`,
-                width: 512,
-                height: 512,
+    <>
+      <div className="journal-article min-h-screen bg-[#050505] text-white">
+        <Seo
+          title={seoTitle(post)}
+          description={seoDescription(post)}
+          path={`/blog/${post.slug}`}
+          image={og?.url}
+          type="article"
+          jsonLd={[
+            {
+              "@context": "https://schema.org",
+              "@type": "BlogPosting",
+              headline: post.title,
+              description: seoDescription(post),
+              // Imagem do post e capa de compartilhamento (1200×630).
+              image: [
+                ...(image
+                  ? [
+                      image.src.startsWith("/")
+                        ? `${SITE_URL}${image.src}`
+                        : image.src,
+                    ]
+                  : []),
+                ...(og?.width
+                  ? [
+                      {
+                        "@type": "ImageObject",
+                        url: og.url,
+                        width: og.width,
+                        height: og.height,
+                      },
+                    ]
+                  : []),
+              ],
+              datePublished: post.createdAt,
+              dateModified: post.updatedAt || post.createdAt,
+              author: { "@type": "Person", name: post.author || "AG LABS" },
+              publisher: {
+                "@type": "Organization",
+                "@id": `${SITE_URL}/#organization`,
+                name: "AG LABS Intelligence",
+                logo: {
+                  "@type": "ImageObject",
+                  url: `${SITE_URL}/android-chrome-512x512.png`,
+                  width: 512,
+                  height: 512,
+                },
               },
+              mainEntityOfPage: { "@type": "WebPage", "@id": url },
+              articleSection: pillar,
+              inLanguage: "pt-BR",
             },
-            mainEntityOfPage: { "@type": "WebPage", "@id": url },
-            articleSection: pillar,
-            inLanguage: "pt-BR",
-          },
-          {
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            itemListElement: [
-              { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
-              { "@type": "ListItem", position: 2, name: "Blog", item: `${SITE_URL}/blog` },
-              { "@type": "ListItem", position: 3, name: post.title, item: url },
-            ],
-          },
-        ]}
-      />
-      {/* Top bar */}
-      <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 h-14 border-b border-white/5 bg-[#050505]/80 backdrop-blur-md">
-        <Link href="/blog">
-          <span className="flex items-center gap-2 text-white/40 hover:text-white text-sm transition-colors cursor-pointer">
-            <ArrowLeft className="w-4 h-4" />
-            Blog
-          </span>
-        </Link>
-        <button
-          onClick={handleShare}
-          className={`flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider transition-colors ${
-            copied ? "text-green-400" : "text-white/30 hover:text-white/70"
-          }`}
-        >
-          {copied ? <Check className="w-3.5 h-3.5" /> : <Share2 className="w-3.5 h-3.5" />}
-          {copied ? "Link copiado!" : "Compartilhar"}
-        </button>
-      </div>
-
-      <main className="pt-14">
-        {/* Imagem original do post no topo */}
-        {image && (
-          <div className="relative h-[50vh] md:h-[60vh] overflow-hidden">
-            <PostImage post={post} alt={post.title} sizes="100vw" priority className="w-full h-full object-cover opacity-40" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/50 to-transparent" />
-          </div>
-        )}
-
-        {/* Article */}
-        <div className={`max-w-3xl mx-auto px-6 md:px-0 ${image ? "-mt-32 relative z-10" : "pt-24"}`}>
-          <span className="inline-block text-blue-400 text-xs font-semibold uppercase tracking-[0.2em] mb-6">
-            {pillar}
-          </span>
-          <h1 className="text-3xl md:text-5xl font-black leading-tight text-white mb-8">
-            {post.title}
-          </h1>
-
-          <div className="flex flex-wrap items-center gap-6 text-xs text-white/30 pb-8 border-b border-white/8 mb-8">
-            <span className="flex items-center gap-1.5">
-              <User className="w-3.5 h-3.5" /> {post.author}
+            {
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  name: "Home",
+                  item: `${SITE_URL}/`,
+                },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: "Blog",
+                  item: `${SITE_URL}/blog`,
+                },
+                {
+                  "@type": "ListItem",
+                  position: 3,
+                  name: post.title,
+                  item: url,
+                },
+              ],
+            },
+          ]}
+        />
+        {/* Top bar */}
+        <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 h-14 border-b border-white/5 bg-[#050505]/80 backdrop-blur-md">
+          <Link href="/blog">
+            <span className="flex items-center gap-2 text-white/40 hover:text-white text-sm transition-colors cursor-pointer">
+              <ArrowLeft className="w-4 h-4" />
+              Blog
             </span>
-            <span className="flex items-center gap-1.5">
-              <Calendar className="w-3.5 h-3.5" /> {formatDate(post.createdAt)}
-            </span>
-            <span className="flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5" /> {post.readTime} min de leitura
-            </span>
-          </div>
+          </Link>
+          <button
+            onClick={handleShare}
+            className={`flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider transition-colors ${
+              copied ? "text-green-400" : "text-white/30 hover:text-white/70"
+            }`}
+          >
+            {copied ? (
+              <Check className="w-3.5 h-3.5" />
+            ) : (
+              <Share2 className="w-3.5 h-3.5" />
+            )}
+            {copied ? "Link copiado!" : "Compartilhar"}
+          </button>
+        </div>
 
-          <p className="text-white/60 text-lg leading-relaxed mb-12 border-l-2 border-blue-500 pl-5">
-            {post.excerpt}
-          </p>
+        <main className="pt-14">
+          {/* Imagem original do post no topo */}
+          {image && (
+            <div className="relative h-[50vh] md:h-[60vh] overflow-hidden">
+              <PostImage
+                post={post}
+                alt={post.title}
+                sizes="100vw"
+                priority
+                className="w-full h-full object-cover opacity-40"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/50 to-transparent" />
+            </div>
+          )}
 
+          {/* Article */}
           <div
-            className="prose prose-invert max-w-none
+            className={`max-w-3xl mx-auto px-6 md:px-0 ${image ? "-mt-32 relative z-10" : "pt-24"}`}
+          >
+            <span className="inline-block text-blue-400 text-xs font-semibold uppercase tracking-[0.2em] mb-6">
+              {pillar}
+            </span>
+            <h1 className="text-3xl md:text-5xl font-black leading-tight text-white mb-8">
+              {post.title}
+            </h1>
+
+            <div className="flex flex-wrap items-center gap-6 text-xs text-white/30 pb-8 border-b border-white/8 mb-8">
+              <span className="flex items-center gap-1.5">
+                <User className="w-3.5 h-3.5" /> {post.author}
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Calendar className="w-3.5 h-3.5" />{" "}
+                {formatDate(post.createdAt)}
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Clock className="w-3.5 h-3.5" /> {post.readTime} min de leitura
+              </span>
+            </div>
+
+            <p className="text-white/60 text-lg leading-relaxed mb-12 border-l-2 border-blue-500 pl-5">
+              {post.excerpt}
+            </p>
+
+            <div
+              className="prose prose-invert max-w-none
               prose-headings:font-black prose-headings:tracking-tight prose-headings:text-white
               prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-5
               prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-4
@@ -266,173 +361,196 @@ export default function BlogPostPage() {
               prose-pre:bg-white/5 prose-pre:border prose-pre:border-white/10
               prose-hr:border-white/10
               prose-img:rounded-sm"
-          >
-            {/* Markdown ou HTML sanitizado (ver src/lib/post-render.ts). */}
-            {/* Post em HTML espera o parser chegar em vez de piscar as tags como texto. */}
-            {(!needsRaw || rehypeRaw) && (
-              <ReactMarkdown
-                remarkPlugins={postRemarkPlugins}
-                rehypePlugins={postRehypePlugins(rehypeRaw ?? undefined)}
-                components={postComponents}
-              >
-                {stripLeadingTitle(post.content, post.title)}
-              </ReactMarkdown>
-            )}
-          </div>
-
-          {/* CTA para o produto do pilar */}
-          <div className="mt-20 mb-16 border border-white/8 hover:border-blue-500/30 transition-colors duration-300 p-8 md:p-12 relative overflow-hidden group">
-            <div className="absolute -z-0 size-72 -top-20 -right-20 rounded-full bg-blue-600/10 blur-3xl pointer-events-none group-hover:bg-blue-600/20 transition-all duration-700" />
-            <p className="text-blue-400 text-xs font-semibold uppercase tracking-[0.2em] mb-3">
-              {pillar}
-            </p>
-            <h2 className="text-2xl md:text-3xl font-black text-white mb-4 leading-tight">
-              {product.name}
-            </h2>
-            <p className="text-white/50 text-sm mb-8 max-w-md leading-relaxed">{product.pitch}</p>
-            <div className="flex flex-wrap items-center gap-4">
-              <a
-                href={product.url}
-                target="_blank"
-                rel="noopener"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition-colors"
-              >
-                {product.cta} <ArrowUpRight className="w-4 h-4" />
-              </a>
-              <a
-                href="https://wa.me/5564993259857?text=Ol%C3%A1!%20Vim%20pelo%20blog%20da%20AG%20LABS."
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-white/40 hover:text-white/80 transition-colors"
-              >
-                Falar com um especialista
-              </a>
-            </div>
-          </div>
-
-          {/* Leia também: posts do mesmo pilar */}
-          {related.length > 0 && (
-            <section className="mb-16">
-              <h2 className="text-lg font-bold text-white mb-6">Leia também</h2>
-              <ul className="grid gap-4 sm:grid-cols-3">
-                {related.map((r) => {
-
-                  return (
-                    <li key={r.slug}>
-                      <Link href={`/blog/${r.slug}`} className="group block border border-white/8 hover:border-blue-500/40 transition-colors">
-                        <PostImage
-                          post={r}
-                          sizes="(min-width: 640px) 240px, 100vw"
-                          className="w-full h-auto aspect-[1200/630] object-cover"
-                        />
-                        <span className="block p-3 text-sm font-semibold text-white/80 group-hover:text-white leading-snug">
-                          {r.title}
-                        </span>
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-            </section>
-          )}
-
-          {/* Comments */}
-          <div className="mb-16">
-            <div className="flex items-center gap-2 mb-8 border-t border-white/5 pt-10">
-              <MessageSquare className="w-5 h-5 text-blue-400" />
-              <h2 className="text-lg font-bold text-white">
-                Comentários
-                {comments.length > 0 && (
-                  <span className="ml-2 text-sm text-white/30 font-normal">({comments.length})</span>
-                )}
-              </h2>
-            </div>
-
-            {/* Comment list */}
-            {commentsLoading ? (
-              <div className="flex items-center gap-2 text-white/30 text-sm mb-10">
-                <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-transparent rounded-full animate-spin" />
-                Carregando comentários...
-              </div>
-            ) : commentsError ? (
-              <p className="text-red-400/70 text-sm mb-10">{commentsError}</p>
-            ) : comments.length === 0 ? (
-              <p className="text-white/30 text-sm mb-10">Seja o primeiro a comentar.</p>
-            ) : (
-              <ul className="space-y-6 mb-10">
-                {comments.map((c) => (
-                  <li key={c.id} className="border border-white/5 p-5">
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-sm font-semibold text-white">{c.authorName}</span>
-                      <span className="text-xs text-white/25">
-                        {new Date(c.createdAt).toLocaleDateString("pt-BR", {
-                          day: "2-digit",
-                          month: "short",
-                          year: "numeric",
-                        })}
-                      </span>
-                    </div>
-                    <p className="text-white/50 text-sm leading-relaxed whitespace-pre-wrap">{c.content}</p>
-                  </li>
-                ))}
-              </ul>
-            )}
-
-            {/* Comment form */}
-            <form onSubmit={handleSubmitComment} className="border border-white/8 p-6 space-y-4">
-              <h3 className="text-sm font-semibold text-white/70 uppercase tracking-wider">Deixe um comentário</h3>
-              <input
-                type="text"
-                placeholder="Seu nome"
-                value={commentName}
-                onChange={(e) => setCommentName(e.target.value)}
-                required
-                maxLength={100}
-                className="w-full bg-white/5 border border-white/10 text-white text-sm px-4 py-2.5 placeholder:text-white/20 focus:outline-none focus:border-blue-500/50 transition-colors"
-              />
-              <div className="relative">
-                <textarea
-                  placeholder="Escreva seu comentário..."
-                  value={commentText}
-                  onChange={(e) => setCommentText(e.target.value)}
-                  required
-                  maxLength={1000}
-                  rows={4}
-                  className="w-full bg-white/5 border border-white/10 text-white text-sm px-4 py-2.5 placeholder:text-white/20 focus:outline-none focus:border-blue-500/50 transition-colors resize-none"
-                />
-                <span className="absolute bottom-2.5 right-3 text-xs text-white/20 pointer-events-none">
-                  {commentText.length}/1000
-                </span>
-              </div>
-              {submitError && (
-                <p className="text-red-400 text-xs">{submitError}</p>
+            >
+              {/* Markdown ou HTML sanitizado (ver src/lib/post-render.ts). */}
+              {/* Post em HTML espera o parser chegar em vez de piscar as tags como texto. */}
+              {(!needsRaw || rehypeRaw) && (
+                <ReactMarkdown
+                  remarkPlugins={postRemarkPlugins}
+                  rehypePlugins={postRehypePlugins(rehypeRaw ?? undefined)}
+                  components={postComponents}
+                >
+                  {stripLeadingTitle(post.content, post.title)}
+                </ReactMarkdown>
               )}
-              <button
-                type="submit"
-                disabled={submitting || !commentName.trim() || !commentText.trim()}
-                className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-semibold transition-colors"
-              >
-                {submitting ? (
-                  <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                ) : submitSuccess ? (
-                  <Check className="w-4 h-4" />
-                ) : (
-                  <Send className="w-4 h-4" />
-                )}
-                {submitSuccess ? "Comentário enviado!" : "Enviar comentário"}
-              </button>
-            </form>
-          </div>
+            </div>
 
-          <div className="pb-16 border-t border-white/5 pt-8">
-            <Link href="/blog">
-              <span className="flex items-center gap-2 text-white/30 hover:text-white/70 text-sm transition-colors cursor-pointer w-fit">
-                <ArrowLeft className="w-4 h-4" /> Voltar para o blog
-              </span>
-            </Link>
+            {/* CTA para o produto do pilar */}
+            <div className="mt-20 mb-16 border border-white/8 hover:border-blue-500/30 transition-colors duration-300 p-8 md:p-12 relative overflow-hidden group">
+              <div className="absolute -z-0 size-72 -top-20 -right-20 rounded-full bg-blue-600/10 blur-3xl pointer-events-none group-hover:bg-blue-600/20 transition-all duration-700" />
+              <p className="text-blue-400 text-xs font-semibold uppercase tracking-[0.2em] mb-3">
+                {pillar}
+              </p>
+              <h2 className="text-2xl md:text-3xl font-black text-white mb-4 leading-tight">
+                {product.name}
+              </h2>
+              <p className="text-white/50 text-sm mb-8 max-w-md leading-relaxed">
+                {product.pitch}
+              </p>
+              <div className="flex flex-wrap items-center gap-4">
+                <a
+                  href={product.url}
+                  target="_blank"
+                  rel="noopener"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition-colors"
+                >
+                  {product.cta} <ArrowUpRight className="w-4 h-4" />
+                </a>
+                <a
+                  href="https://wa.me/5564993259857?text=Ol%C3%A1!%20Vim%20pelo%20blog%20da%20AG%20LABS."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-white/40 hover:text-white/80 transition-colors"
+                >
+                  Falar com um especialista
+                </a>
+              </div>
+            </div>
+
+            {/* Leia também: posts do mesmo pilar */}
+            {related.length > 0 && (
+              <section className="mb-16">
+                <h2 className="text-lg font-bold text-white mb-6">
+                  Leia também
+                </h2>
+                <ul className="grid gap-4 sm:grid-cols-3">
+                  {related.map((r) => {
+                    return (
+                      <li key={r.slug}>
+                        <Link
+                          href={`/blog/${r.slug}`}
+                          className="group block border border-white/8 hover:border-blue-500/40 transition-colors"
+                        >
+                          <PostImage
+                            post={r}
+                            sizes="(min-width: 640px) 240px, 100vw"
+                            className="w-full h-auto aspect-[1200/630] object-cover"
+                          />
+                          <span className="block p-3 text-sm font-semibold text-white/80 group-hover:text-white leading-snug">
+                            {r.title}
+                          </span>
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </section>
+            )}
+
+            {/* Comments */}
+            <div className="mb-16">
+              <div className="flex items-center gap-2 mb-8 border-t border-white/5 pt-10">
+                <MessageSquare className="w-5 h-5 text-blue-400" />
+                <h2 className="text-lg font-bold text-white">
+                  Comentários
+                  {comments.length > 0 && (
+                    <span className="ml-2 text-sm text-white/30 font-normal">
+                      ({comments.length})
+                    </span>
+                  )}
+                </h2>
+              </div>
+
+              {/* Comment list */}
+              {commentsLoading ? (
+                <div className="flex items-center gap-2 text-white/30 text-sm mb-10">
+                  <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-transparent rounded-full animate-spin" />
+                  Carregando comentários...
+                </div>
+              ) : commentsError ? (
+                <p className="text-red-400/70 text-sm mb-10">{commentsError}</p>
+              ) : comments.length === 0 ? (
+                <p className="text-white/30 text-sm mb-10">
+                  Seja o primeiro a comentar.
+                </p>
+              ) : (
+                <ul className="space-y-6 mb-10">
+                  {comments.map((c) => (
+                    <li key={c.id} className="border border-white/5 p-5">
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="text-sm font-semibold text-white">
+                          {c.authorName}
+                        </span>
+                        <span className="text-xs text-white/25">
+                          {new Date(c.createdAt).toLocaleDateString("pt-BR", {
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric",
+                          })}
+                        </span>
+                      </div>
+                      <p className="text-white/50 text-sm leading-relaxed whitespace-pre-wrap">
+                        {c.content}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              {/* Comment form */}
+              <form
+                onSubmit={handleSubmitComment}
+                className="border border-white/8 p-6 space-y-4"
+              >
+                <h3 className="text-sm font-semibold text-white/70 uppercase tracking-wider">
+                  Deixe um comentário
+                </h3>
+                <input
+                  type="text"
+                  placeholder="Seu nome"
+                  value={commentName}
+                  onChange={(e) => setCommentName(e.target.value)}
+                  required
+                  maxLength={100}
+                  className="w-full bg-white/5 border border-white/10 text-white text-sm px-4 py-2.5 placeholder:text-white/20 focus:outline-none focus:border-blue-500/50 transition-colors"
+                />
+                <div className="relative">
+                  <textarea
+                    placeholder="Escreva seu comentário..."
+                    value={commentText}
+                    onChange={(e) => setCommentText(e.target.value)}
+                    required
+                    maxLength={1000}
+                    rows={4}
+                    className="w-full bg-white/5 border border-white/10 text-white text-sm px-4 py-2.5 placeholder:text-white/20 focus:outline-none focus:border-blue-500/50 transition-colors resize-none"
+                  />
+                  <span className="absolute bottom-2.5 right-3 text-xs text-white/20 pointer-events-none">
+                    {commentText.length}/1000
+                  </span>
+                </div>
+                {submitError && (
+                  <p className="text-red-400 text-xs">{submitError}</p>
+                )}
+                <button
+                  type="submit"
+                  disabled={
+                    submitting || !commentName.trim() || !commentText.trim()
+                  }
+                  className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-semibold transition-colors"
+                >
+                  {submitting ? (
+                    <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  ) : submitSuccess ? (
+                    <Check className="w-4 h-4" />
+                  ) : (
+                    <Send className="w-4 h-4" />
+                  )}
+                  {submitSuccess ? "Comentário enviado!" : "Enviar comentário"}
+                </button>
+              </form>
+            </div>
+
+            <div className="pb-16 border-t border-white/5 pt-8">
+              <Link href="/blog">
+                <span className="flex items-center gap-2 text-white/30 hover:text-white/70 text-sm transition-colors cursor-pointer w-fit">
+                  <ArrowLeft className="w-4 h-4" /> Voltar para o blog
+                </span>
+              </Link>
+            </div>
           </div>
-        </div>
-      </main>
-    </div>
+        </main>
+      </div>
+      <Footer />
+    </>
   );
 }

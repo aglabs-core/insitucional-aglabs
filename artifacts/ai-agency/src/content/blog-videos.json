@@ -1,0 +1,30 @@
+{
+  "channel": "https://www.youtube.com/@aglabs-g2n2h/shorts",
+  "checkedAt": "2026-11-17",
+  "videos": [
+    {
+      "id": "VPsGxNRV1yY",
+      "title": "10 estilos de animação que o Claude faz: um avião de papel, dez mundos",
+      "url": "https://www.youtube.com/watch?v=VPsGxNRV1yY",
+      "thumbnail": "https://i.ytimg.com/vi/VPsGxNRV1yY/hqdefault.jpg"
+    },
+    {
+      "id": "ecP4JS3ObgQ",
+      "title": "Testei o GIF da OpenAI: 4 GIFs reais em loop (GPT Image 2.6)",
+      "url": "https://www.youtube.com/watch?v=ecP4JS3ObgQ",
+      "thumbnail": "https://i.ytimg.com/vi/ecP4JS3ObgQ/hqdefault.jpg"
+    },
+    {
+      "id": "ox7AmfYBCk0",
+      "title": "Comentou, recebeu: o bastidor do fluxo que entrega o material na DM",
+      "url": "https://www.youtube.com/watch?v=ox7AmfYBCk0",
+      "thumbnail": "https://i.ytimg.com/vi/ox7AmfYBCk0/hqdefault.jpg"
+    },
+    {
+      "id": "K4nYxWHmt08",
+      "title": "AGLABS manifesto",
+      "url": "https://www.youtube.com/watch?v=K4nYxWHmt08",
+      "thumbnail": "https://i.ytimg.com/vi/K4nYxWHmt08/hqdefault.jpg"
+    }
+  ]
+}

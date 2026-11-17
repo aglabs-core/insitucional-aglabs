@@ -268,3 +268,29 @@ JSON-LD `BlogPosting` (headline, datas, autor, imagem, publisher com logo) e
 `BreadcrumbList`, bloco do produto e "Leia também" (3 posts do mesmo pilar, em roda, para que
 todo post receba links). Gera também o índice `/blog` com a lista completa por pilar, o
 `/blog/rss.xml` e o `sitemap.xml` com `lastmod` de cada post.
+
+## Evolução editorial — 17/11/2026
+
+- Blog e artigos usam o Footer compartilhado da home, com a coluna Nossos apps. Links internos do footer retornam à seção correta da home.
+- A vitrine usa capturas públicas locais em WebP e uma tela de demonstração do Orquestra. Sem dados de clientes. Apps e vídeos têm faixas de largura total.
+- Curiosidades é um pilar editorial próprio. Seis artigos iniciais foram publicados; fontes primárias e técnicas estão nos próprios artigos. O seed em scripts/curiosidades-seed.json registra esse lote, não deve ser executado a cada build.
+- Auditoria: 53 publicados antes do lote, nenhum título ou conteúdo exatamente igual, 32 pares com similaridade de título acima de 0,76. scripts/blog-editorial-audit.json guarda candidatos, não prova duplicação semântica. Seis títulos foram diferenciados sem trocar slugs; antes/depois em scripts/blog-title-refinements.json. Não houve exclusão de posts.
+- Não alteramos a automação de escrita nem sua periodicidade semanal informada pelo proprietário. Preferir perguntas e intenções específicas a trocar apenas o nome do segmento em um modelo de título.
+
+### Leituras e comentários
+
+A migração blog_editorial_metrics cria dados brutos em blog_private, sem acesso direto por anon/authenticated. As duas RPCs públicas têm search_path vazio, argumentos tipados e consultam somente posts publicados: uma registra a sessão e outra retorna agregados. O SECURITY DEFINER é intencional para esse acesso limitado ao esquema privado; os avisos correspondentes do advisor não significam liberação de leitura das sessões.
+
+O cliente registra a leitura após 10 segundos consecutivos com a página visível. Deduplicação por artigo/dia/sessão de aba, com UUID aleatório em sessionStorage. Sem IP, cookie, fingerprint ou identificação de pessoas. Bloqueio de armazenamento desativa a medição. O mês usa America/Sao_Paulo. Comentários são contagens atuais da tabela existente. O teste de idempotência e bloqueio de leitura direta foi feito em transação com rollback.
+
+São estimativas de sessões, não visitantes únicos, prova de leitura integral ou analytics antifraude. Clientes maliciosos podem chamar a RPC ou criar novas sessões. Não extrapolar o histórico anterior à implantação nem usar a amostra de QA como tráfego de clientes. Mais lidas usa o mês corrente; Em alta exigiria comparar velocidade recente com uma janela anterior, então ainda não é exibida como outro ranking.
+
+### Vídeos
+
+scripts/sync-youtube.mjs consulta o feed público do canal UCRKuFSwnii7yBCmirM4P9-w e verifica metadados via oEmbed. Roda a cada build; pnpm --filter @workspace/ai-agency videos permite atualizar antes. Em falha do serviço, mantém o cache previamente verificado. Não é uma atualização automática contínua entre deploys. Thumbnails carregam sob demanda e o player só abre no YouTube. O Instagram tem link para @ag_labs; feed automático depende de configurar acesso oficial à API da Meta, sem expor tokens no navegador.
+
+### Primeira exibição
+
+O pré-render mantém o conteúdo rastreável e adiciona estilo crítico para evitar texto sem formatação. JSON de bootstrap inclui apenas posts publicados e escapa '<' para impedir fechamento de script. Metadados da lista não incluem o corpo dos artigos; a página individual inclui só seu próprio corpo. React usa o snapshot enquanto os chunks carregam e inicia a tela com os dados já recebidos, atualizando pelo CMS. O pré-carregamento indiscriminado das duas páginas de blog foi removido. Gates de falha do pré-render continuam ativos. Não foi medida uma melhora de Core Web Vitals em tráfego real.
+
+A seção Você sabia? exibe seis teasers pequenos (seis colunas no desktop, duas no celular). O segundo lote aborda Transformer/GPT, trends com foto e referência, e a transformação de conhecimento em um produto digital, com link verificado ao blog do Members. São textos próprios de apresentação, sem republicar integralmente artigos de outros blogs.

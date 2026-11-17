@@ -5,6 +5,7 @@ import "./index.css";
 declare global {
   interface Window {
     __homeShell?: string;
+    __blogShell?: string;
   }
 }
 
@@ -16,5 +17,7 @@ const root = document.getElementById("root")!;
 if (root.dataset.homeShell === "1" && window.location.pathname === "/") {
   window.__homeShell = root.innerHTML;
 }
+
+if (window.location.pathname.startsWith("/blog") && root.innerHTML.trim()) window.__blogShell = root.innerHTML;
 
 createRoot(root).render(<App />);

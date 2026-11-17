@@ -61,6 +61,12 @@ test('fixture válida gera artigo, índice, RSS e sitemap reais', async t => {
   assert.match(article, /<strong>renderizado<\/strong>/);
   assert.match(article, /rel="canonical" href="https:\/\/aglabs.ia.br\/blog\/prova-blog"/);
   assert.match(article, /BlogPosting/);
+  assert.match(article, /id="blog-first-paint"/);
+  assert.match(article, /class="blog-static-shell"/);
+  const seed = JSON.parse(article.match(/<script id="blog-seed" type="application\/json">([\s\S]*?)<\/script>/)[1]);
+  assert.equal(seed.post.slug, 'prova-blog');
+  assert.equal(seed.list[0].slug, 'prova-blog');
+  assert.equal(seed.list[0].content, undefined);
   for (const name of ['blog.html', 'sitemap.xml', 'blog/rss.xml']) {
     assert.match(await readFile(join(root, 'dist', name), 'utf8'), /prova-blog/);
   }
@@ -122,4 +128,15 @@ test('linha sem slug ou com caminho inválido não é descartada silenciosamente
     assert.equal(result.code, 1);
     assert.match(result.stderr, /Post sem slug válido/);
   }
+});
+
+
+test('bootstrap escapa fechamento de script sem perder o conteúdo', async t => {
+  const content = 'Texto </script><script>alert(1)</script>';
+  const root = await sandbox(t, {rows:[{...post,content}]});
+  assert.equal((await run(root)).code,0);
+  const html = await readFile(join(root,'dist/blog/prova-blog.html'),'utf8');
+  const raw = html.match(/<script id="blog-seed" type="application\/json">([\s\S]*?)<\/script>/)[1];
+  assert.equal(raw.includes('<'),false);
+  assert.equal(JSON.parse(raw).post.content,content);
 });

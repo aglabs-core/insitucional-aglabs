@@ -5,12 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite --config vite.config.ts --host 0.0.0.0",
-    "build": "vite build --config vite.config.ts && node scripts/prerender-blog.mjs && node scripts/home-shell.mjs",
+    "build": "node scripts/sync-youtube.mjs && vite build --config vite.config.ts && node scripts/prerender-blog.mjs && node scripts/home-shell.mjs",
     "prerender": "node scripts/prerender-blog.mjs",
     "covers": "node scripts/blog-cover.mjs",
     "images": "node scripts/blog-images.mjs",
     "serve": "vite preview --config vite.config.ts --host 0.0.0.0",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "videos": "node scripts/sync-youtube.mjs"
   },
   "devDependencies": {
     "@hookform/resolvers": "^3.10.0",

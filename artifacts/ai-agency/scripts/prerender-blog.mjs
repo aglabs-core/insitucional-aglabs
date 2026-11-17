@@ -79,6 +79,7 @@ const ldScript = (obj) => `<script type="application/ld+json">${JSON.stringify(o
 /* ---- Metadados editoriais (espelho de src/lib/blog-meta.ts) ---- */
 function pillarFromCategory(category = "") {
   const c = category.toLowerCase();
+  if (c.includes("curios")) return "curiosidades";
   if (c.includes("site")) return "sites";
   if (c.includes("conversacional") || c.includes("atendimento")) return "atendimento";
   if (c.includes("automa")) return "automacao";
@@ -191,6 +192,10 @@ function pageHead(shell, { title, description, url, image, imageType, imageWidth
   html = html.replace(/\s*<!--[^>]*?crawlers[\s\S]*?-->\s*<noscript>[\s\S]*?<\/noscript>/, "");
   html = html.replace(/\s*<noscript>\s*<main>[\s\S]*?<\/main>\s*<\/noscript>/, "");
 
+  const readingStyle = `<style id="blog-first-paint">
+body{margin:0;background:#f5f6f8;color:#172234;font:16px/1.75 system-ui,sans-serif}.blog-static-shell{max-width:780px;margin:auto;padding:32px 24px}.blog-static-shell nav{font-size:13px;margin-bottom:24px}.blog-static-shell h1{font-size:clamp(30px,5vw,46px);line-height:1.15;letter-spacing:-1px}.blog-static-shell h2{font-size:25px;line-height:1.3;margin-top:36px}.blog-static-shell a{color:#245fc9}.blog-static-shell img{max-width:100%;height:auto;border-radius:8px}.blog-static-shell pre{overflow:auto;background:#e6edf8;padding:20px;border-radius:7px}.blog-static-shell blockquote{border-left:3px solid #2563eb;padding-left:20px;color:#526176}.blog-static-shell table{display:block;overflow:auto}.blog-static-shell li{margin:12px 0}.blog-static-shell time{color:#69778b;font-size:12px}.blog-static-shell>p{color:#526176}
+</style>`;
+  html=html.replace('</head>',readingStyle+'</head>');
   const rss = `<link rel="alternate" type="application/rss+xml" title="Blog da AG LABS" href="${SITE_URL}/blog/rss.xml" />`;
   return html.replace("</head>", () => `    ${rss}\n${extra}  </head>`);
 }
@@ -287,7 +292,7 @@ function buildPostPage(shell, post, all) {
       `</ul></section>`
     : "";
   const article =
-    `<main><nav aria-label="Trilha"><a href="/">Home</a> › <a href="/blog">Blog</a> › <span>${esc(pillar.name)}</span></nav>` +
+    `<main class="blog-static-shell"><nav aria-label="Trilha"><a href="/">Home</a> › <a href="/blog">Blog</a> › <span>${esc(pillar.name)}</span></nav>` +
     `<article>` +
     `<p>${esc(pillar.name)}</p>` +
     `<h1>${esc(post.title)}</h1>` +
@@ -356,7 +361,7 @@ function buildIndexPage(shell, posts) {
     })
     .join("");
   const main =
-    `<main><nav aria-label="Trilha"><a href="/">Home</a> › <span>Blog</span></nav>` +
+    `<main class="blog-static-shell"><nav aria-label="Trilha"><a href="/">Home</a> › <span>Blog</span></nav>` +
     `<h1>Blog da AG LABS</h1><p>${esc(META.blog.description)}</p>${sections}</main>`;
   return html.replace('<div id="root"></div>', () => `<div id="root">${main}</div>`);
 }
@@ -426,7 +431,7 @@ async function loadRows() {
   const supabase = createClient(supabaseUrl, supabaseKey);
   const { data, error } = await supabase
     .from("blog_posts")
-    .select("title,slug,excerpt,content,category,cover_image,author,created_at,updated_at,read_time")
+    .select("id,title,slug,excerpt,content,category,cover_image,published,author,created_at,updated_at,read_time")
     .eq("published", true);
   if (error) {
     throw new Error(`[prerender] Erro ao buscar posts no Supabase: ${error.message}`);
@@ -455,6 +460,10 @@ async function main() {
     throw new Error("[prerender] Shell sem marcadores de conteúdo/head");
   }
 
+  // Public-only bootstrap removes a second CMS round trip on direct landings.
+  const scriptJson = value => JSON.stringify(value).replace(/</g, "\\u003c");
+  const listSeed=rows.map(({content,...row})=>row).sort((a,b)=>String(b.created_at).localeCompare(String(a.created_at)) || a.slug.localeCompare(b.slug));
+  const withSeed=(html,data)=>html.replace('</head>',`<script id="blog-seed" type="application/json">${scriptJson(data)}</script></head>`);
   const posts = rows
     .map((row) => ({
       title: row.title ?? "",
@@ -468,7 +477,7 @@ async function main() {
       updated: row.updated_at ?? row.created_at,
       readTime: row.read_time ?? 5,
     }))
-    .sort((a, b) => (a.created < b.created ? 1 : -1));
+    .sort((a, b) => String(b.created).localeCompare(String(a.created)) || a.slug.localeCompare(b.slug));
 
   const missing = posts.filter((p) => !META.posts[p.slug]).map((p) => p.slug);
   if (missing.length) {
@@ -482,12 +491,12 @@ async function main() {
     // <slug>.html (e não <slug>/index.html): o Cloudflare Pages serve
     // /blog/<slug> direto, sem redirecionar para a versão com barra final,
     // que divergia da canônica e do sitemap.
-    writeFileSync(resolve(dir, `${post.slug}.html`), buildPostPage(shell, post, posts), "utf8");
+    writeFileSync(resolve(dir, `${post.slug}.html`), withSeed(buildPostPage(shell, post, posts), {list:listSeed,post:rows.find(row=>row.slug===post.slug)}), "utf8");
     count++;
   }
 
   // dist/blog.html: o home-shell só cria a cópia vazia se este arquivo não existir.
-  writeFileSync(resolve(DIST, "blog.html"), buildIndexPage(shell, posts), "utf8");
+  writeFileSync(resolve(DIST, "blog.html"), withSeed(buildIndexPage(shell, posts), {list:listSeed}), "utf8");
   writeFileSync(resolve(dir, "rss.xml"), buildRss(posts), "utf8");
   writeFileSync(resolve(DIST, "sitemap.xml"), buildSitemap(posts), "utf8");
 

@@ -51,3 +51,8 @@ Thumbs.db
 # Replit
 .cache/
 .local/
+
+# Local editorial audit inputs and CLI cache
+artifacts/ai-agency/scripts/.blog-audit.json
+supabase/.temp/
+artifacts/ai-agency/scripts/.local-build.mjs

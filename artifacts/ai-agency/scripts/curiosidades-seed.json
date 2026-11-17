@@ -1,0 +1,68 @@
+[
+  {
+    "slug": "qr-code-nasceu-fabricas-antes-pix",
+    "title": "O QR Code nasceu nas fábricas, muito antes do Pix",
+    "excerpt": "A história de um código pensado para peças de automóveis ajuda a entender por que ele virou uma ponte entre o papel e o digital.",
+    "content": "## Um código para encontrar peças, não para pagar contas\nO QR Code foi desenvolvido pela DENSO WAVE, no Japão, em 1994. A necessidade era identificar peças na produção automotiva com mais informação e leitura rápida. O pagamento por aproximação de uma câmera veio depois: a tecnologia não nasceu como um meio de pagamento.\n\nOs três quadrados maiores nos cantos ajudam o leitor a identificar a posição do símbolo. O código guarda dados em duas dimensões, enquanto um código de barras tradicional usa principalmente a largura de suas barras. É uma diferença de desenho que permite usos muito variados.\n\n## O desenho não decide o destino\nUm QR Code pode guardar texto ou um endereço da web. Ao apontar a câmera, vale conferir o domínio que aparece antes de abrir. Um adesivo trocado pode levar a outro destino: o desenho, sozinho, não garante a identidade de uma empresa.\n\nPara quem usa um QR em cartão, embalagem ou balcão, a pergunta útil é: o que a pessoa encontra depois de escanear? Uma página confusa transfere o problema do papel para o celular. Um contato claro, uma apresentação curta e um próximo passo visível tornam essa passagem mais útil.\n\n## Uma pequena experiência para o seu negócio\nAbra o QR que você entrega aos clientes usando um celular que não tenha sua conta conectada. Confira três pontos: a página abre, a informação está atualizada e o botão principal funciona? Faça isso antes de mandar imprimir um lote.\n\nVocê pode reunir apresentação e contatos em um cartão digital, como o [MeCard](https://mecard.com.br/). A ferramenta é uma possibilidade de destino; o cuidado com a página e com o endereço continua sendo seu.\n\n### Fonte para explorar\n[História do desenvolvimento do QR Code — DENSO WAVE](https://www.denso-wave.com/en/technology/vol1.html).",
+    "category": "curiosidades",
+    "cover_image": "/img/blog/whatsapp-business-ia-mudando-varejo-1200.webp",
+    "published": true,
+    "author": "Equipe AG Labs",
+    "read_time": 3
+  },
+  {
+    "slug": "web-nasceu-organizar-informacao",
+    "title": "A web começou com um problema de organização",
+    "excerpt": "Antes de lojas e redes sociais, uma proposta de 1989 queria tornar informações de pesquisa mais fáceis de conectar.",
+    "content": "## Antes de navegar, era preciso encontrar\nEm março de 1989, Tim Berners-Lee apresentou no CERN uma proposta para gerenciar informações. O texto descrevia um problema conhecido de quem trabalha em equipe: informações se perdiam quando projetos, pessoas e sistemas mudavam.\n\nA proposta sugeria conectar informações por hipertexto. O nome World Wide Web seria escolhido depois, durante a implementação em 1990. A web não começou como uma rede social ou uma vitrine comercial. Sua origem estava em ajudar pessoas a relacionar conhecimento.\n\n## O problema continua familiar\nHoje temos muito mais ferramentas, mas uma decisão ainda pode ficar escondida em uma conversa. Um documento sem contexto, uma tarefa sem responsável e uma nota que ninguém encontra criam atrito mesmo em uma equipe pequena.\n\nUma forma simples de melhorar isso é registrar a decisão ao lado do projeto e ligar a tarefa ao material que a explica. Não exige trocar todas as ferramentas de uma vez. Exige escolher um lugar de referência e cuidar dos vínculos entre as informações.\n\n## Experimente antes de automatizar\nPegue um projeto recente e tente responder: o que foi decidido, por quem e qual é o próximo passo? Se você precisar procurar em cinco conversas, comece reunindo esse contexto em uma nota. Depois conecte a nota ao projeto.\n\nO [Orquestra](https://github.com/aglabsrv-sys/orquestra) é um projeto open source da AG Labs que transforma uma pasta de notas Markdown em um painel para tarefas, projetos e agenda. Os arquivos continuam no seu computador. É uma alternativa para experimentar essa organização com arquivos que você pode abrir em outros editores.\n\n### Fonte para explorar\n[Information Management: A Proposal — documento original de Tim Berners-Lee](https://www.w3.org/History/1989/proposal.html).",
+    "category": "curiosidades",
+    "cover_image": "/img/blog/vibecoding-como-criar-dashboards-dados-empresa-sem-programar-1200.webp",
+    "published": true,
+    "author": "Equipe AG Labs",
+    "read_time": 3
+  },
+  {
+    "slug": "ia-responde-confianca-mesmo-quando-erra",
+    "title": "Por que uma IA pode errar com tanta confiança?",
+    "excerpt": "Uma resposta bem escrita pode conter fatos inventados. Entenda a diferença entre fluência e verificação antes de usar um resultado.",
+    "content": "## Uma frase convincente não é uma prova\nVocê pede uma referência, recebe um título detalhado e descobre que o artigo não existe. Esse é um exemplo do que se costuma chamar de alucinação em IA: uma resposta plausível que apresenta informação incorreta ou inventada.\n\nModelos de linguagem produzem sequências de texto a partir de padrões aprendidos. Isso ajuda a explicar por que um resultado pode soar natural sem ter passado por uma verificação dos fatos. O tom de certeza não é uma medida de precisão.\n\n## O que fazer com uma resposta útil, mas não verificada\nSepare a parte criativa da parte factual. Para ideias de títulos, variações de texto e um primeiro rascunho, você pode explorar alternativas. Para números, citações, nomes e referências, abra a fonte e confira se ela realmente sustenta a afirmação.\n\nUm teste simples é pedir a origem de um dado e tentar encontrá-lo no documento indicado. Se a página não existir, ou não disser aquilo, retire o dado do material. Pedir mais confiança ao modelo não substitui essa etapa.\n\n## Use limites no trabalho com clientes\nEm um atendimento, mantenha condições comerciais, preços e regras em uma fonte atualizada. Quando faltar informação, o fluxo deve reconhecer o limite e encaminhar a dúvida. Essa é uma decisão de projeto, não uma garantia de que o modelo deixará de errar.\n\nO mesmo cuidado vale ao criar conteúdo com ferramentas como o [AG Labs App](https://aglabs.app.br/): use a geração para desenvolver ideias e revise fatos e direitos antes de publicar. Um processo com revisão humana é mais responsável do que tratar toda saída como uma resposta pronta.\n\n### Fontes para explorar\n[AI hallucinations — IBM](https://www.ibm.com/think/topics/ai-hallucinations) e [AI RMF Playbook — NIST](https://www.nist.gov/itl/ai-risk-management-framework/nist-ai-rmf-playbook).",
+    "category": "curiosidades",
+    "cover_image": "/img/blog/5-erros-empresas-implementar-ia-internamente-1200.webp",
+    "published": true,
+    "author": "Equipe AG Labs",
+    "read_time": 3
+  },
+  {
+    "slug": "t-de-gpt-transformer-explicado",
+    "title": "Você sabia que o T do GPT vem de Transformer?",
+    "excerpt": "A sigla esconde uma ideia sobre como relacionar palavras e contexto.",
+    "content": "## Três letras, uma pista sobre a tecnologia\nGPT abrevia Generative Pre-trained Transformer. Em português, a ideia é a de um Transformer generativo pré-treinado: um modelo que aprendeu padrões durante o treinamento e pode gerar respostas.\n\nO T aponta para uma arquitetura apresentada no trabalho *Attention Is All You Need*, de 2017. Um de seus ingredientes é a atenção, um mecanismo que relaciona partes da informação durante o processamento.\n\n## Pense em uma frase do dia a dia\nLeia: “A cliente recebeu a encomenda e disse que ela chegou amassada”. Para entender “ela”, você usa o restante da frase. Essa é uma maneira simples de visualizar por que o contexto importa. A comparação é ilustrativa: o modelo faz cálculos, não entende a situação como uma pessoa.\n\nEm uma conversa com IA, detalhes úteis também ajudam: qual é a tarefa, para quem é a resposta e quais informações precisam ser consideradas? Um pedido com esse contexto dá uma direção mais clara ao resultado. Ainda é preciso conferir os fatos.\n\n## Da curiosidade ao atendimento\nNa AG Labs, conectamos modelos de linguagem e outras tecnologias aos processos dos nossos agentes. O trabalho inclui organizar a base de informação, definir limites e preparar o encaminhamento para pessoas quando necessário. A escolha do modelo faz parte desse projeto.\n\nQuer conhecer uma aplicação prática? Veja o [Atendente de IA da AG Labs](https://rag.aglabs.ia.br/).\n\n### Para explorar\n[O estudo que apresentou o Transformer](https://arxiv.org/abs/1706.03762) e [a pesquisa de pré-treinamento generativo da OpenAI](https://openai.com/index/language-unsupervised/).",
+    "cover_image": "/img/blog/ia-generativa-vantagem-competitiva-pmes-2026-1200.webp",
+    "category": "curiosidades",
+    "published": true,
+    "author": "Equipe AG Labs",
+    "read_time": 2
+  },
+  {
+    "slug": "como-fazer-trends-fotos-ia-referencia",
+    "title": "Como as pessoas fazem aquelas trends de fotos com IA?",
+    "excerpt": "Foto, referência e um pedido claro: um ponto de partida para experimentar.",
+    "content": "## A referência mostra a direção\nRetrato com luz de estúdio, personagem de animação, capa de revista: muitas trends de fotos usam uma imagem para mostrar a estética desejada e outra para indicar a pessoa que deve aparecer.\n\nFerramentas de geração e edição com suporte a referências conseguem receber essas imagens junto de uma descrição. A foto ajuda a indicar a aparência; a referência ajuda a comunicar iluminação, composição e estilo. O resultado depende do modelo e das instruções.\n\n## Um jeito simples de começar\n1. Escolha uma foto sua com o rosto visível e boa iluminação.\n2. Separe uma referência do visual que você quer experimentar.\n3. Anexe as duas em uma ferramenta com suporte a imagens de referência.\n4. Explique qual é sua foto, qual é o exemplo de estilo e o que precisa ser preservado.\n\nVocê pode começar com este pedido:\n\n> Use minha foto como referência de aparência. Use a segunda imagem como referência de iluminação e composição. Crie um retrato com esse clima visual, preservando meus traços. Mantenha o fundo simples.\n\nDepois, ajuste um elemento por vez: “luz mais suave”, “fundo mais claro” ou “enquadramento mais aberto”. Isso facilita perceber qual mudança melhorou o resultado.\n\n## Experimente com o seu estilo\nNo [AG Labs App](https://aglabs.app.br/), você encontra ferramentas de criação com IA para explorar ideias de imagem. Escolha um fluxo compatível com referências e teste sua própria versão da trend. Sem prometer uma cópia exata: os resultados variam conforme a foto, o modelo e o pedido.\n\n### Para explorar\n[A OpenAI explica o uso de imagens enviadas como referência visual](https://openai.com/index/introducing-4o-image-generation/).",
+    "cover_image": "/img/apps/app-aglabs.webp",
+    "category": "curiosidades",
+    "published": true,
+    "author": "Equipe AG Labs",
+    "read_time": 2
+  },
+  {
+    "slug": "conhecimento-cotidiano-primeiro-produto-digital",
+    "title": "A dúvida que você responde toda semana pode virar um produto",
+    "excerpt": "Uma pergunta recorrente pode ser o começo de uma aula, guia ou material digital.",
+    "content": "## O começo pode estar nas suas conversas\nQual assunto clientes ou colegas sempre pedem para você explicar? Essa pergunta pode revelar um tema para seu primeiro conteúdo digital. É uma pista para investigar, sem garantia de que haverá compradores.\n\nImagine alguém que ajuda pequenos negócios a organizar fotos de produtos. As dúvidas sobre luz, fundo e enquadramento podem virar uma aula curta com exercícios. Um profissional que ensina a montar uma rotina pode começar com um guia e um modelo preenchido.\n\n## Da experiência à proposta\nEscolha um problema pequeno e escreva uma frase: “Este material ajuda [pessoa] a fazer [tarefa]”. Mostre essa frase a pessoas do público que você quer atender e pergunte o que ainda está confuso.\n\nAntes de gravar um curso inteiro, organize a entrega que você consegue manter. Pode ser uma aula, um guia ou uma sequência curta. Explique o que está incluído, como o comprador recebe acesso e como pode tirar dúvidas. O formato deve acompanhar o conteúdo.\n\n## Um próximo passo no Members\nO [Members](https://members.ia.br/) é um dos apps da AG Labs para criar e vender conteúdo digital. O blog dele tem um roteiro específico: [o que preparar antes de criar seu primeiro produto digital](https://members.ia.br/blog/preparar-primeiro-produto).\n\nLá, você encontra orientações sobre público, formato, materiais e experiência de acesso. Use esse roteiro para amadurecer a ideia antes de publicar. A plataforma organiza a entrega; entender o público e construir uma oferta clara continuam fazendo parte do seu trabalho.",
+    "cover_image": "/img/apps/members.webp",
+    "category": "curiosidades",
+    "published": true,
+    "author": "Equipe AG Labs",
+    "read_time": 2
+  }
+]

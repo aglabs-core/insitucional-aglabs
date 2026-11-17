@@ -1,3 +1,11 @@
+import { Footer } from "@/components/ui/footer-section";
+import {
+  VideosSection,
+  EcosystemSection,
+  MostRead,
+  CategorySections,
+  Curiosities,
+} from "@/components/blog-editorial-sections";
 import { useState, useMemo, useEffect, memo } from "react";
 import { Link } from "wouter";
 import {
@@ -14,7 +22,7 @@ import {
 } from "lucide-react";
 import { MeshGradient, Dithering } from "@paper-design/shaders-react";
 import { useReducedMotion } from "framer-motion";
-import { blogStore, type BlogPost } from "@/lib/blog-store";
+import { blogStore, initialBlogPosts, type BlogPost } from "@/lib/blog-store";
 import { blogFaq, faqJsonLd } from "@/components/ui/faq-section";
 import { Seo } from "@/components/seo";
 import { blogInfo, pillarIds, pillarName, postPillar } from "@/lib/blog-meta";
@@ -130,8 +138,8 @@ const shortcuts = [
 ];
 
 export default function BlogPage() {
-  const [posts, setPosts] = useState<BlogPost[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [posts, setPosts] = useState<BlogPost[]>(initialBlogPosts);
+  const [loading, setLoading] = useState(() => initialBlogPosts().length === 0);
   const [fetchError, setFetchError] = useState(false);
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
@@ -144,7 +152,7 @@ export default function BlogPage() {
 
   useEffect(() => {
     let cancelled = false;
-    setLoading(true);
+    if (!posts.length) setLoading(true);
     setFetchError(false);
     blogStore
       .getPublished()
@@ -355,6 +363,10 @@ export default function BlogPage() {
               onMouseEnter={() => setCarouselHovered(true)}
               onMouseLeave={() => setCarouselHovered(false)}
               onFocusCapture={() => setCarouselPaused(true)}
+              onBlurCapture={(e) => {
+                if (!e.currentTarget.contains(e.relatedTarget))
+                  setCarouselPaused(false);
+              }}
             >
               <FeatureCard
                 post={highlights[headline % highlights.length]}
@@ -392,15 +404,6 @@ export default function BlogPage() {
                 >
                   →
                 </button>
-                <button
-                  type="button"
-                  aria-label={
-                    carouselPaused ? "Reproduzir manchetes" : "Pausar manchetes"
-                  }
-                  onClick={() => setCarouselPaused((v) => !v)}
-                >
-                  {carouselPaused ? "▶" : "Ⅱ"}
-                </button>
               </div>
             </div>
             {highlights.length > 1 && (
@@ -435,6 +438,7 @@ export default function BlogPage() {
           </section>
         )}
 
+        {!loading && !fetchError && !isFiltering && <EcosystemSection />}
         <div className="journal-content-layout" id="artigos">
           <section
             className="journal-feed"
@@ -600,6 +604,35 @@ export default function BlogPage() {
             </div>
           </aside>
         </div>
+        {!loading && !fetchError && !isFiltering && (
+          <>
+            <VideosSection />
+            <MostRead posts={posts} />
+            <CategorySections posts={posts} onCategory={browseCategory} />
+            <Curiosities posts={posts} onCategory={browseCategory} />
+            <section className="journal-social">
+              <span className="journal-kicker">CONTINUE A CONVERSA</span>
+              <h2>Ideias também em movimento.</h2>
+              <p>
+                Projetos, bastidores e ideias para usar tecnologia no dia a dia.
+              </p>
+              <a
+                href="https://www.instagram.com/ag_labs/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Acompanhar @ag_labs ↗
+              </a>
+              <a
+                href="https://www.youtube.com/@aglabs-g2n2h/shorts"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Ver nossos Shorts no YouTube ↗
+              </a>
+            </section>
+          </>
+        )}
         <section className="journal-faq" aria-labelledby="journal-faq-heading">
           <div>
             <span className="journal-kicker">SOBRE O BLOG</span>
@@ -622,27 +655,7 @@ export default function BlogPage() {
           </div>
         </section>
       </main>
-      <footer className="journal-footer">
-        <div className="journal-container">
-          <Link href="/" className="journal-brand">
-            AG LABS<span className="journal-brand-dot">.</span>
-          </Link>
-          <p>Ideias que conectam tecnologia e negócios.</p>
-          <span>© {new Date().getFullYear()} AG Labs</span>
-          <a
-            href="#top"
-            onClick={(e) => {
-              e.preventDefault();
-              window.scrollTo({
-                top: 0,
-                behavior: reducedMotion ? "instant" : "smooth",
-              });
-            }}
-          >
-            Voltar ao topo ↑
-          </a>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
