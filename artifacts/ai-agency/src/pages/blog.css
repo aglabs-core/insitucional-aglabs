@@ -1266,3 +1266,38 @@
     border-top: 1px solid #d8e0ed;
   }
 }
+/* Discreet carousel controls. */
+.journal-carousel-controls {
+  align-items: center;
+  gap: 9px;
+  bottom: 20px;
+  right: 24px;
+}
+.journal-carousel-controls button {
+  min-width: 18px;
+  width: 18px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #ffffffb3;
+  font-size: 12px;
+}
+.journal-carousel-controls button[aria-pressed] {
+  min-width: 5px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  font-size: 0;
+  background: #ffffff66;
+}
+.journal-carousel-controls button[aria-pressed="true"] {
+  width: 16px;
+  border: 0;
+  border-radius: 4px;
+  background: #8bb3ff;
+}
+.journal-carousel-controls button:hover {
+  color: white;
+}

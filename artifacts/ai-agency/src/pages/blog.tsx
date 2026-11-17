@@ -578,9 +578,6 @@ export default function BlogPage() {
               </section>
             )}
             <section className="journal-promo">
-              <span className="journal-promo-icon">
-                <Sparkles size={25} />
-              </span>
               <span className="journal-kicker">DA LEITURA À AÇÃO</span>
               <h2>Boas ideias merecem sair do papel.</h2>
               <p>

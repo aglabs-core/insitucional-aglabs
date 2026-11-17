@@ -6,6 +6,7 @@ import { join } from 'node:path';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { createServer } from 'node:http';
+import { fileURLToPath } from 'node:url';
 
 const exec = promisify(execFile);
 const source = new URL('../', import.meta.url);
@@ -20,7 +21,7 @@ async function sandbox(t, { rows = [post], html = shell } = {}) {
   for (const name of ['blog-meta.json', 'post-html-schema.json']) {
     await copyFile(new URL(`src/content/${name}`, source), join(root, 'src/content', name));
   }
-  await symlink(new URL('node_modules', source).pathname, join(root, 'node_modules'), 'dir');
+  await symlink(fileURLToPath(new URL('node_modules', source)), join(root, 'node_modules'), process.platform === 'win32' ? 'junction' : 'dir');
   await writeFile(join(root, 'rows.json'), JSON.stringify(rows));
   if (html !== null) await writeFile(join(root, 'dist/index.html'), html);
   return root;

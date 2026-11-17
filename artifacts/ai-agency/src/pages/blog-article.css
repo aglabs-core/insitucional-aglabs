@@ -16,7 +16,7 @@
 .journal-article [class*="border-white/"] {
   border-color: #d9e1ec;
 }
-.journal-article [class*="bg-white/"] {
+.journal-article [class~="bg-white/5"] {
   background: #eaf0f8;
 }
 .journal-article [class*="text-blue-"] {
