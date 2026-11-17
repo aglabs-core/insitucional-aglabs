@@ -4,9 +4,27 @@ import { Link } from "wouter";
 import type { BlogPost } from "@/lib/blog-store";
 import { pillarIds, pillarName, postPillar } from "@/lib/blog-meta";
 import { PostImage } from "@/components/post-image";
-import { useBlogStats } from "@/lib/blog-metrics";
+import { usePopularBlogPosts } from "@/lib/blog-metrics";
 
 const apps = [
+  {
+    name: "Members",
+    image: "members",
+    url: "https://members.ia.br/",
+    text: "Cursos e conteúdos com área de membros.",
+  },
+  {
+    name: "MeCard",
+    image: "mecard",
+    url: "https://mecard.com.br/",
+    text: "Sua apresentação em um cartão digital.",
+  },
+  {
+    name: "Viajeki",
+    image: "viajeki",
+    url: "https://viajeki.com.br/",
+    text: "Planejamento de viagens em grupo.",
+  },
   {
     name: "AG Labs App",
     image: "app-aglabs",
@@ -18,24 +36,6 @@ const apps = [
     image: "barberias",
     url: "https://barberias.com.br/",
     text: "Gestão e agendamento para barbearias.",
-  },
-  {
-    name: "Members",
-    image: "members",
-    url: "https://members.ia.br/",
-    text: "Cursos e conteúdos com área de membros.",
-  },
-  {
-    name: "Viajeki",
-    image: "viajeki",
-    url: "https://viajeki.com.br/",
-    text: "Planejamento de viagens em grupo.",
-  },
-  {
-    name: "MeCard",
-    image: "mecard",
-    url: "https://mecard.com.br/",
-    text: "Sua apresentação em um cartão digital.",
   },
 ];
 export function EcosystemSection() {
@@ -104,10 +104,10 @@ export function EcosystemSection() {
                 rel="noopener noreferrer"
               >
                 <img
-                  src={`/img/apps/${app.image}.webp`}
-                  alt={`Prévia pública do ${app.name}`}
-                  width="900"
-                  height="450"
+                  src={`/img/apps/${app.image}-og.webp`}
+                  alt={`Capa oficial do ${app.name}`}
+                  width="1200"
+                  height="630"
                   loading="lazy"
                 />
                 <div>
@@ -151,50 +151,26 @@ export function EcosystemSection() {
   );
 }
 export function MostRead({ posts }: { posts: BlogPost[] }) {
-  const stats = useBlogStats();
-  const ranked = stats
-    .filter((s) => s.month_reads > 0)
-    .sort(
-      (a, b) =>
-        b.month_reads - a.month_reads || a.post_id.localeCompare(b.post_id),
-    )
-    .map((s) => ({ stats: s, post: posts.find((p) => p.id === s.post_id) }))
-    .filter((x) => x.post)
-    .slice(0, 6);
+  const popular = usePopularBlogPosts();
+  const ranked = popular
+    .map((s) => posts.find((p) => p.id === s.post_id))
+    .filter((p): p is BlogPost => Boolean(p));
+  if (!ranked.length) return null;
   return (
     <section className="journal-most-read">
       <span className="journal-kicker">O QUE DESPERTA INTERESSE</span>
       <h2>Mais lidas do mês</h2>
-      <p>
-        Leituras registradas neste mês. A contagem começou em 17 de novembro de
-        2026.
-      </p>
-      {ranked.length ? (
-        <ol>
-          {ranked.map(({ post, stats }, i) => (
-            <li key={post!.id}>
-              <span>0{i + 1}</span>
-              <Link href={`/blog/${post!.slug}`}>
-                <small>{pillarName(postPillar(post!))}</small>
-                <h3>{post!.title}</h3>
-                <p>
-                  {stats.month_reads}{" "}
-                  {stats.month_reads === 1
-                    ? "leitura registrada"
-                    : "leituras registradas"}{" "}
-                  · {stats.comments}{" "}
-                  {stats.comments === 1 ? "comentário" : "comentários"}
-                </p>
-              </Link>
-            </li>
-          ))}
-        </ol>
-      ) : (
-        <div className="journal-metrics-empty">
-          As primeiras leituras estão chegando. Os artigos aparecem aqui
-          conforme forem acessados.
-        </div>
-      )}
+      <ol>
+        {ranked.map((post, i) => (
+          <li key={post.id}>
+            <span>0{i + 1}</span>
+            <Link href={`/blog/${post.slug}`}>
+              <small>{pillarName(postPillar(post))}</small>
+              <h3>{post.title}</h3>
+            </Link>
+          </li>
+        ))}
+      </ol>
     </section>
   );
 }

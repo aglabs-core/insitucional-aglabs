@@ -56,3 +56,4 @@ Thumbs.db
 artifacts/ai-agency/scripts/.blog-audit.json
 supabase/.temp/
 artifacts/ai-agency/scripts/.local-build.mjs
+artifacts/ai-agency/scripts/.generated-cover-paths.json

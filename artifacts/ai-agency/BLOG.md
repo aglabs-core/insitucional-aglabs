@@ -294,3 +294,12 @@ scripts/sync-youtube.mjs consulta o feed público do canal UCRKuFSwnii7yBCmirM4P
 O pré-render mantém o conteúdo rastreável e adiciona estilo crítico para evitar texto sem formatação. JSON de bootstrap inclui apenas posts publicados e escapa '<' para impedir fechamento de script. Metadados da lista não incluem o corpo dos artigos; a página individual inclui só seu próprio corpo. React usa o snapshot enquanto os chunks carregam e inicia a tela com os dados já recebidos, atualizando pelo CMS. O pré-carregamento indiscriminado das duas páginas de blog foi removido. Gates de falha do pré-render continuam ativos. Não foi medida uma melhora de Core Web Vitals em tráfego real.
 
 A seção Você sabia? exibe seis teasers pequenos (seis colunas no desktop, duas no celular). O segundo lote aborda Transformer/GPT, trends com foto e referência, e a transformação de conhecimento em um produto digital, com link verificado ao blog do Members. São textos próprios de apresentação, sem republicar integralmente artigos de outros blogs.
+
+
+## Ajuste de capas e métricas internas — 17/11/2026
+
+As contagens de leitura e comentários ficam exclusivamente no painel /admin e na RPC blog_read_stats, que exige usuário autenticado presente em admin_users. A RPC pública blog_popular_posts retorna apenas os IDs ordenados dos artigos; o público continua vendo o ranking, sem totais nem contagem de comentários. O cadastro e a gravação de leituras permanecem ativos. Testes com cliente anônimo confirmaram o bloqueio dos totais; a consulta administrativa e o bloqueio de usuário comum foram verificados em transação com rollback.
+
+A vitrine começa com Members, MeCard e Viajeki, usando OGs oficiais de 1200×630, registradas em src/content/app-og-sources.json. Os cards usam a mesma proporção e preenchimento integral. A seção usa margens amplas junto às bordas da tela, incluindo o cabeçalho. O Orquestra preserva seu print de demonstração.
+
+As seis curiosidades receberam capas novas pelo image_gen integrado. Os prompts, o método e os arquivos finais estão em scripts/generated-cover-manifest.json. WebP em 600 e 1200 pixels serve a página; JPG e WebP em og/ servem compartilhamentos. Os originais do gerador permanecem fora do repositório. O metadata photo.source aponta para as versões hospedadas no próprio site.

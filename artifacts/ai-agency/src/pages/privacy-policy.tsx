@@ -83,7 +83,7 @@ export default function PrivacyPolicy() {
 
           <section>
             <h2 className="text-xl font-semibold text-white mb-3">Métricas e comentários do blog</h2>
-            <p>O blog registra leituras após dez segundos com a página visível. Um identificador aleatório em sessionStorage evita contar novamente o mesmo artigo na mesma sessão e dia. Essa contagem não usa cookies, IP, impressão digital do dispositivo ou conta pessoal. Os resultados públicos são agregados e representam sessões, não pessoas únicas. As capas de vídeos são fornecidas pelo YouTube; o player só abre no serviço quando você clica no link.</p>
+            <p>O blog registra leituras após dez segundos com a página visível. Um identificador aleatório em sessionStorage evita contar novamente o mesmo artigo na mesma sessão e dia. Essa contagem não usa cookies, IP, impressão digital do dispositivo ou conta pessoal. As contagens ficam restritas ao painel administrativo e representam sessões, não pessoas únicas. O ranking público apresenta apenas os artigos, sem os números. As capas de vídeos são fornecidas pelo YouTube; o player só abre no serviço quando você clica no link.</p>
             <p>Ao comentar, o nome informado, o texto e a data do comentário ficam públicos. Não inclua informações pessoais sensíveis. Para solicitar a retirada de um comentário, entre em contato com a AG Labs pelos canais desta política.</p>
           </section>
 

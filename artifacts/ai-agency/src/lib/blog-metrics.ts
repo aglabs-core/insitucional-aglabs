@@ -5,9 +5,13 @@ export interface ReadStats {
   month_reads: number;
   comments: number;
 }
-export function useBlogStats() {
+export function useBlogStats(enabled = true) {
   const [stats, setStats] = useState<ReadStats[]>([]);
   useEffect(() => {
+    if (!enabled) {
+      setStats([]);
+      return;
+    }
     let active = true;
     supabase.rpc("blog_read_stats").then(({ data, error }) => {
       if (active && !error) setStats(data ?? []);
@@ -15,8 +19,21 @@ export function useBlogStats() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [enabled]);
   return stats;
+}
+export function usePopularBlogPosts() {
+  const [posts, setPosts] = useState<{ post_id: string }[]>([]);
+  useEffect(() => {
+    let active = true;
+    supabase.rpc("blog_popular_posts").then(({ data, error }) => {
+      if (active && !error) setPosts(data ?? []);
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
+  return posts;
 }
 // Counts qualified sessions, not people. No cookie, IP, fingerprint, or account.
 export function useTrackRead(postId?: string) {

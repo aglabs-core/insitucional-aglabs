@@ -1,0 +1,74 @@
+[
+  {
+    "slug": "t-de-gpt-transformer-explicado",
+    "method": "built-in image_gen",
+    "prompt": "Create a professional landscape blog cover, 16:9 composition, for AG Labs technology curiosity articles. Transformer and language context: floating translucent blue word-like tiles connected by fine luminous attention lines, converging around a central prism, an elegant visual metaphor for relationships between language tokens. Abstract scientific editorial illustration, no robot. Strong legibility as a small thumbnail, one clear focal scene, keep the central subject within the middle 70% for cropping. Premium editorial art direction, rich material detail, subtle blue/purple brand affinity, balanced contrast, tasteful and credible. No headlines, no readable text, no logos, no watermark, no borders. This is a standalone new bitmap image.",
+    "format": "Landscape 16:9 editorial cover, central subject safe for crop; no text, logos or watermark.",
+    "outputs": [
+      "public/img/blog/t-de-gpt-transformer-explicado-600.webp",
+      "public/img/blog/t-de-gpt-transformer-explicado-1200.webp",
+      "public/img/blog/og/t-de-gpt-transformer-explicado.jpg",
+      "public/img/blog/og/t-de-gpt-transformer-explicado.webp"
+    ]
+  },
+  {
+    "slug": "como-fazer-trends-fotos-ia-referencia",
+    "method": "built-in image_gen",
+    "prompt": "Create a professional landscape blog cover, 16:9 composition, for AG Labs technology curiosity articles. AI photo trends: an elegant studio still life showing three portrait prints of the same fictional adult woman in different creative visual styles, natural portrait, clay animation portrait, cinematic editorial portrait, with one simple camera and subtle purple studio backdrop. Clearly a visual creative experiment. Strong legibility as a small thumbnail, one clear focal scene, keep the central subject within the middle 70% for cropping. Premium editorial art direction, rich material detail, subtle blue/purple brand affinity, balanced contrast, tasteful and credible. No headlines, no readable text, no logos, no watermark, no borders. This is a standalone new bitmap image.",
+    "format": "Landscape 16:9 editorial cover, central subject safe for crop; no text, logos or watermark.",
+    "outputs": [
+      "public/img/blog/como-fazer-trends-fotos-ia-referencia-600.webp",
+      "public/img/blog/como-fazer-trends-fotos-ia-referencia-1200.webp",
+      "public/img/blog/og/como-fazer-trends-fotos-ia-referencia.jpg",
+      "public/img/blog/og/como-fazer-trends-fotos-ia-referencia.webp"
+    ]
+  },
+  {
+    "slug": "conhecimento-cotidiano-primeiro-produto-digital",
+    "method": "built-in image_gen",
+    "prompt": "Create a professional landscape blog cover, 16:9 composition, for AG Labs technology curiosity articles. Turning expertise into a digital course: an inviting creator workspace with a small microphone, camera, notebook and laptop displaying abstract lesson thumbnails without readable text. Warm sunlight, sophisticated studio editorial photography, tactile objects. Strong legibility as a small thumbnail, one clear focal scene, keep the central subject within the middle 70% for cropping. Premium editorial art direction, rich material detail, subtle blue/purple brand affinity, balanced contrast, tasteful and credible. No headlines, no readable text, no logos, no watermark, no borders. This is a standalone new bitmap image.",
+    "format": "Landscape 16:9 editorial cover, central subject safe for crop; no text, logos or watermark.",
+    "outputs": [
+      "public/img/blog/conhecimento-cotidiano-primeiro-produto-digital-600.webp",
+      "public/img/blog/conhecimento-cotidiano-primeiro-produto-digital-1200.webp",
+      "public/img/blog/og/conhecimento-cotidiano-primeiro-produto-digital.jpg",
+      "public/img/blog/og/conhecimento-cotidiano-primeiro-produto-digital.webp"
+    ]
+  },
+  {
+    "slug": "qr-code-nasceu-fabricas-antes-pix",
+    "method": "built-in image_gen",
+    "prompt": "Create a professional landscape blog cover, 16:9 composition, for AG Labs technology curiosity articles. Origins of QR codes in automotive factories: a close-up of a clean industrial component with a clearly stylized nonfunctional square code label, automobile assembly line softly blurred behind, precise metallic details, blue and amber industrial lighting. Editorial conceptual photograph. Strong legibility as a small thumbnail, one clear focal scene, keep the central subject within the middle 70% for cropping. Premium editorial art direction, rich material detail, subtle blue/purple brand affinity, balanced contrast, tasteful and credible. No headlines, no readable text, no logos, no watermark, no borders. This is a standalone new bitmap image.",
+    "format": "Landscape 16:9 editorial cover, central subject safe for crop; no text, logos or watermark.",
+    "outputs": [
+      "public/img/blog/qr-code-nasceu-fabricas-antes-pix-600.webp",
+      "public/img/blog/qr-code-nasceu-fabricas-antes-pix-1200.webp",
+      "public/img/blog/og/qr-code-nasceu-fabricas-antes-pix.jpg",
+      "public/img/blog/og/qr-code-nasceu-fabricas-antes-pix.webp"
+    ]
+  },
+  {
+    "slug": "web-nasceu-organizar-informacao",
+    "method": "built-in image_gen",
+    "prompt": "Create a professional landscape blog cover, 16:9 composition, for AG Labs technology curiosity articles. The early web and organizing knowledge: a vintage beige desktop computer with an abstract node-and-link network on screen, paper research notes connected with threads subtly transitioning into luminous digital links, calm blue light and warm paper textures. Editorial historical technology still life, no branding. Strong legibility as a small thumbnail, one clear focal scene, keep the central subject within the middle 70% for cropping. Premium editorial art direction, rich material detail, subtle blue/purple brand affinity, balanced contrast, tasteful and credible. No headlines, no readable text, no logos, no watermark, no borders. This is a standalone new bitmap image.",
+    "format": "Landscape 16:9 editorial cover, central subject safe for crop; no text, logos or watermark.",
+    "outputs": [
+      "public/img/blog/web-nasceu-organizar-informacao-600.webp",
+      "public/img/blog/web-nasceu-organizar-informacao-1200.webp",
+      "public/img/blog/og/web-nasceu-organizar-informacao.jpg",
+      "public/img/blog/og/web-nasceu-organizar-informacao.webp"
+    ]
+  },
+  {
+    "slug": "ia-responde-confianca-mesmo-quando-erra",
+    "method": "built-in image_gen",
+    "prompt": "Create a professional landscape blog cover, 16:9 composition, for AG Labs technology curiosity articles. AI hallucinations: a beautiful translucent glass speech bubble floating above a dark blue surface, part of its reflection becomes a fragmented impossible geometric shape, thoughtful intriguing editorial visual metaphor for a fluent answer that needs checking. Sophisticated 3D editorial illustration, restrained cyan and amber. Strong legibility as a small thumbnail, one clear focal scene, keep the central subject within the middle 70% for cropping. Premium editorial art direction, rich material detail, subtle blue/purple brand affinity, balanced contrast, tasteful and credible. No headlines, no readable text, no logos, no watermark, no borders. This is a standalone new bitmap image.",
+    "format": "Landscape 16:9 editorial cover, central subject safe for crop; no text, logos or watermark.",
+    "outputs": [
+      "public/img/blog/ia-responde-confianca-mesmo-quando-erra-600.webp",
+      "public/img/blog/ia-responde-confianca-mesmo-quando-erra-1200.webp",
+      "public/img/blog/og/ia-responde-confianca-mesmo-quando-erra.jpg",
+      "public/img/blog/og/ia-responde-confianca-mesmo-quando-erra.webp"
+    ]
+  }
+]

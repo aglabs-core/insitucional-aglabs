@@ -1960,3 +1960,24 @@
     font-size: 12px;
   }
 }
+/* Full-width showcase content, aligned to the editorial reference. */
+.journal-ecosystem {
+  padding-inline: clamp(16px, 2.7vw, 56px);
+}
+.journal-ecosystem h2 {
+  font-size: clamp(27px, 2.7vw, 46px);
+  max-width: none;
+}
+.journal-ecosystem-heading > div {
+  flex: 1;
+  max-width: none;
+}
+.journal-ecosystem-heading p {
+  font-size: 14px;
+}
+.journal-product-showcase .journal-apps img {
+  aspect-ratio: 1200 / 630;
+  object-fit: cover;
+  object-position: center;
+  background: #10172b;
+}

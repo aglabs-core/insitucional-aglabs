@@ -441,14 +441,7 @@ export default function BlogPostPage() {
             <div className="mb-16">
               <div className="flex items-center gap-2 mb-8 border-t border-white/5 pt-10">
                 <MessageSquare className="w-5 h-5 text-blue-400" />
-                <h2 className="text-lg font-bold text-white">
-                  Comentários
-                  {comments.length > 0 && (
-                    <span className="ml-2 text-sm text-white/30 font-normal">
-                      ({comments.length})
-                    </span>
-                  )}
-                </h2>
+                <h2 className="text-lg font-bold text-white">Comentários</h2>
               </div>
 
               {/* Comment list */}

@@ -578,42 +578,66 @@
       "product": "mecard",
       "kicker": "Curiosidades",
       "cover": "O QR Code nasceu nas fábricas, muito antes do Pix",
-      "description": "A história de um código pensado para peças de automóveis ajuda a entender por que ele virou uma ponte entre o papel e o digital."
+      "description": "A história de um código pensado para peças de automóveis ajuda a entender por que ele virou uma ponte entre o papel e o digital.",
+      "photo": {
+        "source": "https://aglabs.ia.br/img/blog/qr-code-nasceu-fabricas-antes-pix-1200.webp",
+        "credit": "Ilustração gerada com IA pela AG Labs."
+      }
     },
     "web-nasceu-organizar-informacao": {
       "pillar": "curiosidades",
       "product": "orquestra",
       "kicker": "Curiosidades",
       "cover": "A web começou com um problema de organização",
-      "description": "Antes de lojas e redes sociais, uma proposta de 1989 queria tornar informações de pesquisa mais fáceis de conectar."
+      "description": "Antes de lojas e redes sociais, uma proposta de 1989 queria tornar informações de pesquisa mais fáceis de conectar.",
+      "photo": {
+        "source": "https://aglabs.ia.br/img/blog/web-nasceu-organizar-informacao-1200.webp",
+        "credit": "Ilustração gerada com IA pela AG Labs."
+      }
     },
     "ia-responde-confianca-mesmo-quando-erra": {
       "pillar": "curiosidades",
       "product": "app",
       "kicker": "Curiosidades",
       "cover": "Por que uma IA pode errar com tanta confiança?",
-      "description": "Uma resposta bem escrita pode conter fatos inventados. Entenda a diferença entre fluência e verificação antes de usar um resultado."
+      "description": "Uma resposta bem escrita pode conter fatos inventados. Entenda a diferença entre fluência e verificação antes de usar um resultado.",
+      "photo": {
+        "source": "https://aglabs.ia.br/img/blog/ia-responde-confianca-mesmo-quando-erra-1200.webp",
+        "credit": "Ilustração gerada com IA pela AG Labs."
+      }
     },
     "t-de-gpt-transformer-explicado": {
       "pillar": "curiosidades",
       "kicker": "Você sabia?",
       "cover": "Você sabia que o T do GPT vem de Transformer?",
       "description": "A sigla esconde uma ideia sobre como relacionar palavras e contexto.",
-      "product": "atendente"
+      "product": "atendente",
+      "photo": {
+        "source": "https://aglabs.ia.br/img/blog/t-de-gpt-transformer-explicado-1200.webp",
+        "credit": "Ilustração gerada com IA pela AG Labs."
+      }
     },
     "como-fazer-trends-fotos-ia-referencia": {
       "pillar": "curiosidades",
       "kicker": "Você sabia?",
       "cover": "Como as pessoas fazem aquelas trends de fotos com IA?",
       "description": "Foto, referência e um pedido claro: um ponto de partida para experimentar.",
-      "product": "app"
+      "product": "app",
+      "photo": {
+        "source": "https://aglabs.ia.br/img/blog/como-fazer-trends-fotos-ia-referencia-1200.webp",
+        "credit": "Ilustração gerada com IA pela AG Labs."
+      }
     },
     "conhecimento-cotidiano-primeiro-produto-digital": {
       "pillar": "curiosidades",
       "kicker": "Você sabia?",
       "cover": "A dúvida que você responde toda semana pode virar um produto",
       "description": "Uma pergunta recorrente pode ser o começo de uma aula, guia ou material digital.",
-      "product": "members"
+      "product": "members",
+      "photo": {
+        "source": "https://aglabs.ia.br/img/blog/conhecimento-cotidiano-primeiro-produto-digital-1200.webp",
+        "credit": "Ilustração gerada com IA pela AG Labs."
+      }
     }
   }
 }
