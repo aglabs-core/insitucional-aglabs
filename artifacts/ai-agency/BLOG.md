@@ -266,7 +266,7 @@ Qualidade:
 `<title>`, description, canônica, Open Graph (com `og:url` e imagem 1200×630), Twitter Card,
 JSON-LD `BlogPosting` (headline, datas, autor, imagem, publisher com logo) e
 `BreadcrumbList`, bloco do produto e "Leia também" (3 posts do mesmo pilar, em roda, para que
-todo post receba links). Gera também o índice `/blog` com a lista completa por pilar, o
+todo post receba links). Gera também o índice `/blog` com o layout editorial compartilhado com o app, o
 `/blog/rss.xml` e o `sitemap.xml` com `lastmod` de cada post.
 
 ## Evolução editorial — 17/11/2026
@@ -291,7 +291,9 @@ scripts/sync-youtube.mjs consulta o feed público do canal UCRKuFSwnii7yBCmirM4P
 
 ### Primeira exibição
 
-O pré-render mantém o conteúdo rastreável e adiciona estilo crítico para evitar texto sem formatação. JSON de bootstrap inclui apenas posts publicados e escapa '<' para impedir fechamento de script. Metadados da lista não incluem o corpo dos artigos; a página individual inclui só seu próprio corpo. React usa o snapshot enquanto os chunks carregam e inicia a tela com os dados já recebidos, atualizando pelo CMS. O pré-carregamento indiscriminado das duas páginas de blog foi removido. Gates de falha do pré-render continuam ativos. Não foi medida uma melhora de Core Web Vitals em tráfego real.
+O build executa `blog-visual-shell.mjs` depois de `prerender-blog.mjs`: renderiza os mesmos componentes React do blog e dos artigos, incluindo conteúdo sanitizado, e inclui seus CSS no head. O HTML inicial já entrega o layout editorial completo, sem trocar uma lista simplificada pela interface. JSON de bootstrap inclui apenas posts publicados e escapa '<' para impedir fechamento de script. Metadados da lista não incluem o corpo dos artigos; a página individual inclui só seu próprio corpo. React usa o snapshot enquanto os chunks carregam e inicia a tela com os dados já recebidos, atualizando pelo CMS. Nos artigos em HTML, o corpo sanitizado do build permanece visível enquanto o parser opcional carrega. O footer também é visível sem depender de animação JavaScript. Falhas na renderização ou ausência dos CSS interrompem o build. Não foi medida uma melhora de Core Web Vitals em tráfego real.
+
+No celular, vídeos e apps usam rolagem horizontal com scroll snap, mostrando parte do próximo card. As setas de navegação e de links são SVGs, evitando substituição por emojis do sistema.
 
 A seção Você sabia? exibe seis teasers pequenos (seis colunas no desktop, duas no celular). O segundo lote aborda Transformer/GPT, trends com foto e referência, e a transformação de conhecimento em um produto digital, com link verificado ao blog do Members. São textos próprios de apresentação, sem republicar integralmente artigos de outros blogs.
 

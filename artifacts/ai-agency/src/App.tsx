@@ -54,7 +54,7 @@ function PageLoader() {
       />
     );
   }
-  if (window.__blogShell && window.location.pathname.startsWith("/blog"))
+  if (window.__blogShell && window.location.pathname === window.__blogShellPath)
     return (
       <div
         style={{ display: "contents" }}
@@ -75,8 +75,8 @@ function Router() {
         <Route path="/" component={HomePage} />
         <Route path="/politica-de-privacidade" component={PrivacyPolicy} />
         <Route path="/termos-de-uso" component={TermsOfUse} />
-        <Route path="/blog" component={BlogPage} />
-        <Route path="/blog/:slug" component={BlogPostPage} />
+        <Route path="/blog"><BlogPage /></Route>
+        <Route path="/blog/:slug"><BlogPostPage /></Route>
         <Route path="/admin" component={AdminPage} />
         <Route component={NotFound} />
       </Switch>

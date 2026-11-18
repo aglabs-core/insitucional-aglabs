@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import videoFeed from "@/content/blog-videos.json";
 import { Link } from "wouter";
 import type { BlogPost } from "@/lib/blog-store";
@@ -53,7 +54,7 @@ export function EcosystemSection() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Explore o Orquestra ↗
+          Explore o Orquestra <ArrowUpRight size={14} aria-hidden="true" />
         </a>
       </div>
       <div className="journal-products-layout">
@@ -76,7 +77,7 @@ export function EcosystemSection() {
                   })
                 }
               >
-                ←
+                <ArrowLeft size={16} aria-hidden="true" />
               </button>
               <button
                 type="button"
@@ -91,7 +92,7 @@ export function EcosystemSection() {
                   })
                 }
               >
-                →
+                <ArrowRight size={16} aria-hidden="true" />
               </button>
             </div>
           </div>
@@ -112,7 +113,7 @@ export function EcosystemSection() {
                 />
                 <div>
                   <h3>
-                    {app.name} <span aria-hidden="true">↗</span>
+                    {app.name} <span aria-hidden="true"><ArrowUpRight size={16} /></span>
                   </h3>
                   <p>{app.text}</p>
                 </div>
@@ -143,7 +144,7 @@ export function EcosystemSection() {
             <h3>Orquestra</h3>
             <p>Suas notas, projetos e agenda. No seu computador.</p>
             <small>Markdown, organização e liberdade. Licença MIT.</small>
-            <span className="journal-release-link">Conheça no GitHub ↗</span>
+            <span className="journal-release-link">Conheça no GitHub <ArrowUpRight size={14} aria-hidden="true" /></span>
           </div>
         </a>
       </div>
@@ -192,7 +193,7 @@ export function CategorySections({
             <section key={id} className="journal-category-section">
               <div className="journal-category-heading">
                 <h2>{pillarName(id)}</h2>
-                <button onClick={() => onCategory(id)}>Ver todos ↗</button>
+                <button onClick={() => onCategory(id)}>Ver todos <ArrowUpRight size={14} aria-hidden="true" /></button>
               </div>
               <div className="journal-category-layout">
                 <Link
@@ -245,7 +246,7 @@ export function Curiosities({
           <h2>Você sabia?</h2>
         </div>
         <button onClick={() => onCategory("curiosidades")}>
-          Mais curiosidades ↗
+          Mais curiosidades <ArrowUpRight size={14} aria-hidden="true" />
         </button>
       </div>
       <div className="journal-curiosity-grid">
@@ -264,6 +265,15 @@ export function Curiosities({
 }
 
 export function VideosSection() {
+  const gallery = useRef<HTMLDivElement>(null);
+  const scrollVideos = (direction: number) => {
+    const row = gallery.current;
+    if (!row) return;
+    row.scrollBy({
+      left: direction * row.clientWidth,
+      behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
+    });
+  };
   return (
     <section className="journal-videos">
       <div className="journal-category-heading">
@@ -272,10 +282,18 @@ export function VideosSection() {
           <h2>Vídeos e Shorts</h2>
         </div>
         <a href={videoFeed.channel} target="_blank" rel="noopener noreferrer">
-          Ver canal ↗
+          Ver canal <ArrowUpRight size={14} aria-hidden="true" />
         </a>
       </div>
-      <div className="journal-video-grid">
+      <div className="journal-video-controls" aria-label="Navegação dos vídeos">
+        <button type="button" aria-label="Vídeos anteriores" onClick={() => scrollVideos(-1)}>
+          <ArrowLeft size={16} aria-hidden="true" />
+        </button>
+        <button type="button" aria-label="Próximos vídeos" onClick={() => scrollVideos(1)}>
+          <ArrowRight size={16} aria-hidden="true" />
+        </button>
+      </div>
+      <div className="journal-video-grid" ref={gallery}>
         {videoFeed.videos.map((video) => (
           <a
             key={video.id}
@@ -292,7 +310,7 @@ export function VideosSection() {
             />
             <span className="journal-kicker">YOUTUBE · AG LABS</span>
             <h3>{video.title}</h3>
-            <small>Assistir no YouTube ↗</small>
+            <small>Assistir no YouTube <ArrowUpRight size={12} aria-hidden="true" /></small>
           </a>
         ))}
       </div>

@@ -15,7 +15,7 @@ import {
   Send,
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
-import { blogStore, initialBlogPost, type BlogPost } from "@/lib/blog-store";
+import { blogStore, initialBlogPost, initialBlogPosts, type BlogPost } from "@/lib/blog-store";
 import { commentStore, type BlogComment } from "@/lib/comment-store";
 import { Seo, SITE_URL } from "@/components/seo";
 import {
@@ -46,10 +46,16 @@ function formatDate(iso: string) {
   });
 }
 
-export default function BlogPostPage() {
+type BlogPostPageProps = {
+  initialPost?: BlogPost;
+  initialPosts?: BlogPost[];
+  initialRehypeRaw?: Awaited<ReturnType<typeof loadRehypeRaw>>;
+};
+
+export default function BlogPostPage({ initialPost, initialPosts, initialRehypeRaw }: BlogPostPageProps = {}) {
   const { slug } = useParams<{ slug: string }>();
   const [post, setPost] = useState<BlogPost | null | "loading">(
-    () => initialBlogPost(slug) ?? "loading",
+    () => initialPost ?? initialBlogPost(slug) ?? "loading",
   );
   useTrackRead(post && post !== "loading" ? post.id : undefined);
   const [copied, setCopied] = useState(false);
@@ -61,12 +67,15 @@ export default function BlogPostPage() {
   const [submitting, setSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState("");
-  const [allPosts, setAllPosts] = useState<BlogPost[]>([]);
+  const [allPosts, setAllPosts] = useState<BlogPost[]>(() => initialPosts ?? initialBlogPosts());
   // Plugin que interpreta HTML cru: só é baixado para posts guardados em HTML.
   const [rehypeRaw, setRehypeRaw] = useState<Awaited<
     ReturnType<typeof loadRehypeRaw>
-  > | null>(null);
+  > | null>(() => initialRehypeRaw ?? null);
   const needsRaw = post !== null && post !== "loading" && hasHtml(post.content);
+  // Preserve the already sanitized build HTML while the optional HTML parser loads.
+  const bootArticle = typeof window !== "undefined" && window.__blogArticle?.slug === slug
+    ? window.__blogArticle.html : undefined;
 
   useEffect(() => {
     if (!needsRaw || rehypeRaw) return;
@@ -346,6 +355,7 @@ export default function BlogPostPage() {
             </p>
 
             <div
+              data-blog-article-content=""
               className="prose prose-invert max-w-none
               prose-headings:font-black prose-headings:tracking-tight prose-headings:text-white
               prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-5
@@ -361,10 +371,11 @@ export default function BlogPostPage() {
               prose-pre:bg-white/5 prose-pre:border prose-pre:border-white/10
               prose-hr:border-white/10
               prose-img:rounded-sm"
+              dangerouslySetInnerHTML={needsRaw && !rehypeRaw && bootArticle ? { __html: bootArticle } : undefined}
             >
               {/* Markdown ou HTML sanitizado (ver src/lib/post-render.ts). */}
               {/* Post em HTML espera o parser chegar em vez de piscar as tags como texto. */}
-              {(!needsRaw || rehypeRaw) && (
+              {needsRaw && !rehypeRaw && bootArticle ? undefined : (!needsRaw || rehypeRaw) ? (
                 <ReactMarkdown
                   remarkPlugins={postRemarkPlugins}
                   rehypePlugins={postRehypePlugins(rehypeRaw ?? undefined)}
@@ -372,7 +383,7 @@ export default function BlogPostPage() {
                 >
                   {stripLeadingTitle(post.content, post.title)}
                 </ReactMarkdown>
-              )}
+              ) : null}
             </div>
 
             {/* CTA para o produto do pilar */}

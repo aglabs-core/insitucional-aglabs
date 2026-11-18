@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite --config vite.config.ts --host 0.0.0.0",
-    "build": "node scripts/sync-youtube.mjs && vite build --config vite.config.ts && node scripts/prerender-blog.mjs && node scripts/home-shell.mjs",
-    "prerender": "node scripts/prerender-blog.mjs",
+    "build": "node scripts/sync-youtube.mjs && vite build --config vite.config.ts && node scripts/prerender-blog.mjs && node scripts/blog-visual-shell.mjs && node scripts/home-shell.mjs",
+    "prerender": "node scripts/prerender-blog.mjs && node scripts/blog-visual-shell.mjs",
     "covers": "node scripts/blog-cover.mjs",
     "images": "node scripts/blog-images.mjs",
     "serve": "vite preview --config vite.config.ts --host 0.0.0.0",

@@ -6,6 +6,8 @@ declare global {
   interface Window {
     __homeShell?: string;
     __blogShell?: string;
+    __blogShellPath?: string;
+    __blogArticle?: { slug: string; html: string };
   }
 }
 
@@ -18,6 +20,17 @@ if (root.dataset.homeShell === "1" && window.location.pathname === "/") {
   window.__homeShell = root.innerHTML;
 }
 
-if (window.location.pathname.startsWith("/blog") && root.innerHTML.trim()) window.__blogShell = root.innerHTML;
+if (window.location.pathname.startsWith("/blog") && root.innerHTML.trim()) {
+  window.__blogShell = root.innerHTML;
+  window.__blogShellPath = window.location.pathname;
+  const article = root.querySelector("[data-blog-article-content]");
+  const seed = document.getElementById("blog-seed")?.textContent;
+  if (article && seed) {
+    try {
+      const slug = JSON.parse(seed).post?.slug;
+      if (typeof slug === "string") window.__blogArticle = { slug, html: article.innerHTML };
+    } catch { /* No bootstrap: the normal article loader still works. */ }
+  }
+}
 
 createRoot(root).render(<App />);

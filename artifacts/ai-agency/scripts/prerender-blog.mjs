@@ -304,7 +304,7 @@ function buildPostPage(shell, post, all) {
     `</article>` +
     relatedHtml +
     `</main>`;
-  return html.replace('<div id="root"></div>', () => `<div id="root">${article}</div>`);
+  return html.replace('<div id="root"></div>', () => `<!--blog-root:start--><div id="root">${article}</div><!--blog-root:end-->`);
 }
 
 function buildIndexPage(shell, posts) {
@@ -363,7 +363,7 @@ function buildIndexPage(shell, posts) {
   const main =
     `<main class="blog-static-shell"><nav aria-label="Trilha"><a href="/">Home</a> › <span>Blog</span></nav>` +
     `<h1>Blog da AG LABS</h1><p>${esc(META.blog.description)}</p>${sections}</main>`;
-  return html.replace('<div id="root"></div>', () => `<div id="root">${main}</div>`);
+  return html.replace('<div id="root"></div>', () => `<!--blog-root:start--><div id="root">${main}</div><!--blog-root:end-->`);
 }
 
 function buildSitemap(posts) {

@@ -137,9 +137,9 @@ const shortcuts = [
   },
 ];
 
-export default function BlogPage() {
-  const [posts, setPosts] = useState<BlogPost[]>(initialBlogPosts);
-  const [loading, setLoading] = useState(() => initialBlogPosts().length === 0);
+export default function BlogPage({ initialPosts }: { initialPosts?: BlogPost[] } = {}) {
+  const [posts, setPosts] = useState<BlogPost[]>(() => initialPosts ?? initialBlogPosts());
+  const [loading, setLoading] = useState(() => (initialPosts ?? initialBlogPosts()).length === 0);
   const [fetchError, setFetchError] = useState(false);
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
@@ -373,7 +373,7 @@ export default function BlogPage() {
                     )
                   }
                 >
-                  ←
+                  <ArrowLeft size={14} aria-hidden="true" />
                 </button>
                 {highlights.map((post, i) => (
                   <button
@@ -393,7 +393,7 @@ export default function BlogPage() {
                     setHeadline((n) => (n + 1) % highlights.length)
                   }
                 >
-                  →
+                  <ArrowRight size={14} aria-hidden="true" />
                 </button>
               </div>
             </div>
@@ -612,14 +612,14 @@ export default function BlogPage() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Acompanhar @ag_labs ↗
+                Acompanhar @ag_labs <ArrowUpRight size={14} aria-hidden="true" />
               </a>
               <a
                 href="https://www.youtube.com/@aglabs-g2n2h/shorts"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Ver nossos Shorts no YouTube ↗
+                Ver nossos Shorts no YouTube <ArrowUpRight size={14} aria-hidden="true" />
               </a>
             </section>
           </>

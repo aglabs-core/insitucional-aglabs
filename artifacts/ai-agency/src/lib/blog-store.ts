@@ -15,7 +15,7 @@ export interface BlogPost {
   readTime: number;
 }
 
-function fromRow(row: Record<string, unknown>): BlogPost {
+export function fromRow(row: Record<string, unknown>): BlogPost {
   return {
     id: row.id as string,
     title: row.title as string,
