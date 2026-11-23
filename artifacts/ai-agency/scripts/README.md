@@ -79,3 +79,6 @@ VITE_SUPABASE_URL=... VITE_SUPABASE_ANON_KEY=... pnpm --filter @workspace/ai-age
 # sem credenciais, com as linhas da tabela num JSON:
 BLOG_FIXTURE=posts.json node scripts/prerender-blog.mjs
 ```
+
+
+O workflow `quality.yml` testa conteúdo, tipos e build com um artigo fictício via `BLOG_FIXTURE`. A validação do GitHub funciona sem credenciais. O deploy da plataforma usa a configuração de produção.
