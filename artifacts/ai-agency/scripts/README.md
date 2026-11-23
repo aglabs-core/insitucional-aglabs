@@ -88,6 +88,6 @@ O workflow `quality.yml` testa conteúdo, tipos e build com um artigo fictício 
 O shell da home contém apenas o hero. A página React aplica o fragmento da URL
 depois de montar as demais seções e estabiliza o destino após carregar as fontes,
 sem puxar de volta um visitante que já começou a interagir. Assim, links do blog como
-`/#projetos-personalizados` alcancem o bloco indicado. Alterações posteriores do
+`/#projetos-personalizados` alcançam o bloco indicado. Alterações posteriores do
 fragmento usam o mesmo tratamento; fragmentos inválidos ou sem destino não
 interrompem a navegação.
