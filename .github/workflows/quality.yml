@@ -19,7 +19,6 @@ jobs:
     env:
       PORT: '3000'
       BASE_PATH: /
-      BLOG_FIXTURE: ${{ runner.temp }}/blog-ci.json
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
@@ -34,6 +33,8 @@ jobs:
       - run: pnpm run test:content
       - run: pnpm --filter @workspace/ai-agency run typecheck
       - name: Preparar artigo fictício para validar o build
+        env:
+          BLOG_FIXTURE: ${{ runner.temp }}/blog-ci.json
         run: |
           node --input-type=module -e '
             import { writeFileSync } from "node:fs";
@@ -47,6 +48,8 @@ jobs:
             writeFileSync(process.env.BLOG_FIXTURE, JSON.stringify([post]));
           '
       - run: pnpm --filter @workspace/ai-agency run build
+        env:
+          BLOG_FIXTURE: ${{ runner.temp }}/blog-ci.json
       - name: Conferir início e artigo renderizado
         run: |
           test -s artifacts/ai-agency/dist/index.html
