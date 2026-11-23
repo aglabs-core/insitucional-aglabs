@@ -62,17 +62,20 @@ const HomePage = () => {
     }
     scrollToFragment();
     // As fontes da home podem mudar a altura das seções depois do primeiro layout.
-    void document.fonts.ready.then(() => {
+    const alignAfterFonts = () => {
       requestAnimationFrame(() => {
         if (active && !userInteracted) scrollToFragment();
       });
-    });
+    };
+    void document.fonts.ready.then(alignAfterFonts);
+    document.fonts.addEventListener("loadingdone", alignAfterFonts);
     window.addEventListener("hashchange", scrollToFragment);
     return () => {
       active = false;
       for (const event of interactions) {
         window.removeEventListener(event, cancelPendingAlignment);
       }
+      document.fonts.removeEventListener("loadingdone", alignAfterFonts);
       window.removeEventListener("hashchange", scrollToFragment);
     };
   }, []);
