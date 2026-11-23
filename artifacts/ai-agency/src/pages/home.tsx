@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Facebook,
   Instagram,
@@ -41,6 +41,45 @@ const handleEmailSubmit = async (email: string) => {
 };
 
 const HomePage = () => {
+  useEffect(() => {
+    // O HTML inicial tem apenas o hero; a âncora do blog só existe depois
+    // da montagem desta página. Reaplique o fragmento quando o destino existe.
+    const scrollToFragment = () => {
+      let id: string;
+      try {
+        id = decodeURIComponent(window.location.hash.slice(1));
+      } catch {
+        return;
+      }
+      if (id) document.getElementById(id)?.scrollIntoView({ block: "start" });
+    };
+    let active = true;
+    let userInteracted = false;
+    const cancelPendingAlignment = () => { userInteracted = true; };
+    const interactions = ["pointerdown", "wheel", "keydown"] as const;
+    for (const event of interactions) {
+      window.addEventListener(event, cancelPendingAlignment, { once: true, passive: true });
+    }
+    scrollToFragment();
+    // As fontes da home podem mudar a altura das seções depois do primeiro layout.
+    const alignAfterFonts = () => {
+      requestAnimationFrame(() => {
+        if (active && !userInteracted) scrollToFragment();
+      });
+    };
+    void document.fonts.ready.then(alignAfterFonts);
+    document.fonts.addEventListener("loadingdone", alignAfterFonts);
+    window.addEventListener("hashchange", scrollToFragment);
+    return () => {
+      active = false;
+      for (const event of interactions) {
+        window.removeEventListener(event, cancelPendingAlignment);
+      }
+      document.fonts.removeEventListener("loadingdone", alignAfterFonts);
+      window.removeEventListener("hashchange", scrollToFragment);
+    };
+  }, []);
+
   return (
     <>
       <Seo

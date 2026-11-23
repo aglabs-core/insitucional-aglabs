@@ -82,3 +82,12 @@ BLOG_FIXTURE=posts.json node scripts/prerender-blog.mjs
 
 
 O workflow `quality.yml` testa conteúdo, tipos e build com um artigo fictício via `BLOG_FIXTURE`. A validação do GitHub funciona sem credenciais. O deploy da plataforma usa a configuração de produção.
+
+## Âncoras que chegam de outra página
+
+O shell da home contém apenas o hero. A página React aplica o fragmento da URL
+depois de montar as demais seções e estabiliza o destino após carregar as fontes,
+sem puxar de volta um visitante que já começou a interagir. Assim, links do blog como
+`/#projetos-personalizados` alcançam o bloco indicado. Alterações posteriores do
+fragmento usam o mesmo tratamento; fragmentos inválidos ou sem destino não
+interrompem a navegação.
