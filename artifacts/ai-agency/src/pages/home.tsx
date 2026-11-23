@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Facebook,
   Instagram,
@@ -41,6 +41,23 @@ const handleEmailSubmit = async (email: string) => {
 };
 
 const HomePage = () => {
+  useEffect(() => {
+    // O HTML inicial tem apenas o hero; a âncora do blog só existe depois
+    // da montagem desta página. Reaplique o fragmento quando o destino existe.
+    const scrollToFragment = () => {
+      let id: string;
+      try {
+        id = decodeURIComponent(window.location.hash.slice(1));
+      } catch {
+        return;
+      }
+      if (id) document.getElementById(id)?.scrollIntoView({ block: "start" });
+    };
+    scrollToFragment();
+    window.addEventListener("hashchange", scrollToFragment);
+    return () => window.removeEventListener("hashchange", scrollToFragment);
+  }, []);
+
   return (
     <>
       <Seo
