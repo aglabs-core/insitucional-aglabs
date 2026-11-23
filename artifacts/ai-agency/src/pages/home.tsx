@@ -53,9 +53,19 @@ const HomePage = () => {
       }
       if (id) document.getElementById(id)?.scrollIntoView({ block: "start" });
     };
+    let active = true;
     scrollToFragment();
+    // As fontes da home podem mudar a altura das seções depois do primeiro layout.
+    void document.fonts.ready.then(() => {
+      requestAnimationFrame(() => {
+        if (active) scrollToFragment();
+      });
+    });
     window.addEventListener("hashchange", scrollToFragment);
-    return () => window.removeEventListener("hashchange", scrollToFragment);
+    return () => {
+      active = false;
+      window.removeEventListener("hashchange", scrollToFragment);
+    };
   }, []);
 
   return (
