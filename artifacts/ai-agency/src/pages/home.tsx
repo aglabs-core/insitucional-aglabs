@@ -54,16 +54,25 @@ const HomePage = () => {
       if (id) document.getElementById(id)?.scrollIntoView({ block: "start" });
     };
     let active = true;
+    let userInteracted = false;
+    const cancelPendingAlignment = () => { userInteracted = true; };
+    const interactions = ["pointerdown", "wheel", "keydown"] as const;
+    for (const event of interactions) {
+      window.addEventListener(event, cancelPendingAlignment, { once: true, passive: true });
+    }
     scrollToFragment();
     // As fontes da home podem mudar a altura das seções depois do primeiro layout.
     void document.fonts.ready.then(() => {
       requestAnimationFrame(() => {
-        if (active) scrollToFragment();
+        if (active && !userInteracted) scrollToFragment();
       });
     });
     window.addEventListener("hashchange", scrollToFragment);
     return () => {
       active = false;
+      for (const event of interactions) {
+        window.removeEventListener(event, cancelPendingAlignment);
+      }
       window.removeEventListener("hashchange", scrollToFragment);
     };
   }, []);
