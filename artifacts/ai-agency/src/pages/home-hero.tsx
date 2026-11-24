@@ -19,7 +19,7 @@ export function HomeHero() {
     { label: "HOME", href: "#" },
     { label: "SOBRE NÓS", href: "#sobre-nos" },
     { label: "SOLUÇÕES", href: "#services" },
-    { label: "PRODUTOS", href: "#cases" },
+    { label: "PRODUTOS", href: "#marcas-proprias" },
     { label: "BLOG", href: "/blog" },
   ];
 

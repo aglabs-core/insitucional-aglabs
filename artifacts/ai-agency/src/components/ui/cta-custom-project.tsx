@@ -78,11 +78,11 @@ export function CtaCustomProject() {
 
         {/* CTA */}
         <div className="flex justify-center">
-          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-            <HoverButton className="mt-[-20px] font-geist tracking-tighter text-center text-lg">
+          <HoverButton asChild className="mt-[-20px] font-geist tracking-tighter text-center text-lg">
+            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
               Falar no WhatsApp
-            </HoverButton>
-          </a>
+            </a>
+          </HoverButton>
         </div>
       </div>
 
