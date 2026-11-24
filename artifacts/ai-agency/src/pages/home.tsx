@@ -108,10 +108,8 @@ const HomePage = () => {
       <div id="cases">
         <ElegantCarousel />
       </div>
-      {/* Logo depois de #cases, que é para onde o menu "PRODUTOS" aponta: o
-          carrossel acima mostra o que a agência sabe fazer, esta faixa mostra
-          os produtos que ela fez e opera. Como última seção da página ficaria
-          depois do bloco de CTAs, disputando atenção com a conversão. */}
+      {/* O carrossel acima mostra o que a agência sabe fazer. Esta faixa mostra
+          os produtos que ela fez e opera, e é o destino do menu "PRODUTOS". */}
       <ProductLogoCloud />
       {/* CTA Radar Section */}
       <section
